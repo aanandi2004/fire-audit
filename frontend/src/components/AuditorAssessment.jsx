@@ -39,10 +39,8 @@ function AuditorAssessment({
   const activeSubdivision = activeGroup?.subdivisions.find(s => s.id === subdivisionId)
   
   const getKey = React.useCallback((qId) => {
-    const b = String(blockId || '').toLowerCase().trim().replace(/\s+/g, '_')
-    const q = String(qId || '').toLowerCase().trim().replace(/\s+/g, '_')
-    return b ? `${b}::${q}` : q
-  }, [blockId])
+    return String(qId || '').toLowerCase().trim()
+  }, [])
 
   // Category/Subcategory state
   const [localSelectedCategory, setLocalSelectedCategory] = useState(groupId || '')
@@ -78,7 +76,6 @@ async function handleSave() {
   try {
     if (isAuditorLocked) return alert('Auditor system is locked')
     if (!auditId || !blockId) return alert('Missing audit or block')
-    await ensureAuditLock()
     const user = auth.currentUser
     if (!user) throw new Error('No authenticated user')
     const token = await user.getIdToken(true)
@@ -89,8 +86,8 @@ async function handleSave() {
       const observation = auditorCommentMap[getKey(qid)] || ''
       if (!status && !observation) return
       const body = {
-        audit_id: String(auditId).trim(),
-        block_id: String(blockId).trim(),
+        audit_id: String(auditId).trim().toLowerCase(),
+        block_id: String(blockId).trim().toLowerCase(),
         question_id: qid,
         status: (status || '').toUpperCase().replace(' ', '_'),
         observation
@@ -103,7 +100,7 @@ async function handleSave() {
       if (!resp.ok) {
         const errorData = await resp.json().catch(() => ({}))
         console.error('Save failed with status:', resp.status, errorData)
-        if (resp.status === 403) alert('Permission Denied: Ensure you are the assigned auditor and the audit is locked.')
+        if (resp.status === 403) alert('Permission Denied: Ensure you are the assigned auditor.')
       }
     })
     await Promise.all(savePromises)
@@ -121,15 +118,14 @@ async function handleStatusChange(questionId, value) {
   const key = getKey(qid)
   setAuditorStatusMap((prev) => ({ ...prev, [key]: value }))
   try {
-    await ensureAuditLock()
     if (!auditId || !blockId) return
     const user = auth.currentUser
     if (!user) throw new Error('No authenticated user')
     const token = await user.getIdToken(true)
     const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || 'http://localhost:8010'
     const body = {
-      audit_id: String(auditId).trim(),
-      block_id: String(blockId).trim(),
+      audit_id: String(auditId).trim().toLowerCase(),
+      block_id: String(blockId).trim().toLowerCase(),
       question_id: qid,
       status: (value || '').toUpperCase().replace(' ', '_'),
       auditor_score: statusToScore(value)
@@ -142,7 +138,7 @@ async function handleStatusChange(questionId, value) {
     if (!resp.ok) {
       const errorData = await resp.json().catch(() => ({}))
       console.error('Save failed with status:', resp.status, errorData)
-      if (resp.status === 403) alert('Permission Denied: Ensure you are the assigned auditor and the audit is locked.')
+      if (resp.status === 403) alert('Permission Denied: Ensure you are the assigned auditor.')
     }
   } catch (e) {
     console.error('Auto-save status failed', e)
@@ -205,6 +201,33 @@ async function handleStatusChange(questionId, value) {
   const [verifying, setVerifying] = useState(false)
   const [auditInfo, setAuditInfo] = useState({})
   const [showFinalize, setShowFinalize] = useState(false)
+  async function finalizeAudit() {
+    try {
+      if (!auditId) return
+      const user = auth.currentUser
+      if (!user) throw new Error('No authenticated user')
+      const token = await user.getIdToken(true)
+      const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8010'
+      const resp = await fetch(`${BASE_URL}/audits/${encodeURIComponent(String(auditId).trim())}/complete`, {
+        method: 'POST',
+        headers: { idToken: token }
+      })
+      if (!resp.ok) {
+        const err = await resp.json().catch(() => ({}))
+        console.error('Finalize failed', resp.status, err)
+        alert('Finalize failed. Check console.')
+        return
+      }
+      alert('Audit finalized successfully.')
+      try {
+        const data = await getAudit(auditId)
+        setAuditInfo(data || {})
+      } catch { /* noop */ }
+    } catch (e) {
+      console.error('Finalize error', e)
+      alert('Finalize error. Check console.')
+    }
+  }
   React.useEffect(() => {
     ;(async () => {
       try {
@@ -287,7 +310,6 @@ async function handleStatusChange(questionId, value) {
       throw err
     }
   }, [auditId, ensureRegistered])
-  React.useEffect(() => { ensureAuditLock() }, [ensureAuditLock])
   React.useEffect(() => {
     if (!auditId || !blockId) return
     const controller = new AbortController()
@@ -328,7 +350,10 @@ async function handleStatusChange(questionId, value) {
       try {
         const token = await auth.currentUser.getIdToken()
         const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8010'
-        const params = new URLSearchParams({ assignment_id: String(auditId).trim() })
+        const params = new URLSearchParams({
+          audit_id: String(auditId).trim().toLowerCase(),
+          block_id: String(blockId).trim().toLowerCase()
+        })
         const resp = await fetch(`${BASE_URL}/audit/responses?${params.toString()}`, { headers: { idToken: token }, signal: controller.signal })
         if (!resp.ok) return
         const rows = await resp.json().catch(() => [])
@@ -337,7 +362,7 @@ async function handleStatusChange(questionId, value) {
         ;(Array.isArray(rows) ? rows : []).forEach(d => {
           const bid = String(d.block_id || '').trim()
           if (bid && bid.toLowerCase() !== String(blockId).toLowerCase().trim()) return
-          const rawId = d.id || d.question_id || ''
+          const rawId = d.question_id || ''
           const normalizedId = String(rawId).toLowerCase().trim()
           if (!normalizedId) return
           const key = getKey(normalizedId)
@@ -358,7 +383,7 @@ async function handleStatusChange(questionId, value) {
           Object.keys(s).forEach(k => {
             console.log('AuditorSelect postHydration Key:', k, 'Status:', s[k])
           })
-          console.log(`FETCHED FROM SUBCOLLECTION: ${Object.keys(s).length} items found for ${String(blockId).trim()}`)
+            console.log(`FETCHED FROM SUBCOLLECTION: ${Object.keys(s).length} items found for ${String(blockId).trim()}`)
           if (!keyProofRef.current.hydration && Object.keys(s).length > 0) {
             keyProofRef.current.hydration = Object.keys(s)[0]
             console.log('HYDRATION FIRST KEY:', keyProofRef.current.hydration)
@@ -405,8 +430,8 @@ async function handleStatusChange(questionId, value) {
       const token = await auth.currentUser.getIdToken()
       const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8010'
       const params = new URLSearchParams({
-        audit_id: String(auditId).trim(),
-        block_id: String(blockId).trim(),
+        audit_id: String(auditId).trim().toLowerCase(),
+        block_id: String(blockId).trim().toLowerCase(),
         section: String(selectedSection).trim()
       })
       const resp = await fetch(`${BASE_URL}/audit/observations?${params.toString()}`, { headers: { idToken: token }, signal: controller.signal })
@@ -565,12 +590,11 @@ async function handleStatusChange(questionId, value) {
     }))
     ;(async () => {
       try {
-        await ensureAuditLock()
         if (!auditId || !blockId) return
         const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8010'
         const body = {
-          audit_id: String(auditId).trim(),
-          block_id: String(blockId).trim(),
+          audit_id: String(auditId).trim().toLowerCase(),
+          block_id: String(blockId).trim().toLowerCase(),
           question_id: qid,
           observation: value || ''
         }
@@ -621,7 +645,7 @@ async function handleStatusChange(questionId, value) {
             <button title="Save Progress" onClick={handleSave} disabled={isAuditorLocked} style={{ padding: '8px 16px', borderRadius: '6px', background: isAuditorLocked ? '#cbd5e1' : '#3b82f6', color: 'white', border: 'none', cursor: isAuditorLocked ? 'not-allowed' : 'pointer', fontSize: '13px', fontWeight: 600 }}>
                Save Progress
             </button>
-            <button title="Complete Audit" onClick={() => setShowFinalize(true)} disabled={isAuditorLocked} style={{ padding: '8px 16px', borderRadius: '6px', background: isAuditorLocked ? '#cbd5e1' : '#ef4444', color: 'white', border: 'none', cursor: isAuditorLocked ? 'not-allowed' : 'pointer', fontSize: '13px', fontWeight: 700 }}>
+            <button title="Complete Audit" onClick={finalizeAudit} disabled={isAuditorLocked} style={{ padding: '8px 16px', borderRadius: '6px', background: isAuditorLocked ? '#cbd5e1' : '#ef4444', color: 'white', border: 'none', cursor: isAuditorLocked ? 'not-allowed' : 'pointer', fontSize: '13px', fontWeight: 700 }}>
                Complete Audit
             </button>
           </div>
@@ -723,7 +747,7 @@ async function handleStatusChange(questionId, value) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {visibleQuestions.map((q) => {
   // 1. GENERATE THE STABLE KEY
-  const qid = String(q.id).toLowerCase().trim().replace(/\s+/g, '_');
+  const qid = String(q.id).toLowerCase().trim();
   const key = getKey(qid);
 
   // 2. FIND OBSERVATION FALLBACK (Do this BEFORE using it)

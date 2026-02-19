@@ -14,10 +14,18 @@ def _check_audit_active(audit_id: str):
 
 def _assert_auditor_lock(audit_id: str, uid: str):
     db = firestore.client()
-    doc = db.collection("audits").document(audit_id).get()
-    data = doc.to_dict() if doc.exists else {}
-    if not data.get("locked_by") or data.get("locked_by") != uid:
-        raise HTTPException(status_code=403, detail="Audit lock not held by user")
+    # Allow assigned auditor to write without requiring locked_by
+    asnap = db.collection("assignments").document(audit_id).get()
+    if asnap.exists:
+        adata = asnap.to_dict() or {}
+        if str(adata.get("auditor_id") or "") == str(uid):
+            return
+    dsnap = db.collection("audits").document(audit_id).get()
+    if dsnap.exists:
+        ddata = dsnap.to_dict() or {}
+        if str(ddata.get("auditor_id") or "") == str(uid):
+            return
+    raise HTTPException(status_code=403, detail="Auditor not assigned")
 def _extract_token(authorization: str, id_token: str) -> str:
     if authorization and isinstance(authorization, str) and authorization.lower().startswith("bearer "):
         return authorization.split(" ", 1)[1].strip()
@@ -97,16 +105,12 @@ def _verify_access(audit_id: str, user: dict, section: str = None, block_id: str
 
 def _questions_collection(audit_id: str, block_id: str):
     db = firestore.client()
-    return (
-        db.collection("audit_responses")
-        .document(audit_id)
-        .collection("blocks")
-        .document(block_id)
-        .collection("questions")
-    )
+    return db.collection("audit_responses")
 
 def _get_observation_ref(audit_id: str, block_id: str, question_id: str):
-    return _questions_collection(audit_id, block_id).document(str(question_id))
+    db = firestore.client()
+    cid = f"{str(audit_id).strip().lower()}_{str(block_id).strip().lower()}_{str(question_id).strip().lower()}"
+    return db.collection("audit_responses").document(cid)
 
 @router.get("/audit/observations")
 async def list_observations(
@@ -122,9 +126,7 @@ async def list_observations(
     user = verify_user(token)
     db = firestore.client()
     asnap = db.collection("assignments").document(audit_id).get()
-    if not asnap.exists:
-        raise HTTPException(status_code=404, detail="Assignment not found")
-    adata = asnap.to_dict() or {}
+    adata = asnap.to_dict() if asnap.exists else {}
     # Relaxed read: auditors listed in audit_personnel can read observations
     personnel = adata.get("audit_personnel") or []
     uid = user.get("uid")
@@ -146,8 +148,12 @@ async def list_observations(
             if not group_match:
                 if subgroup and assigned_sub and (str(subgroup).strip().lower() != str(assigned_sub).strip().lower()):
                     raise HTTPException(status_code=403, detail="Subdivision mismatch")
+    db = firestore.client()
+    query = db.collection("audit_responses") \
+        .where("audit_id", "==", str(audit_id).strip().lower()) \
+        .where("block_id", "==", str(block_id).strip().lower())
     res = []
-    for doc in _questions_collection(audit_id, block_id).stream():
+    for doc in query.stream():
         d = doc.to_dict() or {}
         if group and str(d.get("group") or "").strip().lower() != str(group).strip().lower():
             continue
@@ -158,8 +164,8 @@ async def list_observations(
             if not (relaxed or group_match):
                 if section and _normalize_section_name(d.get("section")) != _normalize_section_name(section):
                     continue
-        d["question_id"] = str(doc.id)
-        res.append({ "id": str(doc.id).lower(), **d })
+        d["question_id"] = str(d.get("question_id") or "")
+        res.append({"id": str(doc.id).lower(), **d})
     return res
 
 @router.post("/audit/observations/auditor")
@@ -261,12 +267,13 @@ async def customer_submit_section(
     _verify_access(audit_id, user, section or "", block_id)
     db = firestore.client()
     count = 0
-    for doc in _questions_collection(audit_id, block_id).stream():
+    query = db.collection("audit_responses") \
+        .where("audit_id", "==", str(audit_id).strip().lower()) \
+        .where("block_id", "==", str(block_id).strip().lower()) \
+        .where("group", "==", str(group).strip()) \
+        .where("subgroup", "==", str(subgroup).strip())
+    for doc in query.stream():
         d = doc.to_dict() or {}
-        if str(d.get("group") or "").strip().lower() != str(group).strip().lower():
-            continue
-        if str(d.get("subgroup") or "").strip().lower() != str(subgroup).strip().lower():
-            continue
         if _normalize_section_name(d.get("section")) != _normalize_section_name(section):
             continue
         status = d.get("closure_status") or "OPEN"

@@ -16,10 +16,18 @@ def _check_audit_active(audit_id: str):
 
 def _assert_auditor_lock(audit_id: str, uid: str):
   db = firestore.client()
-  doc = db.collection("audits").document(audit_id).get()
-  data = doc.to_dict() if doc.exists else {}
-  if not data.get("locked_by") or data.get("locked_by") != uid:
-    raise HTTPException(status_code=403, detail="Audit lock not held by user")
+  # Allow assigned auditor to write without requiring locked_by
+  asnap = db.collection("assignments").document(audit_id).get()
+  if asnap.exists:
+    adata = asnap.to_dict() or {}
+    if str(adata.get("auditor_id") or "") == str(uid):
+      return
+  dsnap = db.collection("audits").document(audit_id).get()
+  if dsnap.exists:
+    ddata = dsnap.to_dict() or {}
+    if str(ddata.get("auditor_id") or "") == str(uid):
+      return
+  raise HTTPException(status_code=403, detail="Auditor not assigned")
 # --- RBAC ---
 def _extract_token(authorization: str, id_token: str) -> str:
   if authorization and isinstance(authorization, str) and authorization.lower().startswith("bearer "):
@@ -145,7 +153,6 @@ async def save_auditor_response(body: AuditorResponse, authorization: str = Head
   _check_audit_active(body.audit_id)
   if (user.get("role") or "").upper() != "AUDITOR":
     raise HTTPException(status_code=403, detail="Only auditors can save auditor responses")
-  _assert_auditor_lock(body.audit_id, user["uid"])
   if not body.block_id or not body.question_id:
     raise HTTPException(status_code=400, detail="block_id and question_id are required")
   if body.auditor_score is None and body.final_score is None and body.observation is None and body.photo_url is None:
@@ -162,6 +169,7 @@ async def save_auditor_response(body: AuditorResponse, authorization: str = Head
     m = re.match(r"^([A-F])\-([^-]+)\-", str(body.question_id))
     derived_category = m.group(1) if m else None
     derived_subcategory = m.group(2) if m else None
+  # Nested path: audit_responses/{audit_id}/blocks/{block_id}/questions/{question_id}
   base = db.collection("audit_responses").document(body.audit_id).collection("blocks").document(body.block_id).collection("questions").document(str(body.question_id))
   snap = base.get()
   prev = snap.to_dict() if snap.exists else {}
@@ -200,22 +208,8 @@ async def lock_audit(audit_id: str, authorization: str = Header(default=None, al
   user = verify_user(token)
   if (user.get("role") or "").upper() != "AUDITOR":
     raise HTTPException(status_code=403, detail="Only auditors can lock audits")
-  db = firestore.client()
-  ref = db.collection("audits").document(audit_id)
-  snap = ref.get()
-  cur = snap.to_dict() if snap.exists else {}
-  locked_by = cur.get("locked_by")
-  locked_at = cur.get("locked_at")
-  if locked_by and locked_at:
-    try:
-      from datetime import datetime, timedelta
-      if isinstance(locked_at, datetime) and datetime.utcnow() - locked_at <= timedelta(minutes=30):
-        if locked_by != user["uid"]:
-          raise HTTPException(status_code=409, detail="Audit already locked")
-    except Exception:
-      pass
-  ref.set({"locked_by": user["uid"], "locked_at": firestore.SERVER_TIMESTAMP}, merge=True)
-  return {"audit_id": audit_id, "locked_by": user["uid"]}
+  # Lock disabled: no-op for compatibility
+  return {"audit_id": audit_id, "lock": "disabled"}
 
 @router.get("/audits/{audit_id}")
 async def get_audit(audit_id: str, authorization: str = Header(default=None, alias="Authorization", description="Primary: Authorization: Bearer <ID_TOKEN>"), idToken: str = Header(default=None)):
@@ -282,7 +276,6 @@ async def complete_audit(audit_id: str, authorization: str = Header(default=None
   user = verify_user(token)
   if (user.get("role") or "").upper() != "AUDITOR":
     raise HTTPException(status_code=403, detail="Only auditors can complete audits")
-  _assert_auditor_lock(audit_id, user["uid"])
   db = firestore.client()
   res = _validate_audit_internal(db, audit_id)
   if not res.get("valid"):

@@ -14,10 +14,18 @@ def _check_audit_active(audit_id: str):
 
 def _assert_auditor_lock(audit_id: str, uid: str):
     db = firestore.client()
-    doc = db.collection("audits").document(audit_id).get()
-    data = doc.to_dict() if doc.exists else {}
-    if not data.get("locked_by") or data.get("locked_by") != uid:
-        raise HTTPException(status_code=403, detail="Audit lock not held by user")
+    # Allow assigned auditor to write without requiring locked_by
+    asnap = db.collection("assignments").document(audit_id).get()
+    if asnap.exists:
+        adata = asnap.to_dict() or {}
+        if str(adata.get("auditor_id") or "") == str(uid):
+            return
+    dsnap = db.collection("audits").document(audit_id).get()
+    if dsnap.exists:
+        ddata = dsnap.to_dict() or {}
+        if str(ddata.get("auditor_id") or "") == str(uid):
+            return
+    raise HTTPException(status_code=403, detail="Auditor not assigned")
 def _extract_token(authorization: str, id_token: str) -> str:
     if authorization and isinstance(authorization, str) and authorization.lower().startswith("bearer "):
         return authorization.split(" ", 1)[1].strip()
@@ -136,9 +144,6 @@ class SaveRequest(BaseModel):
     status: str = Field(min_length=1)
     value: Optional[str] = None
 
-def _compound_id(block_id: str, group: str, subdivision_id: str, question_id: str) -> str:
-    return f"{str(block_id)}__{str(group)}__{str(subdivision_id)}__{str(question_id)}"
-
 @router.post("/audit-responses/save")
 async def save_response(body: SaveRequest, authorization: str = Header(default=None, alias="Authorization", description="Primary: Authorization: Bearer <ID_TOKEN>"), idToken: str = Header(default=None)):
     token = _extract_token(authorization, idToken)
@@ -157,15 +162,14 @@ async def save_response(body: SaveRequest, authorization: str = Header(default=N
     valid_status = {"IN_PLACE", "PARTIAL", "NOT_IN_PLACE", "NOT_RELEVANT"}
     if status_upper not in valid_status:
         raise HTTPException(status_code=400, detail="Invalid status")
-    # deterministic id
-    cid = _compound_id(body.block_id, body.group, body.subdivision_id, body.question_id)
-    ref = db.collection("audit_responses").document(body.audit_id).collection("responses").document(cid)
+    # deterministic composite doc id at root
+    ref = db.collection("audit_responses").document(body.audit_id).collection("blocks").document(body.block_id).collection("questions").document(str(body.question_id))
     payload = {
-        "audit_id": body.audit_id,
+        "audit_id": str(body.audit_id).strip().lower(),
         "org_id": body.org_id,
-        "block_id": str(body.block_id),
-        "group": str(body.group),
-        "subdivision_id": str(body.subdivision_id),
+        "block_id": str(body.block_id).strip().lower(),
+        "group": str(body.group).strip(),
+        "subdivision_id": str(body.subdivision_id).strip(),
         "question_id": str(body.question_id),
         "status": status_upper,
         "value": body.value or "",
@@ -174,40 +178,50 @@ async def save_response(body: SaveRequest, authorization: str = Header(default=N
     }
     # idempotent upsert
     ref.set(payload, merge=True)
-    return {"status": "saved", "id": cid}
+    return {"status": "saved", "id": str(body.question_id)}
 
 @router.get("/audit-responses/list")
 async def list_saved_responses(audit_id: str = Query(min_length=1), block_id: Optional[str] = None, authorization: str = Header(default=None, alias="Authorization", description="Primary: Authorization: Bearer <ID_TOKEN>"), idToken: str = Header(default=None)) -> List[dict]:
     token = _extract_token(authorization, idToken)
     verify_user(token)
     db = firestore.client()
-    base = db.collection("audit_responses").document(audit_id).collection("responses")
     res: List[dict] = []
-    q = base
+    bcol = db.collection("audit_responses").document(audit_id).collection("blocks")
     if block_id:
-        # client-side filter since compound id includes block; we also store block_id field
-        q = base.where("block_id", "==", str(block_id))
-    for doc in q.stream():
-        d = doc.to_dict() or {}
-        res.append({"id": doc.id, **d})
-    return res
-@router.get("/audit/responses")
-async def list_responses(assignment_id: str = Query(min_length=1), authorization: str = Header(default=None, alias="Authorization", description="Primary: Authorization: Bearer <ID_TOKEN>"), idToken: str = Header(default=None)) -> List[dict]:
-    token = _extract_token(authorization, idToken)
-    user = verify_user(token)
-    db = firestore.client()
-    asg = db.collection("assignments").document(assignment_id).get()
-    if not asg.exists:
-        raise HTTPException(status_code=404, detail="Assignment not found")
-    asg_data = asg.to_dict()
-    if user["role"] == "CUSTOMER" and user.get("org_id") and user["org_id"] != asg_data.get("org_id"):
-        raise HTTPException(status_code=403, detail="Organization mismatch")
-    res = []
-    bcol = db.collection("audit_responses").document(assignment_id).collection("blocks")
+        qcol = bcol.document(block_id).collection("questions")
+        for doc in qcol.stream():
+            d = doc.to_dict() or {}
+            res.append({"id": doc.id, **d})
+        return res
+    # all blocks
     for bdoc in bcol.stream():
         qcol = bdoc.reference.collection("questions")
         for doc in qcol.stream():
-            d = doc.to_dict()
+            d = doc.to_dict() or {}
+            res.append({"id": doc.id, "block_id": bdoc.id, **d})
+    return res
+@router.get("/audit/responses")
+async def list_responses(audit_id: str = Query(min_length=1), block_id: Optional[str] = None, authorization: str = Header(default=None, alias="Authorization", description="Primary: Authorization: Bearer <ID_TOKEN>"), idToken: str = Header(default=None)) -> List[dict]:
+    token = _extract_token(authorization, idToken)
+    user = verify_user(token)
+    db = firestore.client()
+    asg = db.collection("assignments").document(audit_id).get()
+    asg_data = asg.to_dict() if asg.exists else {}
+    if user["role"] == "CUSTOMER" and user.get("org_id") and user["org_id"] != asg_data.get("org_id"):
+        raise HTTPException(status_code=403, detail="Organization mismatch")
+    base = db.collection("audit_responses")
+    res: List[dict] = []
+    bcol = base.document(audit_id).collection("blocks")
+    if block_id:
+        qcol = bcol.document(block_id).collection("questions")
+        for doc in qcol.stream():
+            d = doc.to_dict() or {}
+            res.append({"id": doc.id, "block_id": block_id, **d})
+        return res
+    for bdoc in bcol.stream():
+        qcol = bdoc.reference.collection("questions")
+        for doc in qcol.stream():
+            d = doc.to_dict() or {}
             res.append({"id": doc.id, "block_id": bdoc.id, **d})
     return res
 
@@ -219,8 +233,10 @@ async def lock_response(body: LockBody, authorization: str = Header(default=None
         raise HTTPException(status_code=403, detail="Not allowed")
     _check_audit_active(body.audit_id)
     db = firestore.client()
-    ref = db.collection("audit_responses").document(body.audit_id).collection("blocks").document(body.block_id).collection("questions").document(str(body.question_id))
-    if not ref.get().exists:
+    composite_id = f"{str(body.audit_id).strip().lower()}_{str(body.block_id).strip().lower()}_{str(body.question_id).strip().lower()}"
+    ref = db.collection("audit_responses").document(composite_id)
+    snap = ref.get()
+    if not snap.exists:
         raise HTTPException(status_code=404, detail="Response not found")
     ref.update({"is_locked": body.is_locked, "updated_at": firestore.SERVER_TIMESTAMP})
     return {"audit_id": body.audit_id, "block_id": body.block_id, "question_id": body.question_id, "status": "locked" if body.is_locked else "unlocked"}
@@ -268,7 +284,7 @@ async def save_org_responses(body: List[OrgResponseSaveBody], authorization: str
         if item.status and status_upper not in valid_status:
             results.append({"question_id": item.question_id, "status": "failed", "error": "Invalid status"})
             continue
-        cid = _compound_id(item.block_id, item.group, item.subdivision_id, item.question_id)
+        cid = f"{str(item.block_id).strip()}__{str(item.group).strip()}__{str(item.subdivision_id).strip()}__{str(item.question_id).strip()}"
         ref = db.collection("org_responses").document(item.audit_id).collection("responses").document(cid)
         payload = {
             "audit_id": item.audit_id,
