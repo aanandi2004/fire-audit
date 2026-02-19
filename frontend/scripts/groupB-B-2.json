@@ -1,0 +1,26 @@
+[
+  {
+    "id": "B-2-1",
+    "block": "General",
+    "clause": "6.2.1",
+    "requirement": "No hazardous material shall be stored in the premises."
+  },
+  {
+    "id": "B-2-2",
+    "block": "General",
+    "clause": "6.2.2",
+    "requirement": "Are doors leading to exit are not locked, accessible and openable without any difficulty"
+  },
+  {
+    "id": "B-2-3",
+    "block": "General",
+    "clause": "6.2.2",
+    "requirement": "Atleast two extis maintained, exit doors opened to outside."
+  },
+  {
+    "id": "B-2-4",
+    "block": "General",
+    "clause": "6.2.3",
+    "requirement": "Storage of volatile flammable liquids shall be prohibited and the handling of such liquids shall be restricted to science laboratories only"
+  }
+]

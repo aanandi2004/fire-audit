@@ -1,0 +1,128 @@
+[
+  {
+    "id": "C-3-1",
+    "block": "General",
+    "clause": "6.3.1",
+    "requirement": "No combustible material of any kind shall be stored or used  in  any  building  or  section  thereof  used  for institutional occupancy, except as necessary to normal occupancy and use of the building."
+  },
+  {
+    "id": "C-3-2",
+    "block": "General",
+    "clause": "6.3.2 a",
+    "requirement": "The common path of travel shall be 30 m. The maximum dead end of corridor distance shall not exceed 6 m"
+  },
+  {
+    "id": "C-3-3",
+    "block": "General",
+    "clause": "6.3.2 b",
+    "requirement": "For horizontal evacuation in consideration for hospital patients  particularly  those  lacking  self- preservation. This calls for moving occupants from a fire affected area to an adjoining area at the same level through a fire resistant wall, to protect them from the immediate dangers of fire and smoke"
+  },
+  {
+    "id": "C-3-4",
+    "block": "General",
+    "clause": "6.3.2 c",
+    "requirement": "All compartments shall be divided with self- closing  (door  closers)  fire  doors  with electromagnetic hold open."
+  },
+  {
+    "id": "C-3-5",
+    "block": "General",
+    "clause": "6.3.2 d",
+    "requirement": "Doors  in  fire  resistant walls  shall  be  so installed that these may normally be kept in open position, but will close automatically. Corridor door openings shall be not less than 2.0 m in width of double swing double leaf type door."
+  },
+  {
+    "id": "C-3-6",
+    "block": "General",
+    "clause": "6.3.2",
+    "requirement": "Any coordinator appointed to sequence the closing of double leaf in case of emergency."
+  },
+  {
+    "id": "C-3-7",
+    "block": "General",
+    "clause": "6.3.2 g",
+    "requirement": "Each compartment (see 4.5.2) shall be able to accommodate, in addition to its own, the patients from adjoining compartment also considering 3.5 m2 per person. If\npatients are not bed-ridden, a factor of 0.6 m2 per person is recommended."
+  },
+  {
+    "id": "C-3-8",
+    "block": "General",
+    "clause": "6.3.2 g",
+    "requirement": "All critical patients and those incapable of self-preservation and having physical impairment shall be housed within 30 m height."
+  },
+  {
+    "id": "C-3-9",
+    "block": "General",
+    "clause": "6.3.2 g",
+    "requirement": "Other types of patients and occupancies incidental  to  the  hospitals  such  as consultation  rooms,  nurses  stations, medical  shops,  canteens,  etc may  be housed at heights beyond 30 m but not more than 45 m."
+  },
+  {
+    "id": "C-3-10",
+    "block": "General",
+    "clause": "6.3.2 g",
+    "requirement": "Basement  shall  not  be  used  to  store flammables or for pathological or other laboratories particularly those involving usage of chemicals."
+  },
+  {
+    "id": "C-3-11",
+    "block": "General",
+    "clause": "6.3.2 g",
+    "requirement": "Operation  theatres,  delivery  rooms, Intensive care units, recovery rooms, etc, that  containing  patients  lacking  self- preservation in case of emergencies shall be  fire/smoke  separated  (120  min minimum rating) from all the adjoining areas."
+  },
+  {
+    "id": "C-3-12",
+    "block": "General",
+    "clause": "6.3.2 g",
+    "requirement": "Aisles, corridors, ramps, etc, through which patients are moved, shall have a minimum width of 2.4 m throughout. Aisles, corridors, and ramps in other areas not intended for the housing, treatment, or use of inpatients shall be not less than 1.5 m in width."
+  },
+  {
+    "id": "C-3-13",
+    "block": "General",
+    "clause": "6.3.2 g",
+    "requirement": "All  exits  from  hospital  or  infirmary sections shall be not less than 2.0 m in width."
+  },
+  {
+    "id": "C-3-14",
+    "block": "General",
+    "clause": "6.3.2 g",
+    "requirement": "Minimum width of door of single or double occupancy patient room shall be 1.25 m while for the wards for 3 to 5 patient beds shall be 1.50 m, to permit movement of patients."
+  },
+  {
+    "id": "C-3-15",
+    "block": "General",
+    "clause": "6.3.2 g",
+    "requirement": "Any sleeping accommodation or suite exceeding 100 m2 in area shall have at least two doorways leading to the exit access corridors."
+  },
+  {
+    "id": "C-3-16",
+    "block": "General",
+    "clause": "6.3.2 g",
+    "requirement": "Floor surface of corridors shall not be inclined at a gradient steeper than 1 in 12 to the horizontal."
+  },
+  {
+    "id": "C-3-17",
+    "block": "General",
+    "clause": "6.3.2 g",
+    "requirement": "Storage  of  flammable  liquids  in laboratories or in any other area shall be not more than 3 litre for every 10 m2 area."
+  },
+  {
+    "id": "C-3-18",
+    "block": "General",
+    "clause": "6.3.2 g",
+    "requirement": "Disposal of any equipment and other (particularly hazardous) materials shall be accomplished in the premises by a disposal specialist or at a safe location away from the health care facility by competent personnel using procedures established in concurrence with the safe practices."
+  },
+  {
+    "id": "C-3-19",
+    "block": "General",
+    "clause": "6.3.2 g",
+    "requirement": "A stretcher lift in a lift bank shall also act as firemans lift meeting the requirements of Part 8 Building Services, Section 5 Installation  of  Lifts,  Escalators  and Moving Walks, Subsection 5A Lifts of .the Code."
+  },
+  {
+    "id": "C-3-20",
+    "block": "General",
+    "clause": "6.3.2 h",
+    "requirement": "Is there a proper evacuation plan showing atleast two exit paths and displayed prominently at all required locations."
+  },
+  {
+    "id": "C-3-21",
+    "block": "General",
+    "clause": "6.3.3",
+    "requirement": "If the institution is used as mental or penal institution or used to house psychiartic patients. It is exempted from having exit doors opened at all times. There shall be a reliable strategy and means to evacuate all occupants and opening of locks either automatically or keying all locks to keys commonly used by attendants."
+  }
+]

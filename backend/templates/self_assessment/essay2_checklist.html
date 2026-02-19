@@ -1,0 +1,35 @@
+<div class="page" style="padding: 12mm;">
+  <div class="title" style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 6mm; text-transform: uppercase;">Self Assessment Report</div>
+  <div class="heading" style="font-size: 16px; font-weight: 700; text-align: center; margin: 0 0 4mm 0;">FIRE AUDIT CHECKLIST STATUS BY BLOCK AND SECTION</div>
+  <div class="band" style="background:#1e3a8a; color:#fff; padding:3mm 2mm; font-weight:700; border-radius:4px; margin-bottom:3mm;">{{ report.block.name }}</div>
+  <div class="subband" style="background:#0ea5e9; color:#fff; padding:3mm 2mm; font-weight:700; border-radius:4px; margin-bottom:3mm;">{{ report.organization.name }}</div>
+
+  <table class="content-table" style="width:100%; border-collapse: collapse;">
+    <thead>
+      <tr>
+        <th style="background:#f8fafc; color:#111827; font-weight:700; border-bottom:1px solid #e5e7eb; padding:2.5mm; font-size:12px; text-align:left;">
+          Section
+        </th>
+        <th style="background:#f8fafc; color:#111827; font-weight:700; border-bottom:1px solid #e5e7eb; padding:2.5mm; font-size:12px; text-align:right; width:20mm;">
+          Target
+        </th>
+        <th style="background:#f8fafc; color:#111827; font-weight:700; border-bottom:1px solid #e5e7eb; padding:2.5mm; font-size:12px; text-align:right; width:22mm;">
+          Organization
+        </th>
+        <th style="background:#f8fafc; color:#111827; font-weight:700; border-bottom:1px solid #e5e7eb; padding:2.5mm; font-size:12px; text-align:left; width:40mm;">
+          Status
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in report.assessment_rows %}
+      <tr>
+        <td style="border-bottom:1px solid #e5e7eb; padding:2.5mm; font-size:12px;">{{ r.section }}</td>
+        <td style="border-bottom:1px solid #e5e7eb; padding:2.5mm; font-size:12px; text-align:right;">{{ r.target }}</td>
+        <td style="border-bottom:1px solid #e5e7eb; padding:2.5mm; font-size:12px; text-align:right;">{{ r.organization }}</td>
+        <td style="border-bottom:1px solid #e5e7eb; padding:2.5mm; font-size:12px;">{{ r.status }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>

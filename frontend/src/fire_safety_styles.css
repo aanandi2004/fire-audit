@@ -1,0 +1,960 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* GLOBAL RESETS & FONTS - Scoped to wrapper */
+.fire-safety-wrapper {
+    font-family: 'Inter', sans-serif;
+    color: #334155;
+    background-color: #f8fafc;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- LAYOUT & TABS --- */
+.fire-safety-wrapper.fire-audit-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    background: #f1f5f9;
+}
+
+.fire-safety-wrapper .fire-audit-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 16px 24px 0;
+    background: #fff;
+    border-bottom: 1px solid #e2e8f0;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    z-index: 10;
+}
+
+.fire-safety-wrapper .fire-audit-tab {
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #64748b;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.fire-safety-wrapper .fire-audit-tab:hover {
+    color: #334155;
+    background: #f8fafc;
+    border-radius: 6px 6px 0 0;
+}
+
+.fire-safety-wrapper .fire-audit-tab.active {
+    color: #3b82f6;
+    border-bottom-color: #3b82f6;
+    background: transparent;
+}
+
+.fire-safety-wrapper .tab-close {
+    font-size: 16px;
+    opacity: 0.6;
+    margin-left: 4px;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fire-safety-wrapper .tab-close:hover {
+    background: #e2e8f0;
+    opacity: 1;
+}
+
+/* --- DASHBOARD VIEW --- */
+.fire-safety-wrapper .dashboard-view-content {
+    flex: 1;
+    padding: 24px;
+    max-width: 1200px; /* Standard width */
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* --- SUMMARY DASHBOARD STYLES (NEW) --- */
+.fire-safety-wrapper .summary-dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.fire-safety-wrapper .summary-top-section {
+    display: grid;
+    grid-template-columns: 260px 1fr; /* Removed logos column */
+    gap: 24px;
+    align-items: stretch;
+}
+
+/* Gauge Card */
+.fire-safety-wrapper .gauge-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    border: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.fire-safety-wrapper .gauge-svg {
+    width: 100%;
+    max-width: 180px;
+    overflow: visible;
+}
+
+.fire-safety-wrapper .gauge-bg {
+    fill: none;
+    stroke: #f1f5f9;
+    stroke-width: 20;
+    stroke-linecap: round;
+}
+
+.fire-safety-wrapper .gauge-arc {
+    fill: none;
+    stroke: #3b82f6;
+    stroke-width: 20;
+    stroke-linecap: round;
+    transition: stroke-dasharray 1s ease;
+}
+
+.fire-safety-wrapper .gauge-needle {
+    stroke: #1e293b;
+    stroke-width: 4;
+    stroke-linecap: round;
+    transform-origin: 100px 100px;
+    transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fire-safety-wrapper .gauge-text {
+    font-size: 28px;
+    font-weight: 800;
+    fill: #1e293b;
+    text-anchor: middle;
+}
+
+/* KPI Cards Row */
+.fire-safety-wrapper .kpi-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+}
+
+.fire-safety-wrapper .kpi-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    border: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.fire-safety-wrapper .kpi-label {
+    font-size: 11px;
+    color: #64748b;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+}
+
+.fire-safety-wrapper .kpi-value {
+    font-size: 28px;
+    font-weight: 800;
+    color: #1e293b;
+    line-height: 1.2;
+}
+
+.fire-safety-wrapper .kpi-subtext {
+    font-size: 11px;
+    color: #94a3b8;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-top: 8px;
+}
+
+/* Logos Column */
+.fire-safety-wrapper .logos-col {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.fire-safety-wrapper .logo-placeholder {
+    background: #e2e8f0;
+    border-radius: 8px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+}
+
+/* Summary Links */
+.fire-safety-wrapper .summary-links {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.fire-safety-wrapper .summary-link {
+    font-size: 13px;
+    font-weight: 600;
+    color: #3b82f6;
+    text-decoration: none;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 6px;
+    background: #eff6ff;
+    transition: background 0.2s;
+}
+
+.fire-safety-wrapper .summary-link:hover {
+    background: #dbeafe;
+}
+
+/* Summary Title */
+.fire-safety-wrapper .summary-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: #1e293b;
+    margin: 0;
+    letter-spacing: -0.02em;
+}
+
+/* Summary Grid */
+.fire-safety-wrapper .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+}
+
+.fire-safety-wrapper .summary-col {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.fire-safety-wrapper .summary-section-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0 0 8px 0;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 8px;
+}
+
+.fire-safety-wrapper .summary-section-title.right {
+    text-align: right;
+}
+
+/* Progress Item */
+.fire-safety-wrapper .progress-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.fire-safety-wrapper .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
+}
+
+.fire-safety-wrapper .progress-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.fire-safety-wrapper .progress-bar-container {
+    flex: 1;
+}
+
+.fire-safety-wrapper .progress-track {
+    height: 8px;
+    background: #f1f5f9;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.fire-safety-wrapper .progress-fill {
+    height: 100%;
+    background: #3b82f6;
+    border-radius: 4px;
+}
+
+.fire-safety-wrapper .progress-value-text {
+    width: 40px;
+    text-align: right;
+    font-size: 13px;
+    font-weight: 700;
+    color: #3b82f6;
+}
+
+/* --- ORGANIZATION VIEW STYLES --- */
+.fire-safety-wrapper .org-view-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: #fff;
+    border-radius: 0 0 8px 8px;
+}
+
+.fire-safety-wrapper .org-tabs {
+    display: flex;
+    gap: 2px;
+    padding: 10px 10px 0;
+    background: #f1f5f9;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.fire-safety-wrapper .org-tab {
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #64748b;
+    background: #e2e8f0;
+    border: 1px solid #cbd5e1;
+    border-bottom: none;
+    border-radius: 6px 6px 0 0;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.fire-safety-wrapper .org-tab.active {
+    background: #fff;
+    color: #334155;
+    border-color: #cbd5e1;
+    margin-bottom: -1px;
+    z-index: 1;
+}
+
+.fire-safety-wrapper .org-content {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+}
+
+.fire-safety-wrapper .hospital-details-layout {
+    display: flex;
+    flex: 1;
+    height: 100%;
+    width: 100%;
+}
+
+.fire-safety-wrapper .hospital-sidebar {
+    width: 300px;
+    background: #f8fafc;
+    border-right: 1px solid #e2e8f0;
+    padding: 16px 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.fire-safety-wrapper .hospital-nav-item {
+    padding: 12px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: background 0.2s;
+    text-transform: uppercase;
+    line-height: 1.4;
+}
+
+.fire-safety-wrapper .hospital-nav-item:hover {
+    background: #f1f5f9;
+}
+
+.fire-safety-wrapper .hospital-nav-item.active {
+    background: #e2e8f0;
+    border-left-color: #3b82f6;
+    color: #1e293b;
+}
+
+.fire-safety-wrapper .hospital-form-area {
+    flex: 1;
+    padding: 32px;
+    overflow-y: auto;
+}
+
+.fire-safety-wrapper .details-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 24px;
+    font-size: 14px;
+}
+
+.fire-safety-wrapper .details-table th {
+    text-align: left;
+    padding: 12px 16px;
+    background: #f8fafc;
+    color: #64748b;
+    font-weight: 600;
+    border-bottom: 2px solid #e2e8f0;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+}
+
+.fire-safety-wrapper .details-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+}
+
+.fire-safety-wrapper .form-actions {
+    display: flex;
+    gap: 16px;
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.fire-safety-wrapper .btn-text {
+    background: none;
+    border: none;
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.fire-safety-wrapper .btn-text:hover {
+    background: #f1f5f9;
+    color: #334155;
+}
+
+.fire-safety-wrapper .btn-text.ml-auto {
+    margin-left: auto;
+}
+
+.fire-safety-wrapper .form-section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 32px 0 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.fire-safety-wrapper .bottom-actions {
+    margin-top: 32px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.fire-safety-wrapper .btn {
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+}
+
+.fire-safety-wrapper .btn-primary {
+    background: #3b82f6;
+    color: white;
+}
+
+.fire-safety-wrapper .btn-primary:hover {
+    background: #2563eb;
+}
+
+.fire-safety-wrapper .block-details-layout {
+    flex: 1;
+    padding: 32px;
+    overflow-y: auto;
+    background: #fff;
+}
+
+.fire-safety-wrapper .blocks-header-actions {
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.fire-safety-wrapper .btn-add-block {
+    padding: 8px 16px;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.fire-safety-wrapper .btn-add-block:hover {
+    background: #2563eb;
+}
+
+.fire-safety-wrapper .icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 4px;
+    transition: background 0.2s;
+    font-size: 16px;
+}
+
+.fire-safety-wrapper .icon-btn:hover {
+    background: #f1f5f9;
+}
+
+.fire-safety-wrapper .delete-btn:hover {
+    background: #fee2e2;
+    color: #ef4444;
+}
+
+.fire-safety-wrapper .org-input {
+    width: 100%;
+    border: 1px solid transparent;
+    background: transparent;
+    font-size: 14px;
+    color: #334155;
+    padding: 6px 8px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.fire-safety-wrapper .org-input:hover {
+    background: #f8fafc;
+    border-color: #e2e8f0;
+}
+
+.fire-safety-wrapper .org-input:focus {
+    outline: none;
+    background: #fff;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+/* --- BLOCKS VIEW STYLES (DASHBOARD TAB) --- */
+.fire-safety-wrapper .blocks-view-content {
+    padding: 32px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    height: 100%;
+    overflow-y: auto;
+}
+
+.fire-safety-wrapper .block-status-list {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.fire-safety-wrapper .fire-audit-section-header {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.fire-safety-wrapper .fire-audit-progress-item {
+    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: 200px 1fr 50px;
+    align-items: center;
+    gap: 16px;
+}
+
+.fire-safety-wrapper .fire-audit-progress-label {
+    font-weight: 600;
+    color: #475569;
+}
+
+.fire-safety-wrapper .fire-audit-progress-track {
+    height: 12px;
+    background: #f1f5f9;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.fire-safety-wrapper .fire-audit-progress-fill {
+    height: 100%;
+    background: #3b82f6;
+    border-radius: 6px;
+    transition: width 0.5s ease;
+}
+
+.fire-safety-wrapper .fire-audit-progress-value {
+    font-weight: 700;
+    color: #3b82f6;
+}
+
+/* --- CATEGORIES VIEW STYLES --- */
+.fire-safety-wrapper .categories-view-container {
+    display: flex;
+    height: 100%;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.fire-safety-wrapper .categories-sidebar {
+    width: 260px;
+    background: #f8fafc;
+    border-right: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.fire-safety-wrapper .categories-sidebar-title {
+    padding: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0;
+}
+
+.fire-safety-wrapper .category-group-header {
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #475569;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.fire-safety-wrapper .category-group-header:hover {
+    background: #f1f5f9;
+}
+
+.fire-safety-wrapper .category-group-header.active {
+    color: #3b82f6;
+    background: #eff6ff;
+}
+
+.fire-safety-wrapper .subcategory-list {
+    background: #fff;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.fire-safety-wrapper .subcategory-item {
+    padding: 10px 20px 10px 32px;
+    font-size: 13px;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.fire-safety-wrapper .subcategory-item:hover {
+    color: #334155;
+    background: #f8fafc;
+}
+
+.fire-safety-wrapper .subcategory-item.active {
+    color: #3b82f6;
+    font-weight: 500;
+    background: #eff6ff;
+    border-right: 3px solid #3b82f6;
+}
+
+.fire-safety-wrapper .categories-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: #f1f5f9;
+}
+
+.fire-safety-wrapper .categories-header {
+    padding: 24px 32px;
+    background: #fff;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.fire-safety-wrapper .categories-header h2 {
+    margin: 0;
+    font-size: 18px;
+    color: #1e293b;
+}
+
+.fire-safety-wrapper .stat-badge {
+    background: #fef2f2;
+    padding: 6px 12px;
+    border-radius: 20px;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.fire-safety-wrapper .stat-badge .label {
+    font-size: 12px;
+    color: #ef4444;
+    font-weight: 600;
+}
+
+.fire-safety-wrapper .stat-badge .value {
+    font-size: 14px;
+    color: #ef4444;
+    font-weight: 800;
+}
+
+.fire-safety-wrapper .gaps-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.fire-safety-wrapper .gap-item-card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    border: 1px solid #e2e8f0;
+}
+
+.fire-safety-wrapper .gap-item-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.fire-safety-wrapper .gap-status-badge {
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.fire-safety-wrapper .gap-status-badge.not_in_place {
+    background: #fee2e2;
+    color: #ef4444;
+}
+
+.fire-safety-wrapper .gap-status-badge.partial {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+.fire-safety-wrapper .gap-question-text {
+    font-size: 15px;
+    color: #1e293b;
+    font-weight: 500;
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+.fire-safety-wrapper .gap-question-subtext {
+    font-size: 13px;
+    color: #64748b;
+    margin-bottom: 16px;
+    padding-left: 12px;
+    border-left: 2px solid #e2e8f0;
+}
+
+.fire-safety-wrapper .gap-details-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.fire-safety-wrapper .gap-detail-section h4 {
+    font-size: 11px;
+    color: #94a3b8;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.fire-safety-wrapper .gap-detail-section p {
+    font-size: 13px;
+    color: #334155;
+    margin: 0;
+}
+
+.fire-safety-wrapper .status-in_place { color: #10b981; font-weight: 600; }
+.fire-safety-wrapper .status-not_in_place { color: #ef4444; font-weight: 600; }
+.fire-safety-wrapper .status-partial { color: #f59e0b; font-weight: 600; }
+
+
+/* --- AUDIT GAPS VIEW STYLES --- */
+
+.fire-safety-wrapper .audit-gaps-container {
+    display: flex;
+    height: 100%;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.fire-safety-wrapper .gaps-sidebar {
+    width: 240px;
+    background: #1e293b;
+    color: #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.fire-safety-wrapper .gaps-sidebar-title {
+    padding: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #94a3b8;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.fire-safety-wrapper .gaps-sidebar-item {
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+    color: #cbd5e1;
+    border-left: 3px solid transparent;
+}
+
+.fire-safety-wrapper .gaps-sidebar-item:hover {
+    background: rgba(255,255,255,0.05);
+    color: white;
+}
+
+.fire-safety-wrapper .gaps-sidebar-item.active {
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border-left-color: #3b82f6;
+}
+
+.fire-safety-wrapper .gaps-grid {
+    flex: 1;
+    padding: 32px;
+    overflow-y: auto;
+    background: #f1f5f9;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+    align-content: start;
+}
+
+.fire-safety-wrapper .gap-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border-top: 4px solid #ef4444; /* Default to red for critical/not-in-place */
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+}
+
+.fire-safety-wrapper .gap-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.fire-safety-wrapper .gap-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 12px;
+}
+
+.fire-safety-wrapper .gap-card-question {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e293b;
+    line-height: 1.4;
+    margin-bottom: 8px;
+}
+
+.fire-safety-wrapper .gap-card-location {
+    font-size: 12px;
+    color: #64748b;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.fire-safety-wrapper .gap-card-footer {
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid #f1f5f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.fire-safety-wrapper .assign-btn {
+    font-size: 12px;
+    font-weight: 600;
+    color: #3b82f6;
+    background: #eff6ff;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.fire-safety-wrapper .assign-btn:hover {
+    background: #dbeafe;
+}

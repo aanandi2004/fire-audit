@@ -1,0 +1,1520 @@
+[
+  {
+    "id": "E-3-1",
+    "block": "Building details",
+    "clause": "",
+    "requirement": "Height (in meters)"
+  },
+  {
+    "id": "E-3-2",
+    "block": "Building details",
+    "clause": "",
+    "requirement": "No. of Floors  (Including basement Floors)"
+  },
+  {
+    "id": "E-3-3",
+    "block": "Building details",
+    "clause": "",
+    "requirement": "Total Floor area (in sq m)(Including basement Floors) under scope"
+  },
+  {
+    "id": "E-3-4",
+    "block": "Building details",
+    "clause": "",
+    "requirement": "Plot Area (in sq m)"
+  },
+  {
+    "id": "E-3-5",
+    "block": "Type of construction",
+    "clause": "",
+    "requirement": "Whether the Building is of permanent construction?"
+  },
+  {
+    "id": "E-3-6",
+    "block": "Type of construction",
+    "clause": "3.3",
+    "requirement": "Whether the building is of TYPE 1/ Type 2 / Type 3/ Type 4 construction  of NBC Part 4 lift & safety?"
+  },
+  {
+    "id": "E-3-7",
+    "block": "Type of construction",
+    "clause": "4.3 and 4.4.2.1",
+    "requirement": "Is the occupant load determined as per table 3"
+  },
+  {
+    "id": "E-3-8",
+    "block": "Type of construction",
+    "clause": "3.4.4.3",
+    "requirement": "Weather the open space around the building is maintained according to clause 3.4.4.3"
+  },
+  {
+    "id": "E-3-9",
+    "block": "Type of construction",
+    "clause": "",
+    "requirement": "Set backs maintained"
+  },
+  {
+    "id": "E-3-10",
+    "block": "Fire Prevention",
+    "clause": "3.1",
+    "requirement": "What is the current classification of occupancy as per clause 3.1?"
+  },
+  {
+    "id": "E-3-11",
+    "block": "Fire Prevention",
+    "clause": "3.1.11",
+    "requirement": "Does the building has multiple occupancies  as per 3.1.11?"
+  },
+  {
+    "id": "E-3-12",
+    "block": "Fire Prevention",
+    "clause": "3.4",
+    "requirement": "Are the general requirements of individual occupancies met as per clause 3.4."
+  },
+  {
+    "id": "E-3-13",
+    "block": "Fire Prevention",
+    "clause": "3.4.5",
+    "requirement": "Are structural and non structural elements has sufficient fire resistance ratings as per table 3? Clause 3.4.5"
+  },
+  {
+    "id": "E-3-14",
+    "block": "Fire Prevention",
+    "clause": "3.4.5.2",
+    "requirement": "Are doorway or opening in a fire resistant wall on any floor is 5.6 m2 in area with a maximum height/width of 2.75 m for type 1 - 3 construction?"
+  },
+  {
+    "id": "E-3-15",
+    "block": "Fire Prevention",
+    "clause": "3.4.5.2",
+    "requirement": "Are wall opening protected with fire resistance doors with fire rating not less than 120 min?"
+  },
+  {
+    "id": "E-3-16",
+    "block": "Fire Prevention",
+    "clause": "3.4.5.4",
+    "requirement": "Openings in walls or floors which are necessary to be provided to allow passages of all building services like cables, electrical wirings, telephone cables, plumbing pipes, etc, shall be protected by enclosure in the form of ducts/shafts having a fire resistance not less than 120 min?"
+  },
+  {
+    "id": "E-3-17",
+    "block": "Fire Prevention",
+    "clause": "3.4.5.4",
+    "requirement": "The space between the electrical cables/conduits and the walls/slabs shall be filled in by a fire stop material having fire resistance rating of not less than 120 min?"
+  },
+  {
+    "id": "E-3-18",
+    "block": "Fire Prevention",
+    "clause": "3.4.5.4",
+    "requirement": "For plumbing shafts in the core of the building, with shaft door opening inside the building, the shafts shall have inspection doors having fire resistance rating not less than 30 min?"
+  },
+  {
+    "id": "E-3-19",
+    "block": "Fire Prevention",
+    "clause": "3.4.6.2",
+    "requirement": "Are emergency power supplying distribution system for critical requirement for functioning of fire and life safety system and equipment planned for efficient and reliable power?"
+  },
+  {
+    "id": "E-3-20",
+    "block": "Fire Prevention",
+    "clause": "3.4.6.2 & 3.4.6.4",
+    "requirement": "Is there a stand by generator as back up to the critical building systems including fire pumps, pressurization & smoke venting, fire lifts, exit signages lighting, emergency lighting, fire alarm system, PAGA, magnetic door locks, lighting in fire command center?"
+  },
+  {
+    "id": "E-3-21",
+    "block": "Fire Prevention",
+    "clause": "3.4.6.2",
+    "requirement": "Is the power supply to the panel/ Distribution boards of these fire and life safety systems safeguarded with fire proof enclosures and location of such systems are in fire safe zone ensuring power supply to these systems?"
+  },
+  {
+    "id": "E-3-22",
+    "block": "Fire Prevention",
+    "clause": "3.4.7",
+    "requirement": "Whether adequate illumination with alternate power supply is provided for safe movement of persons towards and through the exits?"
+  },
+  {
+    "id": "E-3-23",
+    "block": "Fire Prevention",
+    "clause": "3.4.7",
+    "requirement": "Whether adequate illumination with alternate power supply is provided for locating fire alarm call points and fire fighting equipments?"
+  },
+  {
+    "id": "E-3-24",
+    "block": "Fire Prevention",
+    "clause": "3.4.7",
+    "requirement": "Whether emergency lighting is independently connected and can be operated by one switch on the ground floor which is easily accessible to Fire Fighters?"
+  },
+  {
+    "id": "E-3-25",
+    "block": "Fire Prevention",
+    "clause": "3.4.6.5",
+    "requirement": "Are lighting arrestors provided in accordance with NBC part 4 life & safety  lighting protection of buildings?"
+  },
+  {
+    "id": "E-3-26",
+    "block": "Fire Prevention",
+    "clause": "3.4.8",
+    "requirement": "Are air conditioning and ventilation systems installed such that the danger of spread of fire, smoke or fumes from one floor to other or from outside to any occupied building or structure is minimized"
+  },
+  {
+    "id": "E-3-27",
+    "block": "Fire Prevention",
+    "clause": "3.4.8.2.2",
+    "requirement": "Are fire dampers installed which has minimum fire resistance rating of 120 min"
+  },
+  {
+    "id": "E-3-28",
+    "block": "Fire Prevention",
+    "clause": "3.4.8.3.1",
+    "requirement": "Air ducts serving main floor areas, corridors, etc, shall not pass through the exits/exit passageway/ exit enclosure. Exits and lift lobbies, etc, shall not be used as return air passage."
+  },
+  {
+    "id": "E-3-29",
+    "block": "Fire Prevention",
+    "clause": "3.4.8.3.3",
+    "requirement": "The ducts pass through fire walls or floors, the opening around the ducts shall be sealed with materials having fire resistance rating of the compartment. Such duct shall also be provided with fire dampers at all fire walls and floors with fire resistance rating of not less than 120 min."
+  },
+  {
+    "id": "E-3-30",
+    "block": "Fire Prevention",
+    "clause": "3.4.8.4",
+    "requirement": "Are fire/ smoke dampers installed to supply air ducts, fresh air and return air ducts  which shall provide proper passive fire protection sealing in case of fire."
+  },
+  {
+    "id": "E-3-31",
+    "block": "Fire Prevention",
+    "clause": "3.4.11",
+    "requirement": "Are the surface interior finishing materials used such that it will reduce the flame spread and do not generate toxic smoke/ fumes?"
+  },
+  {
+    "id": "E-3-32",
+    "block": "Fire Prevention",
+    "clause": "3.4.12",
+    "requirement": "Is there a separate fire command center or designated space to house Fire alarm system, CCTV system, PAGA, building managements system, and constructed with 120 min fire resistance rating walls?"
+  },
+  {
+    "id": "E-3-33",
+    "block": "Fire Prevention",
+    "clause": "3.4.12",
+    "requirement": "Detailed floor plan along with details of fire fighting equipment and installations maintained in Fire command center?"
+  },
+  {
+    "id": "E-3-34",
+    "block": "Fire Prevention",
+    "clause": "3.4.12",
+    "requirement": "The fire command centre is at Entrance Floor of the building with direct access ? Interior finishes does not use  any flammable materials ?"
+  },
+  {
+    "id": "E-3-35",
+    "block": "Fire Prevention",
+    "clause": "3.4.12",
+    "requirement": "Fire command centre is constructed with 120 min rating walls with a fire door and is provided with emergency lighting. Interior finishes does not use  any flammable materials."
+  },
+  {
+    "id": "E-3-36",
+    "block": "Fire Prevention",
+    "clause": "4.5",
+    "requirement": "Each basement be  separately ventilated. Vents with cross-sectional area (aggregate) not less than 2.5 percent of the floor area spread evenly round the perimeter of the basement be provided in the form of grills, or breakable stall board lights or pavement lights or by way of shafts. Alternatively, a mechanical ventilation system may be provided."
+  },
+  {
+    "id": "E-3-37",
+    "block": "Fire Prevention",
+    "clause": "4.5",
+    "requirement": "In multi-level basements, independent air intake and smoke exhaust shafts (masonry or reinforced concrete) for respective basement levels and compartments therein be planned with its make-up air and exhaust air fans located on the respective level and in the respective compartment. Alternatively, in multi-level basements, common intake masonry (or reinforced cement concrete) shaft may serve respective compartments aligned at all basement levels. Similarly, common smoke exhaust/outlet masonry (or reinforced cement concrete) shafts may also be planned to serve such compartments at all basement levels."
+  },
+  {
+    "id": "E-3-38",
+    "block": "Fire Prevention",
+    "clause": "4.5",
+    "requirement": "All supply air and exhaust air fans on respective levels are installed in fire resisting room of 120 min. Exhaust fans at the respective levels are provided with back draft damper connection to the common smoke exhaust shaft ensuring complete isolation and compartmentation of floor isolation to eliminate spread of fire and smoke to the other compartments/floors."
+  },
+  {
+    "id": "E-3-39",
+    "block": "Fire Prevention",
+    "clause": "4.6",
+    "requirement": "The smoke exhaust fans in the mechanical ventilation system is fire rated, that is, 250°C for 120 min."
+  },
+  {
+    "id": "E-3-40",
+    "block": "Fire Prevention",
+    "clause": "4.6",
+    "requirement": "The smoke ventilation of the basement car parking areas is through provision of supply and exhaust air ducts duly installed with its supports and connected to supply air and exhaust fans. Alternatively, a system of impulse fans (jet fans) may be used for meeting the requirement of smoke ventilation"
+  },
+  {
+    "id": "E-3-41",
+    "block": "Fire Prevention",
+    "clause": "4.6",
+    "requirement": "Power supply panels for the fans are located in fire safe zone to ensure continuity of power supply."
+  },
+  {
+    "id": "E-3-42",
+    "block": "Fire Prevention",
+    "clause": "4.6",
+    "requirement": "The smoke extraction system is operated on actuation of flow switch actuation of sprinkler system. In addition, a local and/or remote ‘manual start-stop control / switch’ is provided for operations by the fire fighters."
+  },
+  {
+    "id": "E-3-43",
+    "block": "Fire Prevention",
+    "clause": "4.6",
+    "requirement": "Visual indication of the operation status of the fans of Smoke Extraction System is provided with the remote control"
+  },
+  {
+    "id": "E-3-44",
+    "block": "Fire Prevention",
+    "clause": "3.4.8",
+    "requirement": "Dampers are located in supply air ducts, fresh air and return air ducts/passages at the following points:"
+  },
+  {
+    "id": "E-3-45",
+    "block": "Fire Prevention",
+    "clause": "3.4.8",
+    "requirement": "a) At the fire separation wall,"
+  },
+  {
+    "id": "E-3-46",
+    "block": "Fire Prevention",
+    "clause": "3.4.8",
+    "requirement": "b) Where ducts/passages enter the vertical shaft,"
+  },
+  {
+    "id": "E-3-47",
+    "block": "Fire Prevention",
+    "clause": "3.4.8",
+    "requirement": "c) Where the ducts pass through floors, and"
+  },
+  {
+    "id": "E-3-48",
+    "block": "Fire Prevention",
+    "clause": "3.4.8",
+    "requirement": "d) At the inlet of supply air duct and the return air duct of each compartment on every floor"
+  },
+  {
+    "id": "E-3-49",
+    "block": "Fire Prevention",
+    "clause": "3.4.8",
+    "requirement": "Dampers are of motorized type/fusible link"
+  },
+  {
+    "id": "E-3-50",
+    "block": "Fire Prevention",
+    "clause": "3.4.8",
+    "requirement": "Dampers are so installed to provide complete integrity of the compartment with all passive fire protection sealing."
+  },
+  {
+    "id": "E-3-51",
+    "block": "Fire Prevention",
+    "clause": "3.4.8",
+    "requirement": "Damper are accessible to maintain, test and also replace, if required"
+  },
+  {
+    "id": "E-3-52",
+    "block": "Fire Prevention",
+    "clause": "3.4.8",
+    "requirement": "Damper are be integrated with Fire Alarm Panel and sequenced to operate as per requirement and have interlocking arrangement for fire safety of the building."
+  },
+  {
+    "id": "E-3-53",
+    "block": "Fire Prevention",
+    "clause": "3.4.8",
+    "requirement": "Manual operation facilities for damper operation is provided"
+  },
+  {
+    "id": "E-3-54",
+    "block": "Exits",
+    "clause": "4.4.1, 4.5.1 and 4.5.2,",
+    "requirement": "Whether the floors of the building are provided with exits for every travel distance of 30 meters (TYPE 1 & 2 constructions) as per table 22 under TYPE 3 & 4 constructions the travel distance is 22.5 Meters. Part 4 of NBC."
+  },
+  {
+    "id": "E-3-55",
+    "block": "Exits",
+    "clause": "4.4.1 & 4.4.2.1",
+    "requirement": "Whether the minimum number of two separate exits are provided for each floor ?"
+  },
+  {
+    "id": "E-3-56",
+    "block": "Exits",
+    "clause": "4.2.3.",
+    "requirement": "Every exit, exit passageway and exit discharge shall be continuously maintained free of all obstructions or impediments to full use in the case of fire or other emergency."
+  },
+  {
+    "id": "E-3-57",
+    "block": "Exits",
+    "clause": "4.2.8",
+    "requirement": "Exits shall be so arranged that they may be reached without passing through another occupied unit/passage in others control, if they pose challenge or restriction in means of egress."
+  },
+  {
+    "id": "E-3-58",
+    "block": "Exits",
+    "clause": "7.3",
+    "requirement": "Whether all the internal stair cases, lift, lobbies and corridors are adequately ventilated and illuminated"
+  },
+  {
+    "id": "E-3-59",
+    "block": "Exits",
+    "clause": "4.2.9",
+    "requirement": "Doors in exits shall open in the direction of exit."
+  },
+  {
+    "id": "E-3-60",
+    "block": "Exits",
+    "clause": "4.2.11",
+    "requirement": "Whether the height of exit door ways is 02-00 meters and more."
+  },
+  {
+    "id": "E-3-61",
+    "block": "Exits",
+    "clause": "4.2.12 & 4.4.2.4.3.2",
+    "requirement": "Are ramps , sloped surfaces, staircases used with handrails. For stair of 2.00M with, railing is available on both sides"
+  },
+  {
+    "id": "E-3-62",
+    "block": "Exits",
+    "clause": "4.2.13",
+    "requirement": "The capacity of the means of egress required from any storey of the building shall not be reduced along the path of egress travel until arrival to the exit discharge."
+  },
+  {
+    "id": "E-3-63",
+    "block": "Exits",
+    "clause": "4.2.16",
+    "requirement": "Suitable means shall be provided so that all access controlled exit doors, turnstiles, boom barriers and other such exits shall automatically operate to open mode during emergencies like fire, smoke, acts of terrorism, etc, so that people can safely and quickly egress into safe areas outside."
+  },
+  {
+    "id": "E-3-64",
+    "block": "Exits",
+    "clause": "4.2.18 & 4.4.2.4.3.5",
+    "requirement": "Are walking surfaces, ramps slip resistant"
+  },
+  {
+    "id": "E-3-65",
+    "block": "Exits",
+    "clause": "4.2.19",
+    "requirement": "Are basements having sufficient exits others and in line with requirements"
+  },
+  {
+    "id": "E-3-66",
+    "block": "Exits",
+    "clause": "4.3 and 4.4.2.1",
+    "requirement": "Are number of exits determined as per occupant load table 3 and width required per person (see Table 4) as appropriate to the type of exit for respective occupancies, subject to complying with maximum travel distance requirement - 30M for Business Building"
+  },
+  {
+    "id": "E-3-67",
+    "block": "Exits",
+    "clause": "4.4.1",
+    "requirement": "Are exit clear of any obstructions, materials are ensures free flow of occupants while evacuation"
+  },
+  {
+    "id": "E-3-68",
+    "block": "Exits",
+    "clause": "4.4.2.4",
+    "requirement": "Are exit access is calculated"
+  },
+  {
+    "id": "E-3-69",
+    "block": "Exits",
+    "clause": "4.4.2.4.3",
+    "requirement": "Are all exit staircases shall discharge, at the level of exit discharge, to the exit discharge"
+  },
+  {
+    "id": "E-3-70",
+    "block": "Exits",
+    "clause": "4.4.2.4.3.2",
+    "requirement": "Are Internal stairs shall be constructed of non- combustible materials throughout, and shall have fire resistant rating of minimum 120 min, shall not be built around lift shaft."
+  },
+  {
+    "id": "E-3-71",
+    "block": "Exits",
+    "clause": "4.4.2.4.3.4 & 4.4.2.4.3.5",
+    "requirement": "Are external staircases, ramps connected to ground and hand rails provided on either end. There shall be no obstructions on the external staircase section."
+  },
+  {
+    "id": "E-3-72",
+    "block": "Exits",
+    "clause": "4.4.2.5",
+    "requirement": "Are staircases and lift lobbies designed and constructed in accordance with pressurization of staircases and lobbies.  & Table 6"
+  },
+  {
+    "id": "E-3-73",
+    "block": "Exits",
+    "clause": "4.5",
+    "requirement": "Are proper compartmentation areas maintained for large spaces to prevent spread of fire."
+  },
+  {
+    "id": "E-3-74",
+    "block": "Exits",
+    "clause": "4.6",
+    "requirement": "Are All exit passageway (from exit to exit discharge) shall be pressurized or naturally ventilated."
+  },
+  {
+    "id": "E-3-75",
+    "block": "Exits",
+    "clause": "4.6.1 & 4.6.2",
+    "requirement": "Smoke exhaust system / mechanical ventilation systems where provided, for above areas and occupancies shall have a minimum of 12 air changes  per  hour."
+  },
+  {
+    "id": "E-3-76",
+    "block": "Exits",
+    "clause": "4.6.2",
+    "requirement": "Are each basement separately ventilated."
+  },
+  {
+    "id": "E-3-77",
+    "block": "Exits",
+    "clause": "",
+    "requirement": "Independent air intake and smoke exhaust shafts (masonry or reinforced concrete) for respective basement levels and compartments therein are be planned with its make-up air and exhaust air fans located on the respective level and in the respective compartment."
+  },
+  {
+    "id": "E-3-78",
+    "block": "Exits",
+    "clause": "4.6.2",
+    "requirement": "Are Inlets and extracts terminated at ground level with stall board or pavement. Stall board and pavement lights should be in positions easily accessible to the fire brigade and clearly marked AIR INLET or SMOKE OUTLET with an indication of area served at or near the opening."
+  },
+  {
+    "id": "E-3-79",
+    "block": "Exits",
+    "clause": "4.6.2",
+    "requirement": "Does the smoke extraction system operate on actuation of flow switch actuation of sprinkler system. In addition, a local and/or remote manual start-stop control/switch shall be provided for operations by the fire fighters."
+  },
+  {
+    "id": "E-3-80",
+    "block": "Exits",
+    "clause": "4.7",
+    "requirement": "Is there a gas supply run through manifold and pipes attached to cluster of cylinders and satisfy requirements"
+  },
+  {
+    "id": "E-3-81",
+    "block": "Exits",
+    "clause": "4.7.2",
+    "requirement": "Are thermal detectors installed in fume hoods and arrangements made for automatic tripping of the exhaust fan in case of fire."
+  },
+  {
+    "id": "E-3-82",
+    "block": "Exits",
+    "clause": "4.7.4",
+    "requirement": "Are manifold installed are away from any air intakes/smoke exhaust openings/ any windows."
+  },
+  {
+    "id": "E-3-83",
+    "block": "Exits",
+    "clause": "4.7.5",
+    "requirement": "Pressure regulating stations shall be designed and installed at critical locations for excess flow shut off valves."
+  },
+  {
+    "id": "E-3-84",
+    "block": "Exits",
+    "clause": "4.7.9",
+    "requirement": "Kitchens working on LPG fuel shall not be permitted in basements."
+  },
+  {
+    "id": "E-3-85",
+    "block": "Exits",
+    "clause": "4.8",
+    "requirement": "Rooms containing high pressure boilers, refrigerating machinery, transformers or other service equipment subject to possible explosion shall not be located directly under or adjacent to exits."
+  },
+  {
+    "id": "E-3-86",
+    "block": "Exits",
+    "clause": "4.4.2",
+    "requirement": "Unless otherwise specified, all the exits and exit passageways to exit discharge has a clear ceiling height of at least 2.4 m. However, the height of exit door is at least 2.0 m"
+  },
+  {
+    "id": "E-3-87",
+    "block": "Exits",
+    "clause": "4.4.2",
+    "requirement": "Horizontal walkways, at least 1 000 mm wide for access to all the areas be provided at every parking level."
+  },
+  {
+    "id": "E-3-88",
+    "block": "Exits",
+    "clause": "4.4.2",
+    "requirement": "All fire exit doors from the car parking to exits are painted green and are with exit signage."
+  },
+  {
+    "id": "E-3-89",
+    "block": "Exits",
+    "clause": "4.4.2",
+    "requirement": "Exit doorway are > I 000 mm"
+  },
+  {
+    "id": "E-3-90",
+    "block": "Exits",
+    "clause": "4.4.2",
+    "requirement": "Activation of the building automatic sprinkler or fire detection system, if provided, shall automatically unlock the doors in the direction of egress, and the doors shall remain unlocked until the automatic sprinkler system or fire-alarm system has been manually reset"
+  },
+  {
+    "id": "E-3-91",
+    "block": "Exits",
+    "clause": "4.4.2",
+    "requirement": "A manual release device is provided in the readily accessible vicinity of the egress door with a signage ‘PUSH TO EXIT’ and when the same is operated, it shall result in direct interruption of power to the lock, independent of the access control system electronics."
+  },
+  {
+    "id": "E-3-92",
+    "block": "Exits",
+    "clause": "4.4.2",
+    "requirement": "In the case of buildings where there is a central corridor, which is part of exit access, the doors of rooms (except for rooms having assembly occupancy) shall open inwards to permit smooth flow of traffic in the corridor."
+  },
+  {
+    "id": "E-3-93",
+    "block": "Exits",
+    "clause": "4.4.2",
+    "requirement": "The minimum width of tread without nosing shall be 300 mm for business. The treads shall be constructed and maintained in a manner to prevent slipping."
+  },
+  {
+    "id": "E-3-94",
+    "block": "Exits",
+    "clause": "4.4.2",
+    "requirement": "The maximum height of riser is 150 mm for staircase. The number of risers is less than or equal to 12 per flight."
+  },
+  {
+    "id": "E-3-95",
+    "block": "Exits",
+    "clause": "4.4.2",
+    "requirement": "Any opening(s) shall not be permitted in walls or in doors, separating exits from adjoining areas."
+  },
+  {
+    "id": "E-3-96",
+    "block": "Exits",
+    "clause": "4.4.2",
+    "requirement": "Minimum width of staircases for Business Building 1.50 M"
+  },
+  {
+    "id": "E-3-97",
+    "block": "Exits",
+    "clause": "4.4.2",
+    "requirement": "No external staircase is inclined at an angle greater than 45° from the horizontal."
+  },
+  {
+    "id": "E-3-98",
+    "block": "Exits",
+    "clause": "4.4.2",
+    "requirement": "External stairs has straight flight not less than 1 500 mm wide. Handrails is provided on both sides, of a height not less than 1 000 mm and not exceeding 1 200 mm."
+  },
+  {
+    "id": "E-3-99",
+    "block": "Exits",
+    "clause": "4.4.2",
+    "requirement": "The pressure difference for staircases is at 50 Pa or above"
+  },
+  {
+    "id": "E-3-100",
+    "block": "Exits",
+    "clause": "3.4.6",
+    "requirement": "If lift is marked if used for Fire?"
+  },
+  {
+    "id": "E-3-101",
+    "block": "Exits",
+    "clause": "3.4.6",
+    "requirement": "Is there power backup arranged for the lift"
+  },
+  {
+    "id": "E-3-102",
+    "block": "Exits",
+    "clause": "3.4.6",
+    "requirement": "Lift shaft are free from any obstacles / obstruction?"
+  },
+  {
+    "id": "E-3-103",
+    "block": "Exits",
+    "clause": "3.4.6",
+    "requirement": "Lifts are displayed with maximum persons and maximum weight to be carried?"
+  },
+  {
+    "id": "E-3-104",
+    "block": "Exits",
+    "clause": "3.4.6",
+    "requirement": "Lifts are provided with intercom for emergency communication?"
+  },
+  {
+    "id": "E-3-105",
+    "block": "Exits",
+    "clause": "3.4.6",
+    "requirement": "Lifts are provided with CCTV camera?"
+  },
+  {
+    "id": "E-3-106",
+    "block": "Exits",
+    "clause": "3.4.7",
+    "requirement": "Photo luminescent safety signs are posted and maintained on every floor at or near the lift indicating that in case of fire, occupants shall use the stairs unless instructed otherwise."
+  },
+  {
+    "id": "E-3-107",
+    "block": "Exits",
+    "clause": "3.4.7",
+    "requirement": "The sign has the plan of the respective floor showing location of the stairways, the direction to and the level of refuge area."
+  },
+  {
+    "id": "E-3-108",
+    "block": "Exits",
+    "clause": "3.4.7",
+    "requirement": "List of Do's and Don'ts is pasted in the lift"
+  },
+  {
+    "id": "E-3-109",
+    "block": "Exits",
+    "clause": "4.4.2",
+    "requirement": "Lift landing doors provided in the lift enclosure shall have a minimum fire resistance rating of 60 min"
+  },
+  {
+    "id": "E-3-110",
+    "block": "Exits",
+    "clause": "3.4.12",
+    "requirement": "Communication system for lifts is also be connected to the fire control room of the building if provided."
+  },
+  {
+    "id": "E-3-111",
+    "block": "Exits",
+    "clause": "3.4.6",
+    "requirement": "All lifts (fireman’s lifts/non fireman’s lifts) are provided with Phase I operation in high rise building (Return to evacuation floor)"
+  },
+  {
+    "id": "E-3-112",
+    "block": "Exits",
+    "clause": "Annex 5",
+    "requirement": "The fireman’s lift is provided in a building for the purpose of aiding firefighters in evacuating trapped persons in the building and to take the equipment for fighting fire to upper levels with minimum delay. Some lifts out of all the lifts shall be identified as fireman’s lifts. In high rise building, one lift to be designated as fireman lift. Does the facility have a Standard Operating Procedure (SOP) for the operation of the Fireman's Lift?"
+  },
+  {
+    "id": "E-3-113",
+    "block": "Exits",
+    "clause": "Part 8 Sec 2",
+    "requirement": "If there are multiple wings in the building, there is at least one fireman’s lift per wing"
+  },
+  {
+    "id": "E-3-114",
+    "block": "Exits",
+    "clause": "Part 8 Sec 2",
+    "requirement": "If there are multiple banks of lifts in the building there is at least one fireman’s lift per bank of lifts."
+  },
+  {
+    "id": "E-3-115",
+    "block": "Exits",
+    "clause": "Part 8 Sec 2",
+    "requirement": "The fireman’s switch be situated in a glass-fronted box with suitable label and fixed adjacent to the lift at the entrance level."
+  },
+  {
+    "id": "E-3-116",
+    "block": "Exits",
+    "clause": "Part 8 Sec 2",
+    "requirement": "The fireman’s lift shall be provided with an audio and visual Signal in the car. The fireman’s lift have a floor area of minimum 1.43 m2 with loading capacity of not less than 544 kg (8 persons lift)."
+  },
+  {
+    "id": "E-3-117",
+    "block": "Exits",
+    "clause": "Part 8 Sec 2",
+    "requirement": "The speed of the fireman’s lift be 1.0 m/s or more such that it can reach the top floor from main floor/firefighter access level within 1 min."
+  },
+  {
+    "id": "E-3-118",
+    "block": "Exits",
+    "clause": "Part 8 Sec 2",
+    "requirement": "Reliable alternative source of power supply should be provided for all fireman lifts through a manually/automatically operated change over switch."
+  },
+  {
+    "id": "E-3-119",
+    "block": "Exits",
+    "clause": "Part 8 Sec 2",
+    "requirement": "The words ‘Fireman Lift’ be conspicuously displayed in fluorescent paint on the lift landing."
+  },
+  {
+    "id": "E-3-120",
+    "block": "Exits",
+    "clause": "3.4.6",
+    "requirement": "Emergency power for fire and life safety systems:"
+  },
+  {
+    "id": "E-3-121",
+    "block": "Exits",
+    "clause": "3.4.6",
+    "requirement": "a) Fire pumps."
+  },
+  {
+    "id": "E-3-122",
+    "block": "Exits",
+    "clause": "3.4.6",
+    "requirement": "b) Pressurization and smoke venting; including its ancillary systems such as dampers and actuators."
+  },
+  {
+    "id": "E-3-123",
+    "block": "Exits",
+    "clause": "3.4.6",
+    "requirement": "c) Fireman’s lifts (including all lifts)."
+  },
+  {
+    "id": "E-3-124",
+    "block": "Exits",
+    "clause": "3.4.6",
+    "requirement": "d) Exit signage lighting."
+  },
+  {
+    "id": "E-3-125",
+    "block": "Exits",
+    "clause": "3.4.6",
+    "requirement": "e) Emergency lighting."
+  },
+  {
+    "id": "E-3-126",
+    "block": "Exits",
+    "clause": "3.4.6",
+    "requirement": "f) Fire alarm system."
+  },
+  {
+    "id": "E-3-127",
+    "block": "Exits",
+    "clause": "3.4.6",
+    "requirement": "g) Public address (PA) system (relating to emergency voice evacuation and annunciation)."
+  },
+  {
+    "id": "E-3-128",
+    "block": "Exits",
+    "clause": "3.4.6",
+    "requirement": "h) Magnetic door hold open devices."
+  },
+  {
+    "id": "E-3-129",
+    "block": "Exits",
+    "clause": "3.4.6",
+    "requirement": "j) Lighting in fire command centre and security room"
+  },
+  {
+    "id": "E-3-130",
+    "block": "Exits",
+    "clause": "3.4.6",
+    "requirement": "The power supply to the panel/distribution board of these fire and life safety systems are through fire proof enclosures or circuit integrity cables or through alternate route in the adjoining fire compartment to ensure supply of power is reliable to these systems and equipment"
+  },
+  {
+    "id": "E-3-131",
+    "block": "Exits",
+    "clause": "3.4.6",
+    "requirement": "Power cabling from the adjoining fire compartment is protected within the compartment of vulnerability"
+  },
+  {
+    "id": "E-3-132",
+    "block": "Exits",
+    "clause": "3.4.6",
+    "requirement": "The location of the panel / distribution board feeding the fire and life safety system are in fire safe zone ensuring supply of power to these systems"
+  },
+  {
+    "id": "E-3-133",
+    "block": "Exits",
+    "clause": "3.4.6",
+    "requirement": "Cables for fire alarm and PA system are laid in metal conduits or armoured to provide physical segregation from the power cables"
+  },
+  {
+    "id": "E-3-134",
+    "block": "Exits",
+    "clause": "3.4.6",
+    "requirement": "MV Panel Room is provided with access from outside (or through exit passageway accessible from outside). The MV panel room is provided with fire resistant walls and doors of fire resistance of not less than 120 min"
+  },
+  {
+    "id": "E-3-135",
+    "block": "Exits",
+    "clause": "3.4.6",
+    "requirement": "Electrical MV main distribution panel and lift panels is provided with C02/inert gas flooding system for all panel compartments with a cylinder located beside the panel"
+  },
+  {
+    "id": "E-3-136",
+    "block": "Exits",
+    "clause": "3.4.6",
+    "requirement": "A substation or a switch-station with oil filled equipment shall be limited to be installed in utility building or in outdoor location. Such substation/utility building shall be at least 7 m away from the adjoining building(s)."
+  },
+  {
+    "id": "E-3-137",
+    "block": "Exits",
+    "clause": "3.4.6",
+    "requirement": "Substation equipment (exceeding oil capacity of 2 000 litre) in utility building have fire rated baffle walls of 240 min rating constructed between such equipment, raised to at least 600 mm above the height of the equipment (including height of oil conservators) and exceeding 300 mm on each side of the equipment."
+  },
+  {
+    "id": "E-3-138",
+    "block": "Exits",
+    "clause": "3.4.6",
+    "requirement": "All transformers where capacity exceeds 10 MVA shall be protected by high velocity water spray systems or nitrogen injection system."
+  },
+  {
+    "id": "E-3-139",
+    "block": "Exits",
+    "clause": "3.4.6",
+    "requirement": "Transformers located inside a building are of dry type and all substation/switch room walls, ceiling, floor, opening including doors and have a fire resistance rating of 120 min. Access to the substation is provided from the nearest fire exit/exit staircase for the purpose of electrical isolation."
+  },
+  {
+    "id": "E-3-140",
+    "block": "Exits",
+    "clause": "3.4.6",
+    "requirement": "Diesel generator set(s) are installed at ground/first basement. For indoor installation, proper ventilation and exhaust are provided. The DG set room is separated by 120 min fire resistance rated walls and doors."
+  },
+  {
+    "id": "E-3-141",
+    "block": "Exits",
+    "clause": "3.4.6",
+    "requirement": "Routing of down conductors (insulated or uninsulated) of lightning protection through electrical or other service shafts are not allowed"
+  },
+  {
+    "id": "E-3-142",
+    "block": "Exits",
+    "clause": "3.4.7, B-24.2.4",
+    "requirement": "Occupants are able to easily identify the way to exits"
+  },
+  {
+    "id": "E-3-143",
+    "block": "Exits",
+    "clause": "3.4.7, B-24.2.4",
+    "requirement": "Exit signs are provided such that no point in an exit access is more than 30m from a visible exit directional sign"
+  },
+  {
+    "id": "E-3-144",
+    "block": "Exits",
+    "clause": "3.4.7, B-24.2.4",
+    "requirement": "An exit sign indicating the direction to an exit are provided at all changes in direction."
+  },
+  {
+    "id": "E-3-145",
+    "block": "Exits",
+    "clause": "3.4.7, B-24.2.4",
+    "requirement": "Further, all landings of floor shall have floor indicating boards prominently indicating the number of the floor."
+  },
+  {
+    "id": "E-3-146",
+    "block": "Exits",
+    "clause": "3.4.7, B-24.2.4",
+    "requirement": "Exit Signs are illuminated and wired to an independent electrical circuit on an alternative source of supply."
+  },
+  {
+    "id": "E-3-147",
+    "block": "Exits",
+    "clause": "3.4.7, B-24.2.4",
+    "requirement": "Directional and functional signs should be located below 1 600 mm where they are easy to approach, to touch and read the raised signs with the fingers"
+  },
+  {
+    "id": "E-3-148",
+    "block": "Exits",
+    "clause": "3.4.7, B-24.2.4",
+    "requirement": "Signs should be located where they are clearly visible to people who are seated, standing or walking. Signs should be placed between 1 200 mm and l 600 mm from the floor or ground surface. It should be possible to approach the sign to be read from a short distance"
+  },
+  {
+    "id": "E-3-149",
+    "block": "Exits",
+    "clause": "3.4.7, B-24.2.4",
+    "requirement": "Where it is likely that the sign may be obstructed, as in a crowded situation, the signs are placed at a height of at least 2 100 mm above the floor. The same requirement applies to signs fixed to the ceiling or projecting from walls. In that case, there should be two signs; one that can be seen from a distance above other people’s heads, one as a complement at the height recommended above"
+  },
+  {
+    "id": "E-3-150",
+    "block": "Exits",
+    "clause": "3.4.7, B-24.2.4",
+    "requirement": "A letter height between 20 mm and 30 mm for each metre of viewing distance is preferred. The letter height should not be less than 15 mm."
+  },
+  {
+    "id": "E-3-151",
+    "block": "Exits",
+    "clause": "3.4.7, B-24.2.4",
+    "requirement": "Signs should be well illuminated with no glare with uniform lighting over the surface of the sign. Minimum acceptable level of lighting for directional signage, maps and text panel is 200 lux. Signs can be luminescent or artificially lit."
+  },
+  {
+    "id": "E-3-152",
+    "block": "Exits",
+    "clause": "3.4.7, B-24.2.4",
+    "requirement": "Signage ‘PUSH TO EXIT’ is provided on the egress door"
+  },
+  {
+    "id": "E-3-153",
+    "block": "Exits",
+    "clause": "3.4.7, B-24.2.4",
+    "requirement": "A prominent sign bearing the words ‘REFUGE AREA’ is installed at the entry of the refuge area, having height of letters of minimum 75 mm and also containing information about the location of refuge areas on the floors above and below this floor. The same signage is provided in the refuge area."
+  },
+  {
+    "id": "E-3-154",
+    "block": "Exits",
+    "clause": "3.4.7, B-24.2.4",
+    "requirement": "All fire exit doors from the car parking to exits are painted green and display exit signage."
+  },
+  {
+    "id": "E-3-155",
+    "block": "Exits",
+    "clause": "3.4.7, B-24.2.4",
+    "requirement": "The floor indication board, indicating the location/designated number of staircase, respective floor number and direction to exit discharge shall be placed inside the staircase, on the wall nearest to the fire door."
+  },
+  {
+    "id": "E-3-156",
+    "block": "Exits",
+    "clause": "E-2",
+    "requirement": "One firefighting shaft is be planned and provided for each business occupancy types. The firefighting shaft necessarily has connectivity directly to exit discharge or through exit passageway (having 120 min fire resistance walls) to exit discharge. Staircase and fire lift lobby of a firefighting shaft shall be smoke controlled as per 4.4.2.5 and Table 6."
+  },
+  {
+    "id": "E-3-157",
+    "block": "Exits",
+    "clause": "5.1.1",
+    "requirement": "Hydrants for firefighting and hose reels are be located in the lobby in firefighting shaft"
+  },
+  {
+    "id": "E-3-158",
+    "block": "Exits",
+    "clause": "2.24",
+    "requirement": "The firefighting shaft are equipped with firemen talk back, wet riser and landing valve in its lobby, to fight fire by fire fighters (see Fig. 2 for a typical firefighting shaft)"
+  },
+  {
+    "id": "E-3-159",
+    "block": "Exits",
+    "clause": "2.24",
+    "requirement": "The respective floors shall be approachable from fire-fighting shaft enabling the fire fighters to access the floor and also enabling the\r\nfire fighters to assist in evacuation through fireman’s lift."
+  },
+  {
+    "id": "E-3-160",
+    "block": "Fire detection and alarm",
+    "clause": "Section 4",
+    "requirement": "Is fire detection system and alarm system installed in accordance with Table 7 minimum requirements of fire fighting installations"
+  },
+  {
+    "id": "E-3-161",
+    "block": "Fire detection and alarm",
+    "clause": "4.9",
+    "requirement": "Are proper visual alarms like strobe lights installed and can are visible?"
+  },
+  {
+    "id": "E-3-162",
+    "block": "Fire detection and alarm",
+    "clause": "4.9",
+    "requirement": "Are hooters with decibel range as per IS 2189 is provided"
+  },
+  {
+    "id": "E-3-163",
+    "block": "Fire detection and alarm",
+    "clause": "4.9",
+    "requirement": "Are voice evacuations systems installed has Hindi and English languages for annunciations and for local language annunciations done by PAGA."
+  },
+  {
+    "id": "E-3-164",
+    "block": "Fire detection and alarm",
+    "clause": "4.9",
+    "requirement": "Are manual call points installed in every floor as accessible."
+  },
+  {
+    "id": "E-3-165",
+    "block": "Fire detection and alarm",
+    "clause": "4.9",
+    "requirement": "For E-3, E-4 and E-5 Building - Provision of automatic fire detection alarm system, while for fire protection, any or combination of clean agents, mist technologies, hypoxic air technology, etc, are planned. Electrical panels may be provided with C02/inert gas flooding system based on the requirement and reliability of power for the functional requirement and performance."
+  },
+  {
+    "id": "E-3-166",
+    "block": "Fire detection and alarm",
+    "clause": "4.9",
+    "requirement": "For buildings above 30 m in height, detectors are also provided inside the electrical shafts, and lift machine rooms, etc, besides occupancy areas."
+  },
+  {
+    "id": "E-3-167",
+    "block": "Fire detection and alarm",
+    "clause": "4.9",
+    "requirement": "Where automatic fire alarm system is provided, the following are monitored from fire alarm panel:\r\n1) Water level in all tanks.\r\n2) Hydrant and sprinkler pressures of respective zones as provided.\r\n3) Pump ‘ON/OFF’ status\r\n4) All isolation valves, wherever provided with supervisory switch (non-padlock valves).\r\n5) Other requirements to meet electromechanical services interface."
+  },
+  {
+    "id": "E-3-168",
+    "block": "Fire Officer",
+    "clause": "4.10.",
+    "requirement": "A dedicated & qualified fire officer with experience of minimum 3 years employed"
+  },
+  {
+    "id": "E-3-169",
+    "block": "Fire Officer",
+    "clause": "4.10.2",
+    "requirement": "Is he competent in delivering fire safety trainings, handling emergency evacuations, mock drills, inspecting and maintaining all fire fighting equipment."
+  },
+  {
+    "id": "E-3-170",
+    "block": "Fire Officer",
+    "clause": "4.10.2",
+    "requirement": "Shall maintain proper liaison between local fire authorities."
+  },
+  {
+    "id": "E-3-171",
+    "block": "Fire Officer",
+    "clause": "4.10.2",
+    "requirement": "Ensure fire operational plans, fire orders and fire notices are prepared and implemented."
+  },
+  {
+    "id": "E-3-172",
+    "block": "Fire Officer",
+    "clause": "4.10.2",
+    "requirement": "Are all inspection & maintenance records well maintained and documented."
+  },
+  {
+    "id": "E-3-173",
+    "block": "Fire drills & Fire orders",
+    "clause": "4.11",
+    "requirement": "Is there a proper emergency evacuation plan designed."
+  },
+  {
+    "id": "E-3-174",
+    "block": "Fire drills & Fire orders",
+    "clause": "4.11",
+    "requirement": "Are periodic mock drills conducted as per NOC"
+  },
+  {
+    "id": "E-3-175",
+    "block": "Fire drills & Fire orders",
+    "clause": "4.11",
+    "requirement": "Are mock drills effective and are performed as per the laid evacuation plan and procedures."
+  },
+  {
+    "id": "E-3-176",
+    "block": "Fire protection",
+    "clause": "5.1",
+    "requirement": "Are fire extinguishers installed in accordance with IS 2190 and NBC Part 4 Table 7"
+  },
+  {
+    "id": "E-3-177",
+    "block": "Fire protection",
+    "clause": "Section 5",
+    "requirement": "Are yard hydrants, down comers, hose reels with nozzles installed in accordance to requirements of table 7"
+  },
+  {
+    "id": "E-3-178",
+    "block": "Fire protection",
+    "clause": "5.1.22",
+    "requirement": "Are fire pumps installed in accordance with table 7"
+  },
+  {
+    "id": "E-3-179",
+    "block": "Fire protection",
+    "clause": "Section 5",
+    "requirement": "Pump specifications (Please specify)"
+  },
+  {
+    "id": "E-3-180",
+    "block": "Fire protection",
+    "clause": "Section 5",
+    "requirement": "Electrical pump"
+  },
+  {
+    "id": "E-3-181",
+    "block": "Fire protection",
+    "clause": "Section 5",
+    "requirement": "Diesel pump"
+  },
+  {
+    "id": "E-3-182",
+    "block": "Fire protection",
+    "clause": "Section 5",
+    "requirement": "Jockey pump"
+  },
+  {
+    "id": "E-3-183",
+    "block": "Fire protection",
+    "clause": "Section 5",
+    "requirement": "Is the fire pump house well constructed and maintained."
+  },
+  {
+    "id": "E-3-184",
+    "block": "Fire protection",
+    "clause": "Section 5",
+    "requirement": "Are all pumps kept in auto mode"
+  },
+  {
+    "id": "E-3-185",
+    "block": "Fire protection",
+    "clause": "5.1",
+    "requirement": "Is there Fire brigade inlet and out let / fire man valve installed at the ground level and all other levels where required to deliver required water for fire fighting"
+  },
+  {
+    "id": "E-3-186",
+    "block": "Fire protection",
+    "clause": "5.1.2.1",
+    "requirement": "Is there a overhead water tank for fire fighting specify capacity."
+  },
+  {
+    "id": "E-3-187",
+    "block": "Fire protection",
+    "clause": "5.1.2",
+    "requirement": "Is there a unground water storage tank for fire fighting."
+  },
+  {
+    "id": "E-3-188",
+    "block": "Fire protection",
+    "clause": "Section 5",
+    "requirement": "Are automatic sprinkler installed where ever required as per table 7"
+  },
+  {
+    "id": "E-3-189",
+    "block": "Fire protection",
+    "clause": "6.5",
+    "requirement": "Additional Requirement for the Sub-Category E3 as per NBC"
+  },
+  {
+    "id": "E-3-190",
+    "block": "Fire protection",
+    "clause": "Section 6.5.2 (b)",
+    "requirement": "Is there a provision of automatic fire detection and alarm system along with any appropriate combination of clean agents, mist technology, hypoxic air technology, etc, as required?"
+  },
+  {
+    "id": "E-3-191",
+    "block": "Fire protection",
+    "clause": "Section 6.5.2 (b)",
+    "requirement": "Is there CO2/ Inert Gas flooding system provided for the electric panels as required to ensure the reliability of power for the functionality?"
+  },
+  {
+    "id": "E-3-192",
+    "block": "Fire protection",
+    "clause": "5.1",
+    "requirement": "Pressure at the hydraulically remote hydrant and at the highest hydrant be not less than 3.5 bar. The pressure at the hydrants is not more than 7.0 bar, considering the safety of operators"
+  },
+  {
+    "id": "E-3-193",
+    "block": "Fire protection",
+    "clause": "Annex D",
+    "requirement": "Refuge area is provided in buildings of height more than 24 m. Refuge area provided is capable to accommodate the occupants of two consecutive floors (this has consider occupants of the floor where refuge is provided and occupants of floor above) by considering area of 0.3 m2 per person for the calculated number of occupants and include additionally to accommodate one wheelchair space of an area of 0.9 m2 for every 200 occupants, portion thereof, based on the occupant load served by the area of refuge or a minimum of 15 m2, whichever is higher."
+  },
+  {
+    "id": "E-3-194",
+    "block": "Fire protection",
+    "clause": "Annex D",
+    "requirement": "The refuge area is provided on the periphery of the floor and open to air at least on one side protected with suitable railings. Refuge area(s) is provided at/or immediately above 24 m and thereafter at every 15 m or so."
+  },
+  {
+    "id": "E-3-195",
+    "block": "Fire protection",
+    "clause": "Annex D",
+    "requirement": "Each refuge area is ventilated and provided with first aid box, fire extinguishers, public address speaker, fire man talk back, and adequate emergency lighting as well as drinking water facility."
+  },
+  {
+    "id": "E-3-196",
+    "block": "Fire protection",
+    "clause": "Annex D",
+    "requirement": "Refuge areas is approachable from the space they serve by an accessible means of egress."
+  },
+  {
+    "id": "E-3-197",
+    "block": "Fire protection",
+    "clause": "Annex D",
+    "requirement": "Refuge areas is connect to firefighting shaft (comprising fireman’s lift, lobby and staircase) without having the occupants requiring to return to the building spaces through which travel to the area of refuge occurred"
+  },
+  {
+    "id": "E-3-198",
+    "block": "Fire protection",
+    "clause": "Annex D",
+    "requirement": "The refuge area is always be kept clear. No storage of combustible products and materials, electrical and mechanical equipment etc in the area."
+  },
+  {
+    "id": "E-3-199",
+    "block": "Fire protection",
+    "clause": "Annex D",
+    "requirement": "Refuge area is provided with adequate drainage facility to maintain efficient storm water disposal. Entire refuge area is provided with sprinklers."
+  },
+  {
+    "id": "E-3-200",
+    "block": "Fire protection",
+    "clause": "5.1.3",
+    "requirement": "Automatic sprinklers shall be installed in false ceiling voids exceeding 800 mm in height."
+  },
+  {
+    "id": "E-3-201",
+    "block": "Fire protection",
+    "clause": "3.4.6",
+    "requirement": "Medium and low voltage wiring running in shafts, and within false ceiling shall run in metal conduit."
+  },
+  {
+    "id": "E-3-202",
+    "block": "Fire protection",
+    "clause": "3.4.6",
+    "requirement": "High, medium and low voltage wiring running in shaft and in false ceiling shall run in separate shaft/conduits."
+  },
+  {
+    "id": "E-3-203",
+    "block": "Fire protection",
+    "clause": "",
+    "requirement": "Any other observations made at the site, please specify."
+  },
+  {
+    "id": "E-3-204",
+    "block": "Fire protection",
+    "clause": "",
+    "requirement": "The calibration of the monitoring and measurement equipment related to fire and life safety is conducted and retained."
+  },
+  {
+    "id": "E-3-205",
+    "block": "Fire protection",
+    "clause": "State Specific Requirements",
+    "requirement": "THE KARNATAKA FIRE FORCE (AMENDMENT) ACT, 2023"
+  },
+  {
+    "id": "E-3-206",
+    "block": "Fire protection",
+    "clause": "",
+    "requirement": "In section 13 of the Karnataka Fire Force Act, 1964 (Karnataka Act 42 of 1964) after sub-section (2), the following shall be inserted, namely:-\r\n“(3) Any person proposing to construct a high rise building shall obtain a No Objection Certificate from the Karnataka State Fire and Emergency Services department.\r\n(4) Subject to the provisions of the National Building Code 2016 relating to Fire and life safety, while issuing a No objection certificate for construction of a high rise building, the Karnataka State Fire and Emergency Services department shall follow such procedure and collect such amount of fee as may be prescribed.\r\nExplanation: “A high rise building” means a building of 21 meters or above in height irrespective of its occupancy as defined in the National Building Code 2016.”"
+  },
+  {
+    "id": "E-3-207",
+    "block": "Fire protection",
+    "clause": "State Specific Requirements",
+    "requirement": "Karnataka Municipalities Model Building Bye-Laws 2017"
+  },
+  {
+    "id": "E-3-208",
+    "block": "Fire protection",
+    "clause": "6.5.1",
+    "requirement": "The staircase and corridor lighting shall be on separate service and shall be independently connected so as it could be operated by one switch installation on the ground floor, easily accessible to fire-fighting staff at any time irrespective of the position of the individuate control of the light points, if any."
+  },
+  {
+    "id": "E-3-209",
+    "block": "Fire protection",
+    "clause": "6.5.1",
+    "requirement": "Emergency lights shall be provided in staircase and corridor/ passageway, horizontal exits, refuge area; and all wires and other accessories used for emergency light shall have fire retardant property"
+  },
+  {
+    "id": "E-3-210",
+    "block": "Fire protection",
+    "clause": "6.5.1",
+    "requirement": "Staircase and corridor lighting shall also be connected to alternate supply from parallel high-tension supply or to the supply from the stand-by generator."
+  },
+  {
+    "id": "E-3-211",
+    "block": "Fire protection",
+    "clause": "12.9",
+    "requirement": "Grounding switch at ground floor level to enable the fire service to ground the fire man lift car in case of emergency shall also be provided;"
+  },
+  {
+    "id": "E-3-212",
+    "block": "Fire protection",
+    "clause": "12.13",
+    "requirement": "Staircase and corridor lights.-The staircase and corridor lighting shall be on separate circuits and shall be independently connected so that it could be operated by one switch installation on the ground floor easily accessible to fire fighting staff at any time irrespective of the position of the individual control of the light points, if any. It shall be of miniature circuit breaker type of switch so as to avoid replacement of fuse in case of crisis."
+  },
+  {
+    "id": "E-3-213",
+    "block": "Fire protection",
+    "clause": "12.13",
+    "requirement": "Staircase and corridor lighting shall also be connected to alternate source of power supply"
+  },
+  {
+    "id": "E-3-214",
+    "block": "Fire protection",
+    "clause": "12.13",
+    "requirement": "Emergency lights shall be provided in the staircase and corridor."
+  },
+  {
+    "id": "E-3-215",
+    "block": "Fire protection",
+    "clause": "5.2.6",
+    "requirement": "Revolving doors shall not to be provided as means of fire exit."
+  },
+  {
+    "id": "E-3-216",
+    "block": "Fire protection",
+    "clause": "6.2",
+    "requirement": "Means of access- A building shall a but on a street or streets or upon spaces directly connected from the street by a hard surface approach road. The width of approach road shall be as prescribed in the Zonal Regulations."
+  },
+  {
+    "id": "E-3-217",
+    "block": "Fire protection",
+    "clause": "6.2",
+    "requirement": "Means of access- The approach road to the building and open spaces on its all sides shall be as prescribed in the Zonal regulations and wherever vehicular driveways are required to be provided, the same shall be reinforced to ensure safety of the fire equipment and capable of taking the weight of Fire engine, weighing up to 45 ton"
+  },
+  {
+    "id": "E-3-218",
+    "block": "Fire protection",
+    "clause": "6.2",
+    "requirement": "Means of access- The said driveway shall be kept free of obstructions and shall be motorable."
+  },
+  {
+    "id": "E-3-219",
+    "block": "Fire protection",
+    "clause": "6.2",
+    "requirement": "Means of access- Main entrances to the premises shall be of adequate width to allow easy access to the fire engine and in no case, it shall measure less than 6.0m. The entrance gate shall fold back against the compound wall of the premises, thus leaving the exterior access way within the plot free for\r\nmovement of fire service vehicles. If archway is provided over the main entrance the height of the archway shall not be at a height less than 4.5m."
+  },
+  {
+    "id": "E-3-220",
+    "block": "Fire protection",
+    "clause": "12",
+    "requirement": "FIRE PROTECTION AND FIRE SAFETY REQUIREMENTS - Refers to NBC 2016 - Part 4"
+  },
+  {
+    "id": "E-3-221",
+    "block": "Fire protection",
+    "clause": "12.1",
+    "requirement": "Dewatering pump shall be provided in all basements"
+  },
+  {
+    "id": "E-3-222",
+    "block": "Fire protection",
+    "clause": "12.12.1",
+    "requirement": "Electrical services - Medium and low voltage wiring running in shafts and within false ceiling shall run in metal conduits. The false ceiling including all fixtures used for its suspension shall be of non-combustible material;"
+  },
+  {
+    "id": "E-3-223",
+    "block": "Fire protection",
+    "clause": "12.17",
+    "requirement": "Alternate source of electric supply.- A stand by electric generator shall be installed to supply power to staircase and corridor lighting circuits, lifts detection system, fire pumps, pressurization fans and bowlers, Public Address (PA) system, exit sign, smoke extraction system, in\r\ncase of failure of normal electric supply. The generator shall be capable of taking starting current of all the machines and circuits stated above simultaneously. If the standby pump is driven by diesel engine; the generator supply need not be connected to the standby pump. The generator shall be automatic in operation."
+  },
+  {
+    "id": "E-3-224",
+    "block": "Fire protection",
+    "clause": "12.21",
+    "requirement": "Automatic sprinkler system shall be installed in the following buildings: (a) All buildings of 24m and above in height"
+  },
+  {
+    "id": "E-3-225",
+    "block": "Fire protection",
+    "clause": "12.25",
+    "requirement": "Fire drills and fire orders.- The guidelines for fire drill and evacuation etc. for highrise building may be seen in NBC 2016 part 4. All such buildings shall prepare the fire orders duly approved by the Chief Fire Officer. A qualified fire officer and trained staff shall be appointed for the following buildings:\r\na) All high-rise buildings above 30m in height where covered area of one floor exceeds 1000 Sq.m except apartments / group housing;"
+  },
+  {
+    "id": "E-3-226",
+    "block": "Fire protection",
+    "clause": "",
+    "requirement": "Petroleum Rules 2002 and amendment upto 2024"
+  },
+  {
+    "id": "E-3-227",
+    "block": "Fire protection",
+    "clause": "117",
+    "requirement": "Precautions against fire. –"
+  },
+  {
+    "id": "E-3-228",
+    "block": "Fire protection",
+    "clause": "117",
+    "requirement": "(1) No person shall smoke in any installation, storage shed or service station save in places specifically authorized by the licensing authority for the purpose."
+  },
+  {
+    "id": "E-3-229",
+    "block": "Fire protection",
+    "clause": "117",
+    "requirement": "(2) No person shall carry matches, fuses or other appliances capable of producing ignition or explosion in any installation or storage shed, which is used for the storage of petroleum."
+  },
+  {
+    "id": "E-3-230",
+    "block": "Fire protection",
+    "clause": "117",
+    "requirement": "(3) No fire, furnace or other source of heat or light capable of igniting inflammable vapour shall be allowed in any installation, storage shed or service station save in places specially authorized by the licensing authority for the purpose."
+  },
+  {
+    "id": "E-3-231",
+    "block": "Fire protection",
+    "clause": "117",
+    "requirement": "(4) (i) An adequate number of portable dry chemical powder or any other fire extinguisher capable of extinguishing oil fires shall always be kept in every storage shed and small class B or C installations at strategic point and all persons employed at such locations shall be conversant with the use of such fire extinguishers."
+  },
+  {
+    "id": "E-3-232",
+    "block": "Fire protection",
+    "clause": "117",
+    "requirement": "(ii) Scale of fire fighting provided in other areas of installation should be as per the requirement given in OISD Standard -117 for all installations approved by the Chief Controller after publication of the original standard OISD-I17. For Installations existing prior to the publication of this standard the fire fighting facilities shall be improved to the extent feasible (keeping this standard in mind) and approved by the Chief Controller."
+  },
+  {
+    "id": "E-3-233",
+    "block": "Fire protection",
+    "clause": "",
+    "requirement": "Central Electricity Authority (Measures relating to Safety and Electric Supply) Regulations, 2023"
+  },
+  {
+    "id": "E-3-234",
+    "block": "Fire protection",
+    "clause": "29",
+    "requirement": "(2) Appropriate type of fire extinguisher conforming to the relevant standards, shall be installed, maintained, periodically inspected and tested as per the relevant standards for extinguishing and controlling fire and record of such tests shall be maintained."
+  },
+  {
+    "id": "E-3-235",
+    "block": "Fire protection",
+    "clause": "38 (3) (ii)",
+    "requirement": "Provisions for supply and use of electricity in multi-storeyed building more than fifteen metre in height. –\r\n(3) The following safety measures shall be provided in the multi-storeyed buildings of more than fifteen metre height and other premises such as airports, hospitals, hotels, places of entertainment, places of worship, cultural centers, stadium, academic buildings, test labs, industrial installations, installation with explosive or flammable\r\nmaterial, railway or metro stations and other public buildings, namely: –\r\n(ii) the owner or occupier of a multi-storeyed building shall ensure that electrical installations and works inside the building are carried out and maintained in such a manner as to prevent danger due to shock and fire\r\nhazards, and the installation is carried out as per the relevant standards;"
+  },
+  {
+    "id": "E-3-236",
+    "block": "Fire protection",
+    "clause": "38 (3) (iii)",
+    "requirement": "No other service pipes and cables shall be taken through the ducts provided for laying of power cables and all ducts provided for power cables and other services shall be provided with fire barrier at each floor\r\ncrossing;"
+  },
+  {
+    "id": "E-3-237",
+    "block": "Fire protection",
+    "clause": "38 (3) (iv)",
+    "requirement": "The Fire Retardant Low Smoke and Low Halogen power cables shall be used in building of more than fifteen metre height as per relevant standards:"
+  },
+  {
+    "id": "E-3-238",
+    "block": "Fire protection",
+    "clause": "46 (vii) (a)",
+    "requirement": "Undertake the following measures, where a substation or a switching station with oil-filled apparatus, such as transformer, static condenser, switchgear or oil circuit breaker having more than 2000 litre of oil is installed, whether indoor or outdoors,-\r\n(a) the separation wall or fire barrier walls of thickness and dimensions as specified in the relevant standards shall be provided between the apparatuses and between the apparatus and adjacent building if building wall adjacent to the apparatuses is not rated for four hours fire withstand rating;"
+  },
+  {
+    "id": "E-3-239",
+    "block": "Fire protection",
+    "clause": "46 (vii) (b)",
+    "requirement": "Provisions shall be made for suitable oil soakpit and where use of more than 9000 litre of oil in any one oil tank, receptacle or chamber is involved, provision shall be made for the draining away or removal of any oil which may leak or escape from the tank, receptacle or chamber containing the same, and special precautions shall be taken to prevent the spread of any fire resulting from the ignition of the oil from any cause and adequate provision shall be made for extinguishing any fire which may occur;"
+  },
+  {
+    "id": "E-3-240",
+    "block": "Fire protection",
+    "clause": "46 (vii) (c)",
+    "requirement": "Spare oil shall not be stored in the vicinity of any oil filled equipment in any such substation or switching station;"
+  },
+  {
+    "id": "E-3-241",
+    "block": "Fire protection",
+    "clause": "46 (viii)",
+    "requirement": "Without prejudice to the above measures, undertake adequate fire detection and protection arrangement for quenching the fire of the apparatus;"
+  },
+  {
+    "id": "E-3-242",
+    "block": "Fire protection",
+    "clause": "46 (ix)",
+    "requirement": "Ensure that every transformer of 10 MVA or reactor of 10 MVAR and above rating shall be provided with automatic fire fighting system as per relevant standards;"
+  },
+  {
+    "id": "E-3-243",
+    "block": "Fire protection",
+    "clause": "46 (x) (a)",
+    "requirement": "Undertake the following measures, where it is necessary to locate the substation, or switching station in the basement, namely: –\r\n(a) the transformer room be in the first basement at the periphery;"
+  },
+  {
+    "id": "E-3-244",
+    "block": "Fire protection",
+    "clause": "46 (x) (b)",
+    "requirement": "The direct access to the transformer room be provided from outside and the surrounding walls of four hours fire withstand rating be provided as per relevant standards;"
+  },
+  {
+    "id": "E-3-245",
+    "block": "Fire protection",
+    "clause": "46 (x) (c)",
+    "requirement": "The entrances to the transformer room be provided with fire resistant doors of two hour fire rating and the door shall always be kept closed and a notice of this effect be affixed on outer side of the door;"
+  },
+  {
+    "id": "E-3-246",
+    "block": "Fire protection",
+    "clause": "46 (x) (d)",
+    "requirement": "A curb of a suitable height be provided at the entrance in order to prevent the flow of oil from a ruptured transformer into other parts of the basement;"
+  },
+  {
+    "id": "E-3-247",
+    "block": "Fire protection",
+    "clause": "46 (x) (e)",
+    "requirement": "Fire cables to primary side and secondary side have sealing at all floors and wall opening of atleast two hours fire withstand rating;"
+  },
+  {
+    "id": "E-3-248",
+    "block": "Fire protection",
+    "clause": "46 (x) (f)",
+    "requirement": "Fire Retardant Low Smoke Low Halogen cable as per relevant standards be used;"
+  },
+  {
+    "id": "E-3-249",
+    "block": "Fire protection",
+    "clause": "46 (xi)",
+    "requirement": "Ensure that oil filled transformers installed indoors in other than residential or commercial buildings are placed on the ground floor or not below the first basement;"
+  },
+  {
+    "id": "E-3-250",
+    "block": "Fire protection",
+    "clause": "46 (xii)",
+    "requirement": "Ensure that only dry type transformer shall be used inside the residential and commercial buildings;"
+  },
+  {
+    "id": "E-3-251",
+    "block": "Fire protection",
+    "clause": "46 (xiii)",
+    "requirement": "Ensure that cable trenches inside the substations and switching stations containing cables are filled with sand, pebbles or similar non-inflammable materials or completely covered with non-inflammable slabs;"
+  },
+  {
+    "id": "E-3-252",
+    "block": "Fire protection",
+    "clause": "126 (1)",
+    "requirement": "Requirement to prevent fire for electric vehicle\r\ncharging station. – The enclosure of electric vehicle supply equipment shall be made of fire retardant material with self-extinguishing property and free from halogen."
+  },
+  {
+    "id": "E-3-253",
+    "block": "Fire protection",
+    "clause": "126 (2)",
+    "requirement": "The fire detection, alarm and control system shall be provided as per relevant standards."
+  }
+]

@@ -1,0 +1,1760 @@
+[
+  {
+    "id": "C-GEN-1",
+    "block": "BULDING DETAILS",
+    "clause": "",
+    "requirement": "Height (in meters)"
+  },
+  {
+    "id": "C-GEN-2",
+    "block": "BULDING DETAILS",
+    "clause": "",
+    "requirement": "Total Plinth Area (in sq m)(Including basement Floors)"
+  },
+  {
+    "id": "C-GEN-3",
+    "block": "BULDING DETAILS",
+    "clause": "",
+    "requirement": "No. of Floors  (Including basement Floors)"
+  },
+  {
+    "id": "C-GEN-4",
+    "block": "BULDING DETAILS",
+    "clause": "",
+    "requirement": "Total Floor area (in sq m)(Including basement Floors)"
+  },
+  {
+    "id": "C-GEN-5",
+    "block": "BULDING DETAILS",
+    "clause": "",
+    "requirement": "Plot Area (in sq m)"
+  },
+  {
+    "id": "C-GEN-6",
+    "block": "Type of construction",
+    "clause": "",
+    "requirement": "Whether the Building is of permanent construction?"
+  },
+  {
+    "id": "C-GEN-7",
+    "block": "Type of construction",
+    "clause": "3.3",
+    "requirement": "Whether the building is of TYPE 1/ Type 2 / Type 3/ Type 4 construction as per clause 3.3 of NBC Part 4 lift & safety?"
+  },
+  {
+    "id": "C-GEN-8",
+    "block": "Type of construction",
+    "clause": "4.3 & 4.4.2.1",
+    "requirement": "Is the occupant load determined as per table 3 (clauses 4.3 and 4.4.2.1)"
+  },
+  {
+    "id": "C-GEN-9",
+    "block": "Type of construction",
+    "clause": "",
+    "requirement": "Ground floor"
+  },
+  {
+    "id": "C-GEN-10",
+    "block": "Type of construction",
+    "clause": "",
+    "requirement": "First floor"
+  },
+  {
+    "id": "C-GEN-11",
+    "block": "Type of construction",
+    "clause": "",
+    "requirement": "Second floor"
+  },
+  {
+    "id": "C-GEN-12",
+    "block": "Type of construction",
+    "clause": "",
+    "requirement": "Thrid floor"
+  },
+  {
+    "id": "C-GEN-13",
+    "block": "Type of construction",
+    "clause": "",
+    "requirement": "Fourth floor"
+  },
+  {
+    "id": "C-GEN-14",
+    "block": "Type of construction",
+    "clause": "3.4.4.3",
+    "requirement": "Weather the open space around the building is maintained according to clause 3.4.4.3"
+  },
+  {
+    "id": "C-GEN-15",
+    "block": "Type of construction",
+    "clause": "",
+    "requirement": "Set backs maintained"
+  },
+  {
+    "id": "C-GEN-16",
+    "block": "Type of construction",
+    "clause": "",
+    "requirement": "North side"
+  },
+  {
+    "id": "C-GEN-17",
+    "block": "Type of construction",
+    "clause": "",
+    "requirement": "East side"
+  },
+  {
+    "id": "C-GEN-18",
+    "block": "Type of construction",
+    "clause": "",
+    "requirement": "West side"
+  },
+  {
+    "id": "C-GEN-19",
+    "block": "Type of construction",
+    "clause": "",
+    "requirement": "South side"
+  },
+  {
+    "id": "C-GEN-20",
+    "block": "Administrative matters",
+    "clause": "",
+    "requirement": "Whether the hospital has a safety committee with a senior person as the chairman of the safety committee."
+  },
+  {
+    "id": "C-GEN-21",
+    "block": "Administrative matters",
+    "clause": "",
+    "requirement": "Is the safety or fire officer part of the safety committee?"
+  },
+  {
+    "id": "C-GEN-22",
+    "block": "Administrative matters",
+    "clause": "",
+    "requirement": "Whether documentation of roles and responsibilities and a written constitution of the committee is available."
+  },
+  {
+    "id": "C-GEN-23",
+    "block": "Administrative matters",
+    "clause": "",
+    "requirement": "Whether the safety committee meetings are held as per Terms of Reference (TOR)."
+  },
+  {
+    "id": "C-GEN-24",
+    "block": "Administrative matters",
+    "clause": "",
+    "requirement": "Whether fire incident data is available."
+  },
+  {
+    "id": "C-GEN-25",
+    "block": "Administrative matters",
+    "clause": "",
+    "requirement": "Is there a Fire Safety Manual or Safety Manual that addresses fire safety and is approved by top management?"
+  },
+  {
+    "id": "C-GEN-26",
+    "block": "Administrative matters",
+    "clause": "",
+    "requirement": "Whether the hospital has a Fire Safety Plan – 24/7 Emergency Preparedness Centre that becomes functional during an emergency."
+  },
+  {
+    "id": "C-GEN-27",
+    "block": "Administrative matters",
+    "clause": "",
+    "requirement": "Fire/Safety Manual includes a plan for fire prevention and control."
+  },
+  {
+    "id": "C-GEN-28",
+    "block": "Administrative matters",
+    "clause": "",
+    "requirement": "Fire/Safety Manual includes systems for fire prevention and control."
+  },
+  {
+    "id": "C-GEN-29",
+    "block": "Administrative matters",
+    "clause": "",
+    "requirement": "Fire/Safety Manual includes maintenance schedules/SOPs for systems related to fire prevention and control."
+  },
+  {
+    "id": "C-GEN-30",
+    "block": "Administrative matters",
+    "clause": "",
+    "requirement": "Fire/Safety Manual includes inspection protocols for fire safety installations."
+  },
+  {
+    "id": "C-GEN-31",
+    "block": "Administrative matters",
+    "clause": "",
+    "requirement": "Fire/Safety Manual includes codes for announcement of fire-related emergencies, procedures, and communication protocols."
+  },
+  {
+    "id": "C-GEN-32",
+    "block": "Administrative matters",
+    "clause": "",
+    "requirement": "Fire/Safety Manual includes responsibilities of different departments in case of fire."
+  },
+  {
+    "id": "C-GEN-33",
+    "block": "Administrative matters",
+    "clause": "",
+    "requirement": "Fire/Safety Manual includes procedures, frequency, and protocols for mock drills."
+  },
+  {
+    "id": "C-GEN-34",
+    "block": "Administrative matters",
+    "clause": "",
+    "requirement": "Fire/Safety Manual includes constitution of Fire Fighting & Evacuation Teams."
+  },
+  {
+    "id": "C-GEN-35",
+    "block": "Administrative matters",
+    "clause": "",
+    "requirement": "Fire/Safety Manual includes the Evacuation Plan."
+  },
+  {
+    "id": "C-GEN-36",
+    "block": "Air Handling units",
+    "clause": "",
+    "requirement": "Centralised HVAC system has appropriate fire dampers to prevent spread of fire, and in case of fire and it  functions properly"
+  },
+  {
+    "id": "C-GEN-37",
+    "block": "Air Handling units",
+    "clause": "",
+    "requirement": "Dampers are tested regularly and have a preventive maintenance schedule"
+  },
+  {
+    "id": "C-GEN-38",
+    "block": "Communication systems",
+    "clause": "",
+    "requirement": "Public address system is checked periodically for its proper functioning."
+  },
+  {
+    "id": "C-GEN-39",
+    "block": "Communication systems",
+    "clause": "",
+    "requirement": "Public address system is available in all the wards and sections of the hospital."
+  },
+  {
+    "id": "C-GEN-40",
+    "block": "Communication systems",
+    "clause": "",
+    "requirement": "Public address system is provided with uninterrupted power supply."
+  },
+  {
+    "id": "C-GEN-41",
+    "block": "Communication systems",
+    "clause": "",
+    "requirement": "Public address system is checked periodically for its proper functioning."
+  },
+  {
+    "id": "C-GEN-42",
+    "block": "Communication systems",
+    "clause": "",
+    "requirement": "A process for communicating emergencies in the hospital is established."
+  },
+  {
+    "id": "C-GEN-43",
+    "block": "Compartmentation",
+    "clause": "",
+    "requirement": "Smoke detectors are installed"
+  },
+  {
+    "id": "C-GEN-44",
+    "block": "Compartmentation",
+    "clause": "",
+    "requirement": "Whether the hospital buildings are sub-divided into separate\r\nsmoke compartments into which the patient can be moved\r\nwithout leaving the hospital building or change of floors?"
+  },
+  {
+    "id": "C-GEN-45",
+    "block": "Electrical Installations",
+    "clause": "",
+    "requirement": "Hospital carries out Electrical Safety Audit at regular intervals as per Indian Electricity Rules."
+  },
+  {
+    "id": "C-GEN-46",
+    "block": "Electrical Installations",
+    "clause": "",
+    "requirement": "Electrical installations are periodically checked and tested by competent electrical personnel."
+  },
+  {
+    "id": "C-GEN-47",
+    "block": "Electrical Installations",
+    "clause": "",
+    "requirement": "Hospital has installed appropriate ELCB/MCB in electrical installations as per Indian Electricity Rules."
+  },
+  {
+    "id": "C-GEN-48",
+    "block": "Electrical Installations",
+    "clause": "",
+    "requirement": "Open wires, damaged wires, loose wires, and overloading are periodically checked."
+  },
+  {
+    "id": "C-GEN-49",
+    "block": "Electrical Installations",
+    "clause": "",
+    "requirement": "Periodical checking and measurement of existing earth pit/grid resistance, earth-to-neutral voltage, and measurement of unbalance current in the system are carried out."
+  },
+  {
+    "id": "C-GEN-50",
+    "block": "Electrical Installations",
+    "clause": "",
+    "requirement": "Hospital has installed lightning arrestor/lightning masts on buildings as per IS Code of Practice (for high-rise buildings >30m)."
+  },
+  {
+    "id": "C-GEN-51",
+    "block": "Electrical Installations",
+    "clause": "",
+    "requirement": "Sub-station rooms are free from all sorts of storage materials causing hindrance for accessibility to electrical control gadgets as well as exit in case of emergency."
+  },
+  {
+    "id": "C-GEN-52",
+    "block": "Electrical Installations",
+    "clause": "",
+    "requirement": "Preventive maintenance and testing of electrical installations are done at regular pre-decided intervals, recorded, and stickers affixed."
+  },
+  {
+    "id": "C-GEN-53",
+    "block": "Electrical Installations",
+    "clause": "",
+    "requirement": "Electrical circuits are free of overloading."
+  },
+  {
+    "id": "C-GEN-54",
+    "block": "Electrical Installations",
+    "clause": "",
+    "requirement": "Electrical panels have a rubber mat."
+  },
+  {
+    "id": "C-GEN-55",
+    "block": "Electrical Installations",
+    "clause": "",
+    "requirement": "UPS batteries are checked regularly by loading them periodically to check for any heating up."
+  },
+  {
+    "id": "C-GEN-56",
+    "block": "Electrical Installations",
+    "clause": "",
+    "requirement": "Proper ventilation is provided in panel, UPS, and equipment rooms to avoid overheating."
+  },
+  {
+    "id": "C-GEN-57",
+    "block": "Electrical Installations",
+    "clause": "3.4.6.3",
+    "requirement": "Whether Electrical main, distribution panel, lift panel provided with Co2/inert gas flooding system"
+  },
+  {
+    "id": "C-GEN-58",
+    "block": "Electrical Installations",
+    "clause": "3.4.6.3.1",
+    "requirement": "Whether oil filled substation are 7 mts away from adjoining building"
+  },
+  {
+    "id": "C-GEN-59",
+    "block": "Electrical Installations",
+    "clause": "3.4.6.1",
+    "requirement": "Whether wires, cables used are flame retardant material"
+  },
+  {
+    "id": "C-GEN-60",
+    "block": "Electrical Installations",
+    "clause": "3.4.6.1",
+    "requirement": "Whether Electrical shaft are sealed at every floor with fire stop material"
+  },
+  {
+    "id": "C-GEN-61",
+    "block": "Electrical Installations",
+    "clause": "3.4.6.2",
+    "requirement": "Whether wiring for fire alarm and PA system laid are in metal conduit/Armoured"
+  },
+  {
+    "id": "C-GEN-62",
+    "block": "Emergency Evacuations",
+    "clause": "",
+    "requirement": "Hospital has prepared an Evacuation Plan which is updated at regular intervals."
+  },
+  {
+    "id": "C-GEN-63",
+    "block": "Emergency Evacuations",
+    "clause": "",
+    "requirement": "Hospital has assessed the ratio between the number of patients and staff available to assist in evacuation."
+  },
+  {
+    "id": "C-GEN-64",
+    "block": "Emergency Evacuations",
+    "clause": "",
+    "requirement": "Hospital has assessed the reaction time of staff in dealing with emergency evacuation."
+  },
+  {
+    "id": "C-GEN-65",
+    "block": "Emergency Evacuations",
+    "clause": "",
+    "requirement": "Minimum time required to react – is it good enough?"
+  },
+  {
+    "id": "C-GEN-66",
+    "block": "Emergency Evacuations",
+    "clause": "",
+    "requirement": "Fire escape routes are available to start evacuation procedures in an orderly manner during a fire emergency."
+  },
+  {
+    "id": "C-GEN-67",
+    "block": "Emergency Evacuations",
+    "clause": "",
+    "requirement": "Final and intermediate doors are easily operable from inside without the use of a key."
+  },
+  {
+    "id": "C-GEN-68",
+    "block": "Emergency Evacuations",
+    "clause": "",
+    "requirement": "Corridors, gangways, and stairways forming part of escape routes are free from obstruction and not used for storage."
+  },
+  {
+    "id": "C-GEN-69",
+    "block": "Emergency Evacuations",
+    "clause": "",
+    "requirement": "Floor and stairway surfaces are in good condition and free from tripping and slipping hazards (including external stairs and paths)."
+  },
+  {
+    "id": "C-GEN-70",
+    "block": "Emergency Evacuations",
+    "clause": "",
+    "requirement": "Fire-resisting doors are in good condition, with fully operating self-closing devices, and doors close fully onto rebates."
+  },
+  {
+    "id": "C-GEN-71",
+    "block": "Emergency Evacuations",
+    "clause": "",
+    "requirement": "Doors on escape routes open in the direction of travel."
+  },
+  {
+    "id": "C-GEN-72",
+    "block": "Emergency Evacuations",
+    "clause": "",
+    "requirement": "Escape routes are clearly and properly signed throughout their lengths, with internal doors not forming part of the route clearly labelled."
+  },
+  {
+    "id": "C-GEN-73",
+    "block": "Emergency Evacuations",
+    "clause": "",
+    "requirement": "Escape routes are provided with adequate lighting at all times of the day and night."
+  },
+  {
+    "id": "C-GEN-74",
+    "block": "Emergency Evacuations",
+    "clause": "",
+    "requirement": "Adequate emergency lighting is provided and fully serviceable."
+  },
+  {
+    "id": "C-GEN-75",
+    "block": "Emergency Evacuations",
+    "clause": "",
+    "requirement": "Hospital building has a Fire Escape Chute installed."
+  },
+  {
+    "id": "C-GEN-76",
+    "block": "Emergency Evacuations",
+    "clause": "",
+    "requirement": "Hospital has identified the location of Fire Fighting Equipment in the premises and their appropriate application."
+  },
+  {
+    "id": "C-GEN-77",
+    "block": "Emergency Evacuations",
+    "clause": "",
+    "requirement": "Hospital has conducted fire-fighting drills at regular intervals to enable in-house fire-fighting teams to respond to emergencies systematically and efficiently."
+  },
+  {
+    "id": "C-GEN-78",
+    "block": "Emergency Evacuations",
+    "clause": "",
+    "requirement": "Evacuation drills and mock drills are held on a regular basis."
+  },
+  {
+    "id": "C-GEN-79",
+    "block": "Emergency Evacuations",
+    "clause": "",
+    "requirement": "Date of the last mock drill conducted is recorded."
+  },
+  {
+    "id": "C-GEN-80",
+    "block": "Emergency Evacuations",
+    "clause": "",
+    "requirement": "Reports of mock drills are submitted to the safety committee."
+  },
+  {
+    "id": "C-GEN-81",
+    "block": "Emergency Evacuations",
+    "clause": "",
+    "requirement": "Necessary action is taken to address any issues identified during mock drills."
+  },
+  {
+    "id": "C-GEN-82",
+    "block": "Emergency Evacuations",
+    "clause": "3.4.7.1",
+    "requirement": "Whether lighting luminaries provided near Manual call point, fire fighting equipment"
+  },
+  {
+    "id": "C-GEN-83",
+    "block": "Emergency Evacuations",
+    "clause": "4.9.(e)",
+    "requirement": "Whether detectors are provided inside Electrical shaft, lift machine room"
+  },
+  {
+    "id": "C-GEN-84",
+    "block": "Emergency Evacuations",
+    "clause": "6.3.2(10)",
+    "requirement": "Any sleeping accommodation exceeds 100m2 area have at least 2 door way."
+  },
+  {
+    "id": "C-GEN-85",
+    "block": "Fire prevention",
+    "clause": "3.1",
+    "requirement": "What is the current classification of occupancy as per clause 3.1?"
+  },
+  {
+    "id": "C-GEN-86",
+    "block": "Fire prevention",
+    "clause": "3.1.11",
+    "requirement": "Does the building has multiple occupancies  as per 3.1.11?"
+  },
+  {
+    "id": "C-GEN-87",
+    "block": "Fire prevention",
+    "clause": "3.4",
+    "requirement": "Are the general requirements of individual occupancies met as per clause 3.4."
+  },
+  {
+    "id": "C-GEN-88",
+    "block": "Fire prevention",
+    "clause": "3.4.5",
+    "requirement": "Are structural and non structural elements has sufficent fire resistance ratings as per table 3? Clause 3.4.5"
+  },
+  {
+    "id": "C-GEN-89",
+    "block": "Fire prevention",
+    "clause": "3.4.5.2",
+    "requirement": "Are doorway or opening in a fire resistant wall on any floor is 5.6 m2 in area with a maximum height/width of 2.75 m for type 1 - 3 construction? Clause 3.4.5.2"
+  },
+  {
+    "id": "C-GEN-90",
+    "block": "Fire prevention",
+    "clause": "3.4.5.2",
+    "requirement": "Are wall opening protected with fire resistance doors with fire rating not less than 120 min? clause 3.4.5.2"
+  },
+  {
+    "id": "C-GEN-91",
+    "block": "Fire prevention",
+    "clause": "3.4.5.4",
+    "requirement": "Openings in walls or floors which are necessary to be provided to allow passages of all building services like cables, electrical wirings, telephone cables, plumbing pipes, etc, shall be protected by enclosure in the form of ducts/shafts having a fire resistance not less than 120 min? clause 3.4.5.4"
+  },
+  {
+    "id": "C-GEN-92",
+    "block": "Fire prevention",
+    "clause": "3.4.5.4",
+    "requirement": "The space between the electrical cables/conduits and the walls/slabs shall be filled in by a fire stop material having fire resistance rating of not less than 120 min? Clause 3.4.5.4"
+  },
+  {
+    "id": "C-GEN-93",
+    "block": "Fire prevention",
+    "clause": "3.4.5.4",
+    "requirement": "For plumbing shafts in the core of the building, with shaft door opening inside the building, the shafts shall have inspection doors having fire resistance rating not less than 30 min? Clause 3.4.5.4"
+  },
+  {
+    "id": "C-GEN-94",
+    "block": "Fire prevention",
+    "clause": "3.4.6.2",
+    "requirement": "Are emergency power supplying distribution system for critical requirement for functioning of fire and life safety system and equipment planned for efficient and reliable power? Clause 3.4.6.2"
+  },
+  {
+    "id": "C-GEN-95",
+    "block": "Fire prevention",
+    "clause": "3.4.6.2 & 3.4.6.4",
+    "requirement": "Is there a stand by generator as back up to the critical building systems including fire pumps, pressurization & smoke venting, fire lifts, exit signages lighting, emergency lighting, fire alarm system, PAGA, magnetic door locks, ligthing in fire command center? clause 3.4.6.2 & 3.4.6.4"
+  },
+  {
+    "id": "C-GEN-96",
+    "block": "Fire prevention",
+    "clause": "3.4.6.2",
+    "requirement": "Is the power supply to the panel/ Distribution boards of these fire and life safety systems safeguarded with fire proof enclosures and location of such systems are in fire safe zone ensuring power supply to these systems? Clause 3.4.6.2"
+  },
+  {
+    "id": "C-GEN-97",
+    "block": "Fire prevention",
+    "clause": "3.4.7",
+    "requirement": "Whether adequate illumination with alternate power supply is provided for safe movement of persons towards and through the exits? Clause 3.4.7"
+  },
+  {
+    "id": "C-GEN-98",
+    "block": "Fire prevention",
+    "clause": "3.4.7",
+    "requirement": "Whether adequate illumination with alternate power supply is provided for locating fire alarm call points and fire fighting equipments? Clause 3.4.7"
+  },
+  {
+    "id": "C-GEN-99",
+    "block": "Fire prevention",
+    "clause": "3.4.7",
+    "requirement": "Whether emergency lighting is independently connected and can be operated by one switch on the ground floor which is easily accessible to Fire Fighters? Clause 3.4.7"
+  },
+  {
+    "id": "C-GEN-100",
+    "block": "Fire prevention",
+    "clause": "3.4.6.5",
+    "requirement": "Are lighting arrestors provided in accordance with NBC part 4 life & safety clause 3.4.6.5 ligthing protection of buildings?"
+  },
+  {
+    "id": "C-GEN-101",
+    "block": "Fire prevention",
+    "clause": "3.4.8",
+    "requirement": "Are air conditioning and ventillation systems installed such that the danger ofspread of fire, smoke or fumes from one floor to other or from outside to any occupied building or structure is minimized as per clause 3.4.8"
+  },
+  {
+    "id": "C-GEN-102",
+    "block": "Fire prevention",
+    "clause": "3.4.8.2.2",
+    "requirement": "Are fire dampers installed which has minimum fire resistance rating of 120 min as per 3.4.8.2.2"
+  },
+  {
+    "id": "C-GEN-103",
+    "block": "Fire prevention",
+    "clause": "3.4.8.3.1",
+    "requirement": "Air ducts serving main floor areas, corridors, etc, shall not pass through the exits/exit passageway/ exit enclosure. Exits and lift lobbies, etc, shall not be used as return air passage. As per 3.4.8.3.1"
+  },
+  {
+    "id": "C-GEN-104",
+    "block": "Fire prevention",
+    "clause": "3.4.8.3.3",
+    "requirement": "the ducts pass through fire walls or floors, the opening around the ducts shall be sealed with materials having fire resistance rating of the compartment. Such duct shall also be provided with fire dampers at all fire walls and floors with fire resitance rating of not less than 120 min. for clause 3.4.8.3.3"
+  },
+  {
+    "id": "C-GEN-105",
+    "block": "Fire prevention",
+    "clause": "3.4.8.4",
+    "requirement": "Are fire/ smoke dampers installed to supply air ducts , fresh air and return air ducts  which shall provide proper passive fire protection sealing in case of fire. As per clause 3.4.8.4"
+  },
+  {
+    "id": "C-GEN-106",
+    "block": "Fire prevention",
+    "clause": "3.4.11",
+    "requirement": "Are the surface interior finishing materials used such that it will reduce the flame spread and do not generate toxic smoke/ fumes? Clause 3.4.11"
+  },
+  {
+    "id": "C-GEN-107",
+    "block": "Fire prevention",
+    "clause": "3.4.12",
+    "requirement": "Is there a separate fire command center or designated space to house Fire alarm system, CCTV system,PAGA, building managements system, and constructed with 120 min fire resistance rating walls? Clause 3.4.12"
+  },
+  {
+    "id": "C-GEN-108",
+    "block": "Fire prevention",
+    "clause": "3.4.12",
+    "requirement": "Detailed floor plan along with details of fire fighting equipment and installations maintained in Fire command center? Clause 3.4.12"
+  },
+  {
+    "id": "C-GEN-109",
+    "block": "Exits",
+    "clause": "4.4.1, 4.5.1 & 4.5.2",
+    "requirement": "Whether the floors of the building are provided with exits for every travel distance of 30 meters (TYPE 1 & 2 constructions) as per table 22 under clause 4.4.1, 4.5.1 and 4.5.2,  TYPE 3 & 4 constructions the travel distance is 22.5 Meters. Part 4 of NBC."
+  },
+  {
+    "id": "C-GEN-110",
+    "block": "Exits",
+    "clause": "4.4.1 & 4.4.2.1",
+    "requirement": "Whether the minimum number of two separate exits are provided for each floor as per clause 4.4.1 & 4.4.2.1?"
+  },
+  {
+    "id": "C-GEN-111",
+    "block": "Exits",
+    "clause": "4.2.3",
+    "requirement": "Every exit, exit passageway and exit discharge shall be continuously maintained free of all obstructions or impediments to full use in the case of fire or other\nemergency. Clause 4.2.3"
+  },
+  {
+    "id": "C-GEN-112",
+    "block": "Exits",
+    "clause": "4.2.8",
+    "requirement": "Exits shall be so arranged that they may be reached without passing through another occupied unit/passage in others control, if they pose challenge or restriction in means of egress. Clause 4.2.8"
+  },
+  {
+    "id": "C-GEN-113",
+    "block": "Exits",
+    "clause": "7.3",
+    "requirement": "Whether all the internal stair cases, lift, lobbies and corridors are adequately ventilated and illuminated as per clause 7.3 of IS 14435:1997?"
+  },
+  {
+    "id": "C-GEN-114",
+    "block": "Exits",
+    "clause": "4.2.9",
+    "requirement": "Doors in exits shall open in the direction of exit. Clause 4.2.9"
+  },
+  {
+    "id": "C-GEN-115",
+    "block": "Exits",
+    "clause": "4.2.11",
+    "requirement": "Whether the height of exit door ways is 02-00 meters and more. Caluse 4.2.11"
+  },
+  {
+    "id": "C-GEN-116",
+    "block": "Exits",
+    "clause": "4.2.12 & 4.4.2.4.3.2",
+    "requirement": "Are ramps , sloped surfaces, staricases shall be used with handrails. Clause 4.2.12 & 4.4.2.4.3.2"
+  },
+  {
+    "id": "C-GEN-117",
+    "block": "Exits",
+    "clause": "4.2.13",
+    "requirement": "The capacity of the means of egress required from any storey of the building shall not be reduced along the path of egress travel until arrival to the exit discharge. Clause 4.2.13"
+  },
+  {
+    "id": "C-GEN-118",
+    "block": "Exits",
+    "clause": "4.2.16",
+    "requirement": "Suitable means shall be provided so that all access controlled exit doors, turnstiles, boom barriers and other such exits shall automatically operate to open\nmode during emergencies like fire, smoke, acts of terrorism, etc, so that people can safely and quickly egress into safe areas outside. clause 4.2.16"
+  },
+  {
+    "id": "C-GEN-119",
+    "block": "Exits",
+    "clause": "4.2.18 & 4.4.2.4.3.5",
+    "requirement": "Are walking surfaces, ramps slip resistant and in line with clause 4.2.18 & 4.4.2.4.3.5"
+  },
+  {
+    "id": "C-GEN-120",
+    "block": "Exits",
+    "clause": "4.2.19",
+    "requirement": "Are basements having sufficent exits others and in line with requirements of clause 4.2.19"
+  },
+  {
+    "id": "C-GEN-121",
+    "block": "Exits",
+    "clause": "4.3 & 4.4.2.1",
+    "requirement": "Are numnber of exits determined as per occupant load table 3 and clause 4.3 and 4.4.2.1"
+  },
+  {
+    "id": "C-GEN-122",
+    "block": "Exits",
+    "clause": "4.4.1",
+    "requirement": "Are exit clear of any obstructions, materials are ensures free flow of occupants while evacuation clause 4.4.1"
+  },
+  {
+    "id": "C-GEN-123",
+    "block": "Exits",
+    "clause": "4.4.2.4",
+    "requirement": "Are exit access is calculated as per 4.4.2.4"
+  },
+  {
+    "id": "C-GEN-124",
+    "block": "Exits",
+    "clause": "4.4.2.4.3",
+    "requirement": "Are all exit staircases shall discharge, at the level of exit discharge, to the exit discharge as per clause 4.4.2.4.3"
+  },
+  {
+    "id": "C-GEN-125",
+    "block": "Exits",
+    "clause": "4.4.2.4.3.2",
+    "requirement": "Are Internal stairs shall be constructed of non- combustible materials throughout, and shall have fire resistant rating of minimum 120 min, shall not be built around lift shaft. Clause 4.4.2.4.3.2"
+  },
+  {
+    "id": "C-GEN-126",
+    "block": "Exits",
+    "clause": "4.4.2.4.3.4 & 4.4.2.4.3.5",
+    "requirement": "Are external staricases, ramps connected to ground and hand rails provided on either end. There shall be no obstructions on the external staircase section. Clause 4.4.2.4.3.4 & 4.4.2.4.3.5"
+  },
+  {
+    "id": "C-GEN-127",
+    "block": "Exits",
+    "clause": "4.4.2.5 & Table 6",
+    "requirement": "Are staricases and lift lobbies designed and constructed in accordance with pressurization of staricases and lobbies. Clause 4.4.2.5 & Table 6"
+  },
+  {
+    "id": "C-GEN-128",
+    "block": "Exits",
+    "clause": "4.5",
+    "requirement": "Are proper compartmentation areas maintained for large spaces to prevent spread of fire. Clause 4.5"
+  },
+  {
+    "id": "C-GEN-129",
+    "block": "Exits",
+    "clause": "4.6",
+    "requirement": "Are All exit passageway (from exit to exit discharge) shall be pressurized or naturally ventilated. Clause 4.6"
+  },
+  {
+    "id": "C-GEN-130",
+    "block": "Exits",
+    "clause": "4.6.1 & 4.6.2",
+    "requirement": "Smoke exhaust system / mechanical ventillation systems where provided, for above areas and occupancies shall have a minimum of 12 air changes  per  hour. Clause 4.6.1 & 4.6.2"
+  },
+  {
+    "id": "C-GEN-131",
+    "block": "Exits",
+    "clause": "4.6.2",
+    "requirement": "Are each basement seperately ventillated. Clause 4.6.2"
+  },
+  {
+    "id": "C-GEN-132",
+    "block": "Exits",
+    "clause": "4.6.2",
+    "requirement": "Are Inlets and extracts terminated at ground level with stall board or pavement lights as before. Stall board and pavement lights should be in positions easily accessible to the fire brigade and clearly marked AIR INLET or SMOKE OUTLET with an indication of area served at or near the opening. Clause 4.6.2"
+  },
+  {
+    "id": "C-GEN-133",
+    "block": "Exits",
+    "clause": "4.6.2",
+    "requirement": "Does the smoke extraction system operate on actuation of flow switch actuation of sprinkler system. In addition, a local and/or remote manual start-stop control/switch shall be provided for operations by the fire fighters. Clause 4.6.2"
+  },
+  {
+    "id": "C-GEN-134",
+    "block": "Exits",
+    "clause": "4.7",
+    "requirement": "Is there a gas supply run through manifold and pipes attached to cluster of cylinders and satisfy requirements of Clause 4.7"
+  },
+  {
+    "id": "C-GEN-135",
+    "block": "Exits",
+    "clause": "4.7.2",
+    "requirement": "Are thermal detectors installed in fume hoods and arrangements made for automatic tripping of the exhaust fan in case of fire. Clause 4.7.2"
+  },
+  {
+    "id": "C-GEN-136",
+    "block": "Exits",
+    "clause": "4.7.4",
+    "requirement": "Are manifold installed are away from any air intakes/smoke exhaust openings/ any windows. Clause 4.7.4"
+  },
+  {
+    "id": "C-GEN-137",
+    "block": "Exits",
+    "clause": "4.7.5",
+    "requirement": "Pressure regulating stations shall be designed and installed at critical locations for excess flow shut off valves. Clause 4.7.5"
+  },
+  {
+    "id": "C-GEN-138",
+    "block": "Exits",
+    "clause": "4.7.9",
+    "requirement": "Kitchens working on LPG fuel shall not be permitted in basements. Clause 4.7.9"
+  },
+  {
+    "id": "C-GEN-139",
+    "block": "Exits",
+    "clause": "4.8",
+    "requirement": "Rooms containing high pressure boilers, refrigerating machinery, transformers or other service equipment subject to possible explosion shall not be located directly under or adjacent to exits. Clause 4.8"
+  },
+  {
+    "id": "C-GEN-140",
+    "block": "Exits",
+    "clause": "",
+    "requirement": "Whether the fire exits / doors are well defined, displayed and\nlocated at each floor or refuge area or any safe place decided by\nthe management?"
+  },
+  {
+    "id": "C-GEN-141",
+    "block": "Exits",
+    "clause": "",
+    "requirement": "Atleast two exits is available or suitable opening is avialable for\nexit"
+  },
+  {
+    "id": "C-GEN-142",
+    "block": "Exits",
+    "clause": "",
+    "requirement": "Whether refuge area are kept clear (No storage of Electrical,\nmechanical, combustible material, wheel chairs, trolley or any\nequipment)"
+  },
+  {
+    "id": "C-GEN-143",
+    "block": "Exits",
+    "clause": "",
+    "requirement": "Is prominent signage board provided in refuge area"
+  },
+  {
+    "id": "C-GEN-144",
+    "block": "Exits",
+    "clause": "",
+    "requirement": "Whether refuge area provided with Fire extinguisher, PA\nsystem, Emergency light, drinking water facility."
+  },
+  {
+    "id": "C-GEN-145",
+    "block": "Exits",
+    "clause": "",
+    "requirement": "Whether refuge area connected to fire fighting shaft\n(comprising fire man lift, lobby, staircase)"
+  },
+  {
+    "id": "C-GEN-146",
+    "block": "Fire detection and alarm",
+    "clause": "Table 7",
+    "requirement": "IS fire detection system and alarm system installed in accordance with Table 7 minimum requirements of fire fighting installations"
+  },
+  {
+    "id": "C-GEN-147",
+    "block": "Fire detection and alarm",
+    "clause": "4.9",
+    "requirement": "Are detectors installad covering  all occupied areas including lifts, electrical shafts and false ceilings. Clause 4.9"
+  },
+  {
+    "id": "C-GEN-148",
+    "block": "Fire detection and alarm",
+    "clause": "4.9",
+    "requirement": "Are proper visual alarms like strobe lights installed and can are visisble? Clause 4.9"
+  },
+  {
+    "id": "C-GEN-149",
+    "block": "Fire detection and alarm",
+    "clause": "4.9",
+    "requirement": "Are hooters with decible range of min 110 dB installed. Clause 4.9"
+  },
+  {
+    "id": "C-GEN-150",
+    "block": "Fire detection and alarm",
+    "clause": "4.9",
+    "requirement": "Are voice evacuations systems installed has Hindi and english languages for annunciations and for local langugae annunciations done by PAGA. Clause 4.9"
+  },
+  {
+    "id": "C-GEN-151",
+    "block": "Fire detection and alarm",
+    "clause": "4.9",
+    "requirement": "Are manual call points installed in every floor as accessible. Clause 4.9"
+  },
+  {
+    "id": "C-GEN-152",
+    "block": "Fire detection and alarm",
+    "clause": "",
+    "requirement": "Whether the hospital has provided Fire Detection & Fire Alarm\r\nSystem for the entire Building as per IS: 2185?"
+  },
+  {
+    "id": "C-GEN-153",
+    "block": "Fire detection and alarm",
+    "clause": "",
+    "requirement": "Fire Alarm systems are properly tested and maintained and\r\nrecords are kept for same, Fire Alarms are sufficiently audible,"
+  },
+  {
+    "id": "C-GEN-154",
+    "block": "Fire detection and alarm",
+    "clause": "",
+    "requirement": "Manual Call Points are accessible (free of obstruction)"
+  },
+  {
+    "id": "C-GEN-155",
+    "block": "Fire detection and alarm",
+    "clause": "",
+    "requirement": "Are the fire alarms adequate and free from obstruction?"
+  },
+  {
+    "id": "C-GEN-156",
+    "block": "Fire detection and alarm",
+    "clause": "",
+    "requirement": "Whether the Manual Call Points have means to break the\r\nglass?"
+  },
+  {
+    "id": "C-GEN-157",
+    "block": "Fire Officer",
+    "clause": "4.1",
+    "requirement": "A dedicated & qualified fire officer with experience of minimum 3 years employeed  Clause 4.10"
+  },
+  {
+    "id": "C-GEN-158",
+    "block": "Fire Officer",
+    "clause": "4.10.2",
+    "requirement": "Is he competent in delivering fire safety trainings, handling emergency evacucaitons, mock drills, inspecting and maintaining all fire fighting equipment. Clasue 4.10.2"
+  },
+  {
+    "id": "C-GEN-159",
+    "block": "Fire Officer",
+    "clause": "4.10.2",
+    "requirement": "Shall maintain proper liasion between local fire authorities. 4.10.2"
+  },
+  {
+    "id": "C-GEN-160",
+    "block": "Fire Officer",
+    "clause": "4.10.2",
+    "requirement": "ensure fire operational plans, fire orders and fir notices are prepared and implemented. Clasue 4.10.2"
+  },
+  {
+    "id": "C-GEN-161",
+    "block": "Fire Officer",
+    "clause": "4.10.2",
+    "requirement": "Are all inspection & maintenance records well maintained and documented. Clause 4.10.2"
+  },
+  {
+    "id": "C-GEN-162",
+    "block": "Fire drills & Fire orders",
+    "clause": "4.11",
+    "requirement": "Is there a proper emergency evacuaction plan designed. Clause 4.11"
+  },
+  {
+    "id": "C-GEN-163",
+    "block": "Fire drills & Fire orders",
+    "clause": "4.11",
+    "requirement": "Are periodic mock drills conducted as per NOC and as per this clause 4.11"
+  },
+  {
+    "id": "C-GEN-164",
+    "block": "Fire drills & Fire orders",
+    "clause": "4.11",
+    "requirement": "Are mock drills effective and are performed as per the laid evacuation plan and procedures 4. 11"
+  },
+  {
+    "id": "C-GEN-165",
+    "block": "Fire protection",
+    "clause": "5.1 & Table 7",
+    "requirement": "Are fire extinguighers installed in accordance with IS 2190. and clasue 5.1 and table 7"
+  },
+  {
+    "id": "C-GEN-166",
+    "block": "Fire protection",
+    "clause": "Table 7",
+    "requirement": "Are yard hydrants, down comers, hose reels with nozzles installed in accordance to requirements of table 7"
+  },
+  {
+    "id": "C-GEN-167",
+    "block": "Fire protection",
+    "clause": "Table7 & 5.1.22",
+    "requirement": "Are fire pumps installed in accordance with table 7 clause 5.1.22"
+  },
+  {
+    "id": "C-GEN-168",
+    "block": "Fire protection",
+    "clause": "Table 7",
+    "requirement": "Pump specifications (Plz specify)"
+  },
+  {
+    "id": "C-GEN-169",
+    "block": "Fire protection",
+    "clause": "",
+    "requirement": "Electrical pump"
+  },
+  {
+    "id": "C-GEN-170",
+    "block": "Fire protection",
+    "clause": "",
+    "requirement": "Diesel pump"
+  },
+  {
+    "id": "C-GEN-171",
+    "block": "Fire protection",
+    "clause": "",
+    "requirement": "Jockey pump"
+  },
+  {
+    "id": "C-GEN-172",
+    "block": "Fire protection",
+    "clause": "Table 7",
+    "requirement": "Is the fire pump house well constructed and maintained."
+  },
+  {
+    "id": "C-GEN-173",
+    "block": "Fire protection",
+    "clause": "",
+    "requirement": "Are all pumps kept in auto mode"
+  },
+  {
+    "id": "C-GEN-174",
+    "block": "Fire protection",
+    "clause": "5.1",
+    "requirement": "IS there Fire brigade inlet and out let / fire man valve installed at the ground level and all other levels wehre required to deliver required water for fire fighting clause 5.1"
+  },
+  {
+    "id": "C-GEN-175",
+    "block": "Fire protection",
+    "clause": "5.1.2.1",
+    "requirement": "Is there a overhed water tank for fire fighting specify capacity. Clause 5.1.2.1"
+  },
+  {
+    "id": "C-GEN-176",
+    "block": "Fire protection",
+    "clause": "5.1.2",
+    "requirement": "Is there a unground water storage tank for fire fighting. Clause 5.1.2"
+  },
+  {
+    "id": "C-GEN-177",
+    "block": "Fire protection",
+    "clause": "Table 7",
+    "requirement": "Are automatic sprinkler installed where ever required as per table 7"
+  },
+  {
+    "id": "C-GEN-178",
+    "block": "Fire protection",
+    "clause": "Table 7",
+    "requirement": "Are fire suppression system based installed"
+  },
+  {
+    "id": "C-GEN-179",
+    "block": "Fire protection",
+    "clause": "5.1.9",
+    "requirement": "Is there a requirement to install clean agent based suppression system. If yes, then is it installed in accordance to guidelines of 5.1.9"
+  },
+  {
+    "id": "C-GEN-180",
+    "block": "Fire protection",
+    "clause": "",
+    "requirement": "Fire fighting equipments inventorised and Fire asset numbering\r\nis followed"
+  },
+  {
+    "id": "C-GEN-181",
+    "block": "Fire protection",
+    "clause": "",
+    "requirement": "The hospital building has an approachable peripheral road\r\naround it for access by fire brigade?"
+  },
+  {
+    "id": "C-GEN-182",
+    "block": "Fire Extinguishers",
+    "clause": "1",
+    "requirement": "Whether appropriate type & number of fire extinguishers have been installed as per NBC Part 4?"
+  },
+  {
+    "id": "C-GEN-183",
+    "block": "Fire Extinguishers",
+    "clause": "2",
+    "requirement": "Whether fire extinguishers installed are according to the type of fire that could take place?"
+  },
+  {
+    "id": "C-GEN-184",
+    "block": "Fire Extinguishers",
+    "clause": "3",
+    "requirement": "Whether the hospital has a regular preventive maintenance schedule for the Fire Extinguishers?"
+  },
+  {
+    "id": "C-GEN-185",
+    "block": "Fire Extinguishers",
+    "clause": "4",
+    "requirement": "Stickers are affixed showing date of checking and next scheduled date for checking"
+  },
+  {
+    "id": "C-GEN-186",
+    "block": "Fire Extinguishers",
+    "clause": "5",
+    "requirement": "If the hospital has MRI - comptable extinguishers are to be installed"
+  },
+  {
+    "id": "C-GEN-187",
+    "block": "Fire Extinguishers",
+    "clause": "6",
+    "requirement": "Suppression system to be installed in server system (larger\r\nhospital)"
+  },
+  {
+    "id": "C-GEN-188",
+    "block": "Fire Extinguishers",
+    "clause": "7",
+    "requirement": "Whether the installed fire extinguishers are easily accessible?"
+  },
+  {
+    "id": "C-GEN-189",
+    "block": "Fire Hydrant Systems",
+    "clause": "1",
+    "requirement": "Whether the hospital has Water Reservoir exclusively for fire fighting as per the requirements prescribed in NBC Part IV?"
+  },
+  {
+    "id": "C-GEN-190",
+    "block": "Fire Hydrant Systems",
+    "clause": "2",
+    "requirement": "Whether the hospital has Fire Hydrant Ring Main with Yard Hydrant as per NBC Part IV & IS:3844?"
+  },
+  {
+    "id": "C-GEN-191",
+    "block": "Fire Hydrant Systems",
+    "clause": "3",
+    "requirement": "Whether the hospital has Wet Riser system with landing valve as per NBC Part IV & IS:3844?"
+  },
+  {
+    "id": "C-GEN-192",
+    "block": "Fire Hydrant Systems",
+    "clause": "4",
+    "requirement": "Whether the hospital has Hose Box containing two nos. 15 m long Hoses and one Branch Pipe with Nozzle near each Yard Hydrant & Landing Valve?"
+  },
+  {
+    "id": "C-GEN-193",
+    "block": "Fire Hydrant Systems",
+    "clause": "5",
+    "requirement": "Whether the hospital has provided First-Aid Hose Reel (40 m long) near each landing valve tapped off from the Wet Riser?"
+  },
+  {
+    "id": "C-GEN-194",
+    "block": "Fire Hydrant Systems",
+    "clause": "6",
+    "requirement": "Whether the hospital has provided Sprinkler system for all floors and other applicable areas as per NBC Code?"
+  },
+  {
+    "id": "C-GEN-195",
+    "block": "Fire Hydrant Systems",
+    "clause": "7",
+    "requirement": "Whether the hospital has provided Fire Extinguishers within the building as per IS:2190?"
+  },
+  {
+    "id": "C-GEN-196",
+    "block": "Fire Hydrant Systems",
+    "clause": "8",
+    "requirement": "Whether the hospital has trained the personnel to use the Fire Extinguishers in case of emergency?"
+  },
+  {
+    "id": "C-GEN-197",
+    "block": "Fire Hydrant Systems",
+    "clause": "9",
+    "requirement": "Whether the hospital has installed the Main Fire Pump and one Standby Pump with minimum capacity of 2280 LPM?"
+  },
+  {
+    "id": "C-GEN-198",
+    "block": "Fire Hydrant Systems",
+    "clause": "10",
+    "requirement": "Whether the hospital has installed a Diesel Operating Pump with minimum capacity of 2280 LPM as Standby Pump?"
+  },
+  {
+    "id": "C-GEN-199",
+    "block": "Fire Hydrant Systems",
+    "clause": "11",
+    "requirement": "Whether Auto Start facility is incorporated in the Fire Pump with a Jockey Pump of 180 LPM capacity?"
+  },
+  {
+    "id": "C-GEN-200",
+    "block": "Fire Hydrant Systems",
+    "clause": "12",
+    "requirement": "Whether the Fire Pump House is maintained properly?"
+  },
+  {
+    "id": "C-GEN-201",
+    "block": "Fire Hydrant Systems",
+    "clause": "13",
+    "requirement": "Whether the pumps have calibrated pressure gauges and appropriate pressures are maintained in the fire hydrant & sprinkler lines?"
+  },
+  {
+    "id": "C-GEN-202",
+    "block": "Fire Hydrant Systems",
+    "clause": "14",
+    "requirement": "Whether the hospital has provided Fire Detection & Fire Alarm System for the entire building as per IS:2189?"
+  },
+  {
+    "id": "C-GEN-203",
+    "block": "Fire Hydrant Systems",
+    "clause": "15",
+    "requirement": "Whether the hospital has provided a Public Address (PA) System with Two-way Communication System?"
+  },
+  {
+    "id": "C-GEN-204",
+    "block": "Fire Hydrant Systems",
+    "clause": "16",
+    "requirement": "Whether Emergency Power Supply is provided to the following systems:"
+  },
+  {
+    "id": "C-GEN-205",
+    "block": "Fire Hydrant Systems",
+    "clause": "",
+    "requirement": "a. Illumination of means of escape routes"
+  },
+  {
+    "id": "C-GEN-206",
+    "block": "Fire Hydrant Systems",
+    "clause": "",
+    "requirement": "b. Fire Alarm Panel & PA Console"
+  },
+  {
+    "id": "C-GEN-207",
+    "block": "Fire Hydrant Systems",
+    "clause": "",
+    "requirement": "c. Fire Pumps"
+  },
+  {
+    "id": "C-GEN-208",
+    "block": "Fire Hydrant Systems",
+    "clause": "",
+    "requirement": "d. Fire Lift"
+  },
+  {
+    "id": "C-GEN-209",
+    "block": "Fire Hydrant Systems",
+    "clause": "17",
+    "requirement": "Whether the Pump Rooms are well ventilated?"
+  },
+  {
+    "id": "C-GEN-210",
+    "block": "Fire Hydrant Systems",
+    "clause": "18",
+    "requirement": "Whether the battery for Diesel Pump has a separate charger?"
+  },
+  {
+    "id": "C-GEN-211",
+    "block": "Fire Hydrant Systems",
+    "clause": "19",
+    "requirement": "Whether the exhaust pipe of Diesel Engine is insulated?"
+  },
+  {
+    "id": "C-GEN-212",
+    "block": "Flammable materials",
+    "clause": "",
+    "requirement": "Hospital has policies and protocols for storing, dispensing, and use of flammable materials."
+  },
+  {
+    "id": "C-GEN-213",
+    "block": "Flammable materials",
+    "clause": "",
+    "requirement": "Hospital has obtained necessary approval from the Indian Explosives Department for bulk storage of diesel or any other flammable material."
+  },
+  {
+    "id": "C-GEN-214",
+    "block": "Flammable materials",
+    "clause": "",
+    "requirement": "All electrical fittings in the flammable storage areas are flame-proof."
+  },
+  {
+    "id": "C-GEN-215",
+    "block": "Flammable materials",
+    "clause": "",
+    "requirement": "Pumps used for pumping fuel are of flame-proof construction."
+  },
+  {
+    "id": "C-GEN-216",
+    "block": "Flammable materials",
+    "clause": "",
+    "requirement": "Whether basements are used for storing flammables, pathological, or chemical materials."
+  },
+  {
+    "id": "C-GEN-217",
+    "block": "Flammable materials",
+    "clause": "",
+    "requirement": "Whether storage of flammable liquid in 100 m² area is more than 3 litres."
+  },
+  {
+    "id": "C-GEN-218",
+    "block": "FIRE DOORS AND STAIRWELLS",
+    "clause": "",
+    "requirement": "Whether the Fire Doors have 2 hour fire rating and should be displayed with note push?"
+  },
+  {
+    "id": "C-GEN-219",
+    "block": "FIRE DOORS AND STAIRWELLS",
+    "clause": "",
+    "requirement": "Fire the exits meant for fire exit free of obstacles,"
+  },
+  {
+    "id": "C-GEN-220",
+    "block": "FIRE DOORS AND STAIRWELLS",
+    "clause": "",
+    "requirement": "If fire exits are locked, keys are accessible nearby for easy and quick opening"
+  },
+  {
+    "id": "C-GEN-221",
+    "block": "Gas Storage",
+    "clause": "",
+    "requirement": "Is Liquid Medical Oxygen (LMO) stored in the building?"
+  },
+  {
+    "id": "C-GEN-222",
+    "block": "Gas Storage",
+    "clause": "",
+    "requirement": "LMO is installed as per requirements of the rules – are there any measures taken for combating emergencies in the medical gas system, such as a gas alarm system?"
+  },
+  {
+    "id": "C-GEN-223",
+    "block": "Gas Storage",
+    "clause": "",
+    "requirement": "Are gas shut-off valves provided and functioning?"
+  },
+  {
+    "id": "C-GEN-224",
+    "block": "Gas Storage",
+    "clause": "",
+    "requirement": "Whether LPG is installed in a separate place with barrier and precautions as per IS:6044?"
+  },
+  {
+    "id": "C-GEN-225",
+    "block": "Gas Storage",
+    "clause": "",
+    "requirement": "Are cylinders chained and protected?"
+  },
+  {
+    "id": "C-GEN-226",
+    "block": "Gas Storage",
+    "clause": "",
+    "requirement": "Are cylinders stored with their valves uppermost and all storage norms complied with?"
+  },
+  {
+    "id": "C-GEN-227",
+    "block": "Gas Storage",
+    "clause": "",
+    "requirement": "Are permanent warning notices prominently displayed prohibiting smoking and naked lights/flames?"
+  },
+  {
+    "id": "C-GEN-228",
+    "block": "Gas Storage",
+    "clause": "",
+    "requirement": "Whether gas distribution pipelines are laid below the false ceiling?"
+  },
+  {
+    "id": "C-GEN-229",
+    "block": "General",
+    "clause": "",
+    "requirement": "Policies related to environment protection are established in the hospital."
+  },
+  {
+    "id": "C-GEN-230",
+    "block": "General",
+    "clause": "",
+    "requirement": "Hospital is certified for ISO 14001:2015 (Environmental Management System)."
+  },
+  {
+    "id": "C-GEN-231",
+    "block": "General",
+    "clause": "",
+    "requirement": "Whether gas distribution pipelines are laid below the false ceiling?"
+  },
+  {
+    "id": "C-GEN-232",
+    "block": "General",
+    "clause": "",
+    "requirement": "What is the material of the false ceiling?"
+  },
+  {
+    "id": "C-GEN-233",
+    "block": "General",
+    "clause": "",
+    "requirement": "Glazing: Whether openable panels are provided on each floor and spaced not more than 10 meters apart?"
+  },
+  {
+    "id": "C-GEN-234",
+    "block": "General",
+    "clause": "",
+    "requirement": "Glazing: Is the height of the opening panel between 1.2 to 1.5 meters from the floor level?"
+  },
+  {
+    "id": "C-GEN-235",
+    "block": "General",
+    "clause": "",
+    "requirement": "Glazing: Whether the wording “Fire Openable Panel” and “Open in case of fire – Do not obstruct” is marked?"
+  },
+  {
+    "id": "C-GEN-236",
+    "block": "General",
+    "clause": "",
+    "requirement": "Whether the oil tank for DG/Boiler is provided with a dyked enclosure having volumetric capacity at least 10% more than the oil tank volume, and filled with sand up to 300 mm height?"
+  },
+  {
+    "id": "C-GEN-237",
+    "block": "General",
+    "clause": "",
+    "requirement": "Hospital is certified for OHSAS 18001:2007 or ISO 45001:2018 (Occupational Health & Safety Management System)."
+  },
+  {
+    "id": "C-GEN-238",
+    "block": "General",
+    "clause": "",
+    "requirement": "Has the hospital undergone EcoVadis or Sedex audits towards responsible business practices?"
+  },
+  {
+    "id": "C-GEN-239",
+    "block": "General",
+    "clause": "",
+    "requirement": "Infectious diseases control program is established in the hospital."
+  },
+  {
+    "id": "C-GEN-240",
+    "block": "General",
+    "clause": "",
+    "requirement": "Are notices informing staff what to do in the event of fire prominently displayed?"
+  },
+  {
+    "id": "C-GEN-241",
+    "block": "General",
+    "clause": "",
+    "requirement": "Are duplicate copies of important records stored in another building?"
+  },
+  {
+    "id": "C-GEN-242",
+    "block": "General",
+    "clause": "",
+    "requirement": "According to you, which is the most vulnerable area in the hospital for a potential fire, and are you informed about it?"
+  },
+  {
+    "id": "C-GEN-243",
+    "block": "General",
+    "clause": "",
+    "requirement": "Staircase – Open or Enclosed?"
+  },
+  {
+    "id": "C-GEN-244",
+    "block": "Hazard identification and risk assessment - HIRA",
+    "clause": "",
+    "requirement": "Are fire risk areas identified ?"
+  },
+  {
+    "id": "C-GEN-245",
+    "block": "Hazard identification and risk assessment - HIRA",
+    "clause": "",
+    "requirement": "Is fire hazard covered as part of HIRA and controls\r\nestablished?"
+  },
+  {
+    "id": "C-GEN-246",
+    "block": "HAZARDOUS AREAS",
+    "clause": "",
+    "requirement": "What are the types of potential hazards identified in the\r\nhospital"
+  },
+  {
+    "id": "C-GEN-247",
+    "block": "HAZARDOUS AREAS",
+    "clause": "",
+    "requirement": "Heat"
+  },
+  {
+    "id": "C-GEN-248",
+    "block": "HAZARDOUS AREAS",
+    "clause": "",
+    "requirement": "Noise"
+  },
+  {
+    "id": "C-GEN-249",
+    "block": "HAZARDOUS AREAS",
+    "clause": "",
+    "requirement": "Radiation"
+  },
+  {
+    "id": "C-GEN-250",
+    "block": "HAZARDOUS AREAS",
+    "clause": "",
+    "requirement": "Explosion"
+  },
+  {
+    "id": "C-GEN-251",
+    "block": "HAZARDOUS AREAS",
+    "clause": "",
+    "requirement": "Chemical-Fire"
+  },
+  {
+    "id": "C-GEN-252",
+    "block": "HAZARDOUS AREAS",
+    "clause": "",
+    "requirement": "Toxic Release"
+  },
+  {
+    "id": "C-GEN-253",
+    "block": "HAZARDOUS AREAS",
+    "clause": "",
+    "requirement": "Others"
+  },
+  {
+    "id": "C-GEN-254",
+    "block": "Housekeeping",
+    "clause": "",
+    "requirement": "Are all the passages, floors, and stairways in good condition?"
+  },
+  {
+    "id": "C-GEN-255",
+    "block": "Housekeeping",
+    "clause": "",
+    "requirement": "Whether walkways are clearly marked and free from obstruction?"
+  },
+  {
+    "id": "C-GEN-256",
+    "block": "Housekeeping",
+    "clause": "",
+    "requirement": "Was any study carried out for the assessment of illumination level?"
+  },
+  {
+    "id": "C-GEN-257",
+    "block": "Housekeeping",
+    "clause": "",
+    "requirement": "Is there any system of periodical cleaning and replacing the lighting fittings/lamps in order to ensure that they give the intended illumination levels?"
+  },
+  {
+    "id": "C-GEN-258",
+    "block": "Housekeeping",
+    "clause": "",
+    "requirement": "Whether No Smoking Zone is enforced rigidly?"
+  },
+  {
+    "id": "C-GEN-259",
+    "block": "Housekeeping",
+    "clause": "",
+    "requirement": "Have you maintained good housekeeping in all areas, especially stores, kitchen, electrical installation, transformer house, and waste disposal areas?"
+  },
+  {
+    "id": "C-GEN-260",
+    "block": "LIFTS AND ELEVATORS",
+    "clause": "",
+    "requirement": "If lift is marked if used for Fire?"
+  },
+  {
+    "id": "C-GEN-261",
+    "block": "LIFTS AND ELEVATORS",
+    "clause": "",
+    "requirement": "Is there power backup arranged for the lift"
+  },
+  {
+    "id": "C-GEN-262",
+    "block": "LIFTS AND ELEVATORS",
+    "clause": "",
+    "requirement": "Lift shaft are free from any obstacles / obstruction?"
+  },
+  {
+    "id": "C-GEN-263",
+    "block": "LIFTS AND ELEVATORS",
+    "clause": "",
+    "requirement": "Lift lobby / landing are free from any obstacles / obstruction?"
+  },
+  {
+    "id": "C-GEN-264",
+    "block": "LIFTS AND ELEVATORS",
+    "clause": "",
+    "requirement": "lifts are used for evacuation in case of fire?"
+  },
+  {
+    "id": "C-GEN-265",
+    "block": "LIFTS AND ELEVATORS",
+    "clause": "",
+    "requirement": "lifts are displayed with maximum persons and maximum weight to be carried?"
+  },
+  {
+    "id": "C-GEN-266",
+    "block": "LIFTS AND ELEVATORS",
+    "clause": "",
+    "requirement": "lifts are provided with intercom for emergency communication?"
+  },
+  {
+    "id": "C-GEN-267",
+    "block": "LIFTS AND ELEVATORS",
+    "clause": "",
+    "requirement": "lifts are provided with CCTV camera?"
+  },
+  {
+    "id": "C-GEN-268",
+    "block": "LIFTS AND ELEVATORS",
+    "clause": "",
+    "requirement": "fireman’s switch is provided at  ground level?"
+  },
+  {
+    "id": "C-GEN-269",
+    "block": "LIFTS AND ELEVATORS",
+    "clause": "",
+    "requirement": "Emergency Contact numbers"
+  },
+  {
+    "id": "C-GEN-270",
+    "block": "LIFTS AND ELEVATORS",
+    "clause": "",
+    "requirement": "Fire Emergency Instructions are displayed in bilingual"
+  },
+  {
+    "id": "C-GEN-271",
+    "block": "LIFTS AND ELEVATORS",
+    "clause": "",
+    "requirement": "Respirator is procurred and mainatined for Fire fighting team"
+  },
+  {
+    "id": "C-GEN-272",
+    "block": "LIFTS AND ELEVATORS",
+    "clause": "",
+    "requirement": "Emergency preparedness response Team is given training on  proper use of PPE"
+  },
+  {
+    "id": "C-GEN-273",
+    "block": "Service ducts and shafts",
+    "clause": "",
+    "requirement": "Fire dampers are provided and operational in the ventillation system"
+  },
+  {
+    "id": "C-GEN-274",
+    "block": "Signages",
+    "clause": "",
+    "requirement": "Fire Signages are appropriate and placed at the right locations"
+  },
+  {
+    "id": "C-GEN-275",
+    "block": "Signages",
+    "clause": "",
+    "requirement": "Emergency fire signages glow in dark"
+  },
+  {
+    "id": "C-GEN-276",
+    "block": "Signages",
+    "clause": "",
+    "requirement": "Fire Signages are suitably visible and are bilingual, with one local language"
+  },
+  {
+    "id": "C-GEN-277",
+    "block": "Signages",
+    "clause": "",
+    "requirement": "Display of Fire Notice, Fire order, Exit sign, Floor Nos. at conspicuous places"
+  },
+  {
+    "id": "C-GEN-278",
+    "block": "Signages",
+    "clause": "",
+    "requirement": "Emergency Exit signs are displayed prominently"
+  },
+  {
+    "id": "C-GEN-279",
+    "block": "Training and Awareness",
+    "clause": "",
+    "requirement": "Hospital has any liaison with nearest hospital(s) considered under Mutual Aid."
+  },
+  {
+    "id": "C-GEN-280",
+    "block": "Training and Awareness",
+    "clause": "",
+    "requirement": "Hospital conducts fire training for its staff."
+  },
+  {
+    "id": "C-GEN-281",
+    "block": "Training and Awareness",
+    "clause": "",
+    "requirement": "Entire staff is imparted with the process of activation of Code Red."
+  },
+  {
+    "id": "C-GEN-282",
+    "block": "Training and Awareness",
+    "clause": "",
+    "requirement": "Entire staff receives induction training on Fire Safety and use of Fire Extinguishers."
+  },
+  {
+    "id": "C-GEN-283",
+    "block": "Training and Awareness",
+    "clause": "",
+    "requirement": "Periodical training on Fire Safety and use of Fire Extinguishers is conducted."
+  },
+  {
+    "id": "C-GEN-284",
+    "block": "Training and Awareness",
+    "clause": "",
+    "requirement": "Hospital security personnel have adequate knowledge in firefighting."
+  },
+  {
+    "id": "C-GEN-285",
+    "block": "Training and Awareness",
+    "clause": "",
+    "requirement": "Trained staff is capable of dealing with fire extinguishers, firefighting appliances, and evacuation procedures."
+  },
+  {
+    "id": "C-GEN-286",
+    "block": "Training and Awareness",
+    "clause": "",
+    "requirement": "Training records are maintained."
+  },
+  {
+    "id": "C-GEN-287",
+    "block": "Training and Awareness",
+    "clause": "",
+    "requirement": "In case of fire, hospital staff are aware of firefighting systems."
+  },
+  {
+    "id": "C-GEN-288",
+    "block": "Training and Awareness",
+    "clause": "",
+    "requirement": "In case of fire, hospital staff are aware of their responsibilities during fire emergencies."
+  },
+  {
+    "id": "C-GEN-289",
+    "block": "Training and Awareness",
+    "clause": "",
+    "requirement": "In case of fire, hospital staff are aware of evacuation routes and techniques."
+  },
+  {
+    "id": "C-GEN-290",
+    "block": "Training and Awareness",
+    "clause": "",
+    "requirement": "In case of fire, hospital staff are aware of types of fire extinguishers and their areas of use."
+  },
+  {
+    "id": "C-GEN-291",
+    "block": "Training and Awareness",
+    "clause": "",
+    "requirement": "In case of fire, hospital staff are aware of operation of fire extinguishers."
+  },
+  {
+    "id": "C-GEN-292",
+    "block": "Training and Awareness",
+    "clause": "",
+    "requirement": "In case of fire, hospital staff are aware of code announcements."
+  },
+  {
+    "id": "C-GEN-293",
+    "block": "Training and Awareness",
+    "clause": "",
+    "requirement": "In case of fire, hospital staff are aware of assembly points."
+  }
+]

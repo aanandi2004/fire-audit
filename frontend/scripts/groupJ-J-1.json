@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "block": "",
+    "clause": "6.7.2.3 a",
+    "requirement": "From every point in every floor area, there shall  be  at  least  two  exits  accessible  in different directions; where floor areas are divided into rooms, there shall be at least two ways of escape from every room, however small rooms, except toilet rooms, so located that the points of access thereto are out of or suitably shielded from areas of high hazard."
+  },
+  {
+    "id": 2,
+    "block": "",
+    "clause": "6.7.2.3 b",
+    "requirement": "In addition to types of exits for upper floors specified for Group G occupancies, slide escapes may be used as required exits for both new and existing buildings."
+  },
+  {
+    "id": 3,
+    "block": "",
+    "clause": "6.9.2 a",
+    "requirement": "Hazardous buildings shall have vapour/flame/ember/spark  detectors  and  explosion\r\nsuppression systems depending on the type offire hazard involved."
+  },
+  {
+    "id": 4,
+    "block": "",
+    "clause": "6.9.2 b",
+    "requirement": "Each building where gas is employed for any purpose shall be provided with an approved outside  gas  shut­off  valve  conspicuously marked."
+  },
+  {
+    "id": 5,
+    "block": "",
+    "clause": "6.9.2 c",
+    "requirement": "Each boiler room or room containing a heating plant shall be separated from the rest of the building by a separating wall."
+  },
+  {
+    "id": 6,
+    "block": "",
+    "clause": "6.9.2 d",
+    "requirement": "In any room in which volatile flammable substances  are  used  or  stored,  no  device generating a spark, or glow flame capable of igniting flammable vapour shall be installed or  permitted  unless  it  is  enclosed  in  a flameproof enclosure."
+  },
+  {
+    "id": 7,
+    "block": "",
+    "clause": "6.9.2 f",
+    "requirement": "All openings in exterior walls except wall vents shall be protected by a fire stop assembly as in 4 and they shall be fixed, automatic or self-closing. Wall vents having an area of not less than 100 cm2 each shall be placed in the exterior walls near the floor line, not more than 1 800 mm apart horizontally. Each building shall be provided with a power driven fan exhaust system of ventilation which shall be arranged and operated so as to produce a complete change of air in each room every 3 min."
+  },
+  {
+    "id": 8,
+    "block": "",
+    "clause": "6.9.2 h",
+    "requirement": "Equipment or machinery which generates or emits combustible or explosive dust or fibres shall  be  provided with  an  adequate  dust collecting and exhaust system."
+  }
+]

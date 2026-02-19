@@ -1,0 +1,44 @@
+[
+  {
+    "id": "G-1-1",
+    "block": "General",
+    "clause": "6.7.1.1",
+    "requirement": "The areas having storage, manufacturing, hazardous activities such as paint store, oil storage, spray booths, etc, shall be separated from non-hazardous areas like administrative office, staff canteen, etc by fire rated walls/doors of 120 min fire resistance rating."
+  },
+  {
+    "id": "G-1-2",
+    "block": "General",
+    "clause": "6.7.1.1",
+    "requirement": "The fire resistance rating of high hazardous areas like petrochemical, explosives shall be 240 min."
+  },
+  {
+    "id": "G-1-3",
+    "block": "General",
+    "clause": "6.7.1.1 a & b",
+    "requirement": "The separating wall shall be carried through the roof. The screen wall shall be of not less than 230 mm in thickness if it is an extension of a masonry wall, and not less than 150 mm in thickness if it is an extension of a reinforced concrete wall."
+  },
+  {
+    "id": "G-1-4",
+    "block": "General",
+    "clause": "6.7.1.1 g",
+    "requirement": "Doors and window openings in external walls within 3 m of the fire separating walls shall be protected by fire doors having a rating of at least 60 min and window openings may be protected by fire resistant glass assembly having same fire rating."
+  },
+  {
+    "id": "G-1-5",
+    "block": "General",
+    "clause": "6.7.1.1 k",
+    "requirement": "Storage areas shall be separated from the remainder of the building/block by fire walls."
+  },
+  {
+    "id": "G-1-6",
+    "block": "General",
+    "clause": "6.7.3 a",
+    "requirement": "In any room in which volatile flammable substances  are  used  or  stored,  no  device generating a glow or flame capable of igniting flammable vapour shall be installed or used, such a room shall be provided with a suitably designed  exhaust  ventilation  system as per Annex M."
+  },
+  {
+    "id": "G-1-7",
+    "block": "General",
+    "clause": "6.7.3 c",
+    "requirement": "Fire protection considerations for venting industrial occupancies shall be as in Annex M."
+  }
+]

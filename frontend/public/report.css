@@ -1,0 +1,57 @@
+/* 1. THE NUCLEAR RESET - This stops the overlap */
+html, body, #root, main {
+    height: auto !important;
+    overflow: visible !important;
+    display: block !important;
+    background: #f0f0f0; /* Gray desk background */
+    margin: 0;
+    padding: 0;
+}
+
+/* 2. PAGE DEFINITION */
+@page {
+    size: A4;
+    margin: 20mm;
+}
+
+/* 3. THE PAGE CONTAINER */
+.report-page {
+    display: block !important;
+    position: relative !important;
+    width: 210mm;
+    /* Remove fixed min-height to let content flow, or use it STRICTLY with overflow hidden */
+    min-height: 297mm; 
+    margin: 40px auto; /* Creates the gap between pages in preview */
+    padding: 20mm;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    box-sizing: border-box; /* Crucial: includes padding in the 210mm width */
+    page-break-after: always;
+    break-after: page;
+    clear: both;
+}
+
+/* 4. TABLE REPAIR - Fixes the Building Details Grid */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    page-break-inside: avoid; /* Stops tables from splitting weirdly */
+    margin-bottom: 15pt;
+}
+
+table, th, td {
+    border: 1px solid #000 !important; /* Forces the black borders you want */
+}
+
+th {
+    background-color: #efefef !important;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* 5. PREVENTING TEXT OVERLAP */
+.cover, .section, .toc {
+    display: block;
+    width: 100%;
+    position: relative;
+}

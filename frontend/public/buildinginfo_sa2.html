@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Self Assessment Report</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      @page { size: A4; margin: 12mm; }
+      html, body { height: 100%; }
+      body { font-family: Arial, Helvetica, sans-serif; color: #111827; background: #ffffff; margin: 0; }
+      .page { width: 210mm; min-height: 297mm; margin: 0 auto; background: #ffffff; box-sizing: border-box; padding: 12mm; }
+      .section { margin-bottom: 6mm; }
+      .title { font-size: 18px; font-weight: 700; text-align: center; text-transform: uppercase; }
+      .heading { font-size: 16px; font-weight: 700; text-align: center; margin-top: 2mm; }
+      .band { background:#1e3a8a; color:#fff; padding:3mm 2mm; font-weight:700; border-radius:4px; margin-top: 4mm; }
+      .subband { background:#0ea5e9; color:#fff; padding:3mm 2mm; font-weight:700; border-radius:4px; margin-top: 3mm; }
+      .content-table { width:100%; border-collapse: collapse; margin-top: 4mm; }
+      .content-table thead th { background:#dcfce7; color:#111827; font-weight:700; border-bottom:2px solid #cbd5e1; padding:2.5mm; font-size:12px; }
+      .content-table tbody td { border-bottom:1px solid #e5e7eb; padding:2.5mm; font-size:12px; }
+      .content-table tbody tr:nth-child(even) td { background: #f9fafb; }
+      .right { text-align: right; }
+      .content-table col:nth-child(1) { width: 30mm; }
+      .content-table col:nth-child(2) { width: auto; }
+      .content-table col:nth-child(3) { width: 20mm; }
+      .content-table col:nth-child(4) { width: 22mm; }
+      .content-table col:nth-child(5) { width: 40mm; }
+      .content-table thead th:nth-child(3),
+      .content-table thead th:nth-child(4) { text-align: right; }
+      .content-table thead th:nth-child(5) { text-align: left; }
+      .content-table tbody td:nth-child(3),
+      .content-table tbody td:nth-child(4) { text-align: right; }
+      .content-table tbody td:nth-child(5) { text-align: left; }
+      .cat-row { display: flex; gap: 8mm; align-items: center; margin-top: 3mm; }
+      .cat-item { display: flex; gap: 2mm; align-items: center; font-size: 12px; }
+      .cat-label { font-weight: 700; color: #334155; }
+      .cat-value { font-weight: 700; color: #111827; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 4px; padding: 1.5mm 2.5mm; }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <div class="section">
+        <div class="title">Self Assessment Report</div>
+        <div class="heading">FIRE AUDIT CHECKLIST STATUS BY BLOCK AND SECTION</div>
+      </div>
+      <div class="section">
+        <div class="band">{{BLOCK_NAME}}</div>
+        <div class="subband">{{SECTION_HEADING}}</div>
+        <div class="cat-row">
+          <div class="cat-item">
+            <span class="cat-label">Category:</span>
+            <span class="cat-value">{{CATEGORY_LABEL}}</span>
+          </div>
+          <div class="cat-item">
+            <span class="cat-label">Subcategory:</span>
+            <span class="cat-value">{{SUBDIVISION_LABEL}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="section">
+        <table class="content-table">
+          <colgroup>
+            <col />
+            <col />
+            <col />
+            <col />
+            <col />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Section</th>
+              <th>{{CATEGORY_HEADER}}</th>
+              <th>Target</th>
+              <th>Organization</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr id="rows-marker"></tr>
+            <tr class="sample-row">
+              <td>Fire Prevention</td>
+              <td>1. Smoke detectors are installed</td>
+              <td class="right">5.0</td>
+              <td class="right">5.0</td>
+              <td>In Place</td>
+            </tr>
+            <tr class="sample-row">
+              <td>General</td>
+              <td>2. Electrical circuits free of overloading</td>
+              <td class="right">5.0</td>
+              <td class="right">5.0</td>
+              <td>In Place</td>
+            </tr>
+            <tr class="sample-row">
+              <td>Means of Escape</td>
+              <td>3. Sub-station rooms free from storage materials</td>
+              <td class="right">5.0</td>
+              <td class="right">3.0</td>
+              <td>Partially in Place</td>
+            </tr>
+            <tr class="sample-row">
+              <td>Electrical Safety</td>
+              <td>4. Whether electrical main distribution panel provided</td>
+              <td class="right">5.0</td>
+              <td class="right">0.0</td>
+              <td>Not in Place</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

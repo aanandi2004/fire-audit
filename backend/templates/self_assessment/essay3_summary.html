@@ -1,0 +1,49 @@
+<h2>Self Assessment Summary</h2>
+
+<div class="overall">
+  {{ organization.name }} • Compliance: {{ overall.percentage }}%
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Section</th>
+      <th>Target</th>
+      <th>Earned</th>
+      <th>Compliance</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for s in sections %}
+    <tr>
+      <td>{{ s.name }}</td>
+      <td>{{ s.target }}</td>
+      <td>{{ s.earned }}</td>
+      <td>{{ s.percentage }}%</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h3>Category-wise Compliance</h3>
+{% for s in sections %}
+<div class="bar-row">
+  <span>{{ s.name }}</span>
+  <div class="bar">
+    <div class="fill" style="width: {{ s.percentage }}%"></div>
+  </div>
+  <span>{{ s.percentage }}%</span>
+</div>
+{% endfor %}
+
+<h3>Status Distribution</h3>
+{% for st in status_distribution %}
+<div class="bar-row">
+  <span>{{ st.label }}</span>
+  <div class="bar">
+    <div class="fill {{ st.label | lower | replace(' ', '-') }}"
+         style="width: {{ st.percent }}%"></div>
+  </div>
+  <span>{{ st.count }}</span>
+</div>
+{% endfor %}

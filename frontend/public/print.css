@@ -1,0 +1,155 @@
+/* Print-optimized CSS. Static layout only. No dynamic logic. */
+
+@page {
+  size: A4;
+  /* Explicit margins in millimeters for predictable output */
+  margin-top: 18mm;
+  margin-bottom: 22mm;
+  margin-left: 15mm;
+  margin-right: 15mm;
+}
+
+html, body {
+  font-family: "Helvetica", Arial, sans-serif;
+  font-size: 10pt; /* print-safe units */
+  color: #000;
+}
+
+/* Fixed header: repeated on all pages */
+.print-header {
+  position: static;
+  height: 12mm;
+  border-bottom: 0.5pt solid #000;
+  display: flex;
+  align-items: center;
+  background: #fff;
+}
+.print-header-inner {
+  font-size: 11pt;
+  font-weight: 700;
+  padding: 0 12mm;
+  text-transform: uppercase;
+}
+
+/* Fixed footer: repeated on all pages */
+.print-footer {
+  position: static;
+  height: 10mm;
+  border-top: 0.5pt solid #000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 8pt;
+  padding: 0 12mm;
+  background: #fff;
+}
+@media print {
+  /* Page counters for “Page X of Y” */
+  .print-footer .page-number::after { content: counter(page); }
+  .print-footer .total-pages::after { content: counter(pages); }
+}
+
+/* Cover page rules */
+.cover {
+  text-align: center;
+  page-break-after: always; /* Keep cover as single page */
+}
+.cover h1 {
+  font-size: 24pt;
+  font-weight: 700;
+  margin: 0 0 6pt 0;
+  text-transform: uppercase;
+}
+.cover h2 {
+  font-size: 16pt;
+  font-weight: 600;
+  margin: 0 0 18pt 0;
+  text-transform: uppercase;
+}
+.cover-meta p {
+  margin: 4pt 0;
+}
+
+/* Table of Contents rules */
+.toc {
+  page-break-before: always; /* Start on new page */
+  page-break-after: always;  /* End TOC with a break */
+}
+.toc h3 {
+  font-size: 12pt;
+  font-weight: 700;
+  margin: 0 0 8pt 0;
+  text-transform: uppercase;
+  border-bottom: 1pt solid #000;
+  padding-bottom: 4pt;
+}
+.toc ol {
+  padding-left: 18pt;
+}
+.toc li {
+  margin: 3pt 0;
+}
+
+/* Sections */
+.section {
+  page-break-inside: auto;
+}
+.section h3 {
+  font-size: 12pt;
+  font-weight: 700;
+  margin: 0 0 8pt 0;
+  text-transform: uppercase;
+  border-bottom: 1pt solid #000;
+  padding-bottom: 4pt;
+  page-break-after: avoid; /* Prevent orphaned headings */
+}
+.subsection h4 {
+  font-size: 11pt;
+  font-weight: 600;
+  margin: 8pt 0 4pt 0;
+  text-decoration: underline;
+  page-break-after: avoid; /* Keep with first rows */
+}
+
+/* Tables */
+table.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 6pt 0 10pt 0;
+  page-break-inside: auto; /* Allow long tables to flow across pages */
+}
+table.table thead {
+  display: table-header-group; /* Repeat headers on continuation pages */
+}
+table.table tfoot {
+  display: table-footer-group;
+}
+table.table th,
+table.table td {
+  border: 1pt solid #000;
+  padding: 4pt 6pt;
+  vertical-align: middle;
+  font-size: 9pt;
+}
+table.table th {
+  background: #d9d9d9;
+  font-weight: 700;
+}
+table.table-2col th {
+  width: 45%;
+  background: #efefef;
+  text-align: left;
+}
+table.table-2col td {
+  width: 55%;
+}
+
+/* Do not split rows across pages */
+tr {
+  page-break-inside: avoid;
+}
+
+/* Metrics and summary blocks */
+.metrics, .section-wise {
+  page-break-inside: avoid; /* Keep blocks intact where possible */
+}

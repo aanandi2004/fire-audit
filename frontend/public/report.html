@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fire & Life Safety Report</title>
+  <link rel="stylesheet" href="report.css" />
+</head>
+<body>
+  <!-- Fixed header for all printed pages -->
+  <header class="print-header">
+    <div class="print-header-inner">
+      <span>FIRE &amp; LIFE SAFETY – SELF ASSESSMENT REPORT</span>
+    </div>
+  </header>
+
+  <!-- Static Cover: values filled by backend; no client logic -->
+  <section class="report-page hard-break cover">
+    <h1>FIRE & LIFE SAFETY</h1>
+    <h2>SELF ASSESSMENT REPORT</h2>
+    <div class="cover-meta">
+      <p>Organization: {{organization_name}}</p>
+      <p>Type: {{organization_type}}</p>
+      <p>Assessment Year: {{assessment_year}}</p>
+      <p>Block: {{block_name}}</p>
+    </div>
+  </section>
+
+  <!-- Table of Contents (optional static rendering to match reference) -->
+  <section class="report-page hard-break toc">
+    <h3>TABLE OF CONTENTS</h3>
+    <ol>
+      <li>SECTION 1 – ORGANIZATION & BLOCK DETAILS</li>
+      <li>SECTION 2 – APPLICABLE FIRE SAFETY SECTIONS</li>
+      <li>SECTION 3 – SCORING & COMPLIANCE ANALYSIS</li>
+      <li>SECTION 4 – SUMMARY STATEMENT</li>
+      <li>DECLARATION</li>
+    </ol>
+  </section>
+
+  <!-- SECTION 1 – ORGANIZATION & BLOCK DETAILS -->
+  <section class="report-page section" id="section-1">
+    <h3>SECTION 1 – ORGANIZATION & BLOCK DETAILS</h3>
+
+    <!-- Dynamic: Block Summary table; rows come from backend -->
+    <!-- Page-break control: keep heading with first table row -->
+    <div class="subsection">
+      <h4>Block Summary</h4>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>S.No</th>
+            <th>Block Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Dynamic rows -->
+          <tr>
+            <td>1</td>
+            <td>{{block_name}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Dynamic: General Information; do not omit rows; unknown values are "-" -->
+    <div class="subsection">
+      <h4>General Information</h4>
+      <table class="table table-2col">
+        <tbody>
+          <tr><th>Name of Organisation</th><td>{{organization_name}}</td></tr>
+          <tr><th>Address</th><td>{{organization_address}}</td></tr>
+          <tr><th>Nature of Occupancy</th><td>{{nature_of_occupancy}}</td></tr>
+          <tr><th>Total Departments</th><td>{{total_departments}}</td></tr>
+          <tr><th>Total Number of Process</th><td>{{total_processes}}</td></tr>
+          <tr><th>Contractors</th><td>{{contractors}}</td></tr>
+          <tr><th>Height of Building (m)</th><td>{{height_m}}</td></tr>
+          <tr><th>Plot Area (sq m)</th><td>{{plot_area_sqm}}</td></tr>
+          <tr><th>Built Up Area (sq m)</th><td>{{built_up_area_sqm}}</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- The following subsections are dynamic lists of labeled 2-column tables -->
+    <!-- Dynamic: Only render if provided; backend controls visibility -->
+    <div class="subsection">
+      <h4>Type of Occupancy</h4>
+      <table class="table table-2col">
+        <tbody>
+          {{#each type_of_occupancy}}
+          <tr><th>{{this.label}}</th><td>{{this.value}}</td></tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="subsection">
+      <h4>Access to Building</h4>
+      <table class="table table-2col">
+        <tbody>
+          {{#each access_to_building}}
+          <tr><th>{{this.label}}</th><td>{{this.value}}</td></tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="subsection">
+      <h4>Construction Details</h4>
+      <table class="table table-2col">
+        <tbody>
+          {{#each construction_details}}
+          <tr><th>{{this.label}}</th><td>{{this.value}}</td></tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="subsection">
+      <h4>Basements</h4>
+      <table class="table table-2col">
+        <tbody>
+          {{#each basements}}
+          <tr><th>{{this.label}}</th><td>{{this.value}}</td></tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="subsection">
+      <h4>Power Supply (Main & Standby)</h4>
+      <table class="table table-2col">
+        <tbody>
+          {{#each power_supply}}
+          <tr><th>{{this.label}}</th><td>{{this.value}}</td></tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="subsection">
+      <h4>Kitchen, Gas & AC</h4>
+      <table class="table table-2col">
+        <tbody>
+          {{#each kitchen_gas_ac}}
+          <tr><th>{{this.label}}</th><td>{{this.value}}</td></tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="subsection">
+      <h4>Fire Water & Pumps</h4>
+      <table class="table table-2col">
+        <tbody>
+          {{#each fire_water_pumps}}
+          <tr><th>{{this.label}}</th><td>{{this.value}}</td></tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="subsection">
+      <h4>Hydrant Systems</h4>
+      <table class="table table-2col">
+        <tbody>
+          {{#each hydrant_systems}}
+          <tr><th>{{this.label}}</th><td>{{this.value}}</td></tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="subsection">
+      <h4>Detectors & Alarms</h4>
+      <table class="table table-2col">
+        <tbody>
+          {{#each detectors_alarms}}
+          <tr><th>{{this.label}}</th><td>{{this.value}}</td></tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="subsection">
+      <h4>Sprinklers & Extinguishers</h4>
+      <table class="table table-2col">
+        <tbody>
+          {{#each sprinklers_extinguishers}}
+          <tr><th>{{this.label}}</th><td>{{this.value}}</td></tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="subsection">
+      <h4>PPE & Communications</h4>
+      <table class="table table-2col">
+        <tbody>
+          {{#each ppe_comms}}
+          <tr><th>{{this.label}}</th><td>{{this.value}}</td></tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="subsection">
+      <h4>Legal & Drawings</h4>
+      <table class="table table-2col">
+        <tbody>
+          {{#each legal_drawings}}
+          <tr><th>{{this.label}}</th><td>{{this.value}}</td></tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- SECTION 2 – APPLICABLE FIRE SAFETY SECTIONS -->
+  <!-- Dynamic: render exactly what backend provides; no filtering -->
+  <section class="report-page section" id="section-2">
+    <h3>SECTION 2 – APPLICABLE FIRE SAFETY SECTIONS</h3>
+
+    {{#each categories}}
+    <div class="category">
+      <h4>{{this.name}}</h4>
+      {{#each this.subcategories}}
+      <div class="subcategory">
+        <h4>{{this.name}}</h4>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>S.No</th>
+              <th>NBC Clause</th>
+              <th>Requirement / Question</th>
+              <th>Status</th>
+              <th>Score</th>
+              <th>Remarks</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each this.questions}}
+            <tr>
+              <td>{{this.sno}}</td>
+              <td>{{this.clause}}</td>
+              <td>{{this.text}}</td>
+              <td>{{this.status}}</td>
+              <td>{{this.score}}</td>
+              <td>{{this.remarks}}</td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+      {{/each}}
+    </div>
+    {{/each}}
+  </section>
+
+  <!-- SECTION 3 – SCORING & COMPLIANCE ANALYSIS -->
+  <!-- Presentation-only: totals populated by backend -->
+  <section class="report-page section" id="section-3">
+    <h3>SECTION 3 – SCORING & COMPLIANCE ANALYSIS</h3>
+
+    <div class="metrics">
+      <table class="table table-2col">
+        <tbody>
+          <tr><th>Overall Compliance (%)</th><td>{{overall_score_percentage}}</td></tr>
+          <tr><th>Total Questions</th><td>{{total_questions}}</td></tr>
+          <tr><th>Max Possible Score</th><td>{{max_possible_score}}</td></tr>
+          <tr><th>Score Obtained</th><td>{{score_obtained}}</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-wise">
+      <h4>Section-wise Compliance</h4>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Section</th>
+            <th>In Place</th>
+            <th>Partial</th>
+            <th>Not In Place</th>
+            <th>Not Assessed</th>
+            <th>Compliance %</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each section_totals}}
+          <tr>
+            <td>{{this.section}}</td>
+            <td>{{this.in_place}}</td>
+            <td>{{this.partial}}</td>
+            <td>{{this.not_in_place}}</td>
+            <td>{{this.not_assessed}}</td>
+            <td>{{this.compliance_percent}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="chart">
+      <img src="{{score_chart_image}}" alt="Compliance Chart" />
+    </div>
+  </section>
+
+  <!-- SECTION 4 – SUMMARY STATEMENT -->
+  <section class="report-page section" id="section-4">
+    <h3>SECTION 4 – SUMMARY STATEMENT</h3>
+    <p>{{summary_statement}}</p>
+  </section>
+
+  <!-- DECLARATION -->
+  <section class="report-page section" id="declaration">
+    <h3>DECLARATION</h3>
+    <table class="table table-2col">
+      <tbody>
+        <tr><th>Authorized Signatory</th><td>____________________________</td></tr>
+        <tr><th>Name & Designation</th><td>____________________________</td></tr>
+        <tr><th>Date & Seal</th><td>____________________________</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Print footer: repeated on every page via CSS -->
+  <footer class="print-footer">
+    <span>Self Assessment Fire Safety Report</span>
+    <span>Page <span class="page-number"></span> of <span class="total-pages"></span></span>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<style>
+@page { size: A4; margin: 20mm; }
+html, body { height: 100%; }
+.page { width: 210mm; min-height: 297mm; margin: 10mm auto; background: #fff; position: relative; box-sizing: border-box; box-shadow: 0 2mm 6mm rgba(0,0,0,0.08); page-break-after: always }
+.page:last-of-type { page-break-after: auto }
+.content-wrapper { padding: 35mm 20mm 20mm 20mm }
+</style>
+<div class="page">
+  <div class="content-wrapper">
+    <h2 style="margin:0 0 6mm 0; font-size:18px;">Category-wise Compliance (A4)</h2>
+    <div style="margin-bottom:8mm; font-size:12px; background:#eef2ff; color:#111827; border:1px solid #c7d2fe; border-radius:6px; padding:6px;">
+      Overall compliance: {{ overall.percentage }}% • Categories: {{ overall.categories }} • Questions: {{ overall.questions }}
+    </div>
+    {% for c in category_compliance %}
+    <div style="display:flex; align-items:center; margin:4mm 0;">
+      <div style="width:80mm; font-size:12px;">{{ c.name }}</div>
+      <div style="flex:1; height:14px; background:#e2e8f0; border-radius:7px; overflow:hidden; margin-right:6px;">
+        <div style="height:100%; background:#2563eb; width: {{ c.percentage }}%;"></div>
+      </div>
+      <div style="width:20mm; text-align:right; font-size:12px; font-weight:700;">{{ c.percentage }}%</div>
+    </div>
+    {% endfor %}
+    <div style="margin-top:12mm; font-size:13px; font-weight:700;">Status Distribution</div>
+    {% for s in status_distribution %}
+    <div style="display:flex; align-items:center; margin:4mm 0;">
+      <div style="width:80mm; font-size:12px;">{{ s.label }}</div>
+      <div style="flex:1; height:14px; background:#e2e8f0; border-radius:7px; overflow:hidden; margin-right:6px;">
+        <div style="height:100%; background:{{ s.color }}; width: {{ s.percent }}%;"></div>
+      </div>
+      <div style="width:20mm; text-align:right; font-size:12px; font-weight:700;">{{ s.count }}</div>
+    </div>
+    {% endfor %}
+  </div>
+</div>

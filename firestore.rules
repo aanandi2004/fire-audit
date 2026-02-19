@@ -1,0 +1,93 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    function isAdmin() {
+      return isSignedIn() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'ADMIN';
+    }
+    function userRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+    function isCustomer() {
+      return isSignedIn() && userRole() == 'CUSTOMER';
+    }
+    function isAuditor() {
+      return isSignedIn() && userRole() == 'AUDITOR';
+    }
+    function userOrgId() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.org_id;
+    }
+    function assignmentData(auditId) {
+      return get(/databases/$(database)/documents/assignments/$(auditId)).data;
+    }
+    function isOwnOrg(auditId) {
+      return assignmentData(auditId).org_id == userOrgId();
+    }
+    function isAssignedAuditor(auditId) {
+      return assignmentData(auditId).auditor_id == request.auth.uid;
+    }
+
+    match /users/{uid} {
+      allow read, update, delete: if isSignedIn() && (request.auth.uid == uid || isAdmin());
+      allow create: if isAdmin();
+    }
+
+    match /organizations/{orgId} {
+      allow read: if isSignedIn();
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /answers/{docId} {
+      allow read, write: if isSignedIn() && (docId == request.auth.uid + '_answers' || isAdmin());
+      allow create: if isSignedIn();
+    }
+
+    match /assignments/{assignmentId} {
+      allow read, write, delete, create: if isAdmin();
+    }
+
+    match /reports/{reportId} {
+      allow read: if isSignedIn();
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /self_assessment_questions/{questionId} {
+      allow read: if isSignedIn();
+      allow create, update: if isAdmin();
+      allow delete: if false;
+    }
+
+    match /organizations/{orgId}/building_info/{partId}/sections/{sectionId}/fields/{fieldId} {
+      allow read: if isSignedIn();
+      allow create, update: if isCustomer() && userOrgId() == orgId
+        && request.resource.data.diff(resource.data).changedKeys().hasOnly(['value','updated_by','updated_at']);
+      allow delete: if false;
+    }
+
+    match /audit_responses/{auditId} {
+      allow read: if isSignedIn() && (isAdmin() || isOwnOrg(auditId) || isAssignedAuditor(auditId));
+      match /blocks/{blockId}/questions/{questionId} {
+        allow read: if isSignedIn() && (isAdmin() || isOwnOrg(auditId) || isAssignedAuditor(auditId));
+        allow create, update: if isCustomer() && isOwnOrg(auditId)
+          && request.resource.data.diff(resource.data).changedKeys().hasOnly(['category','subcategory','customer_status','customer_score','updated_at','updated_by']);
+        allow create, update: if isAuditor() && isAssignedAuditor(auditId)
+          && request.resource.data.diff(resource.data).changedKeys().hasOnly(['auditor_status','auditor_score','observation','photo_url','reviewed_at','reviewed_by']);
+        allow delete: if false;
+      }
+    }
+
+    match /org_responses/{orgId} {
+      allow read: if isSignedIn() && (isAdmin() || userOrgId() == orgId);
+      allow create, update: if isAdmin();
+      match /building_details/{sectionId} {
+        allow read: if isSignedIn() && (isAdmin() || userOrgId() == orgId);
+        allow create, update: if isCustomer() && userOrgId() == orgId
+          && request.resource.data.diff(resource.data).changedKeys().hasOnly(['section_id','fields','updated_at']);
+        allow delete: if false;
+      }
+    }
+  }
+}

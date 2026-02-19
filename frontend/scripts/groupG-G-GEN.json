@@ -1,0 +1,626 @@
+[
+  {
+    "id": "G-GEN-1",
+    "block": "BULDING DETAILS",
+    "clause": "",
+    "requirement": "Height (in meters)"
+  },
+  {
+    "id": "G-GEN-2",
+    "block": "BULDING DETAILS",
+    "clause": "",
+    "requirement": "Total Plinth Area (in sq m)(Including basement Floors)"
+  },
+  {
+    "id": "G-GEN-3",
+    "block": "BULDING DETAILS",
+    "clause": "",
+    "requirement": "No. of Floors  (Including basement Floors)"
+  },
+  {
+    "id": "G-GEN-4",
+    "block": "BULDING DETAILS",
+    "clause": "",
+    "requirement": "Total Floor area (in sq m)(Including basement Floors)"
+  },
+  {
+    "id": "G-GEN-5",
+    "block": "BULDING DETAILS",
+    "clause": "",
+    "requirement": "Plot Area (in sq m)"
+  },
+  {
+    "id": "G-GEN-6",
+    "block": "Type of construction",
+    "clause": "",
+    "requirement": "Whether the Building is of permanent construction?"
+  },
+  {
+    "id": "G-GEN-7",
+    "block": "Type of construction",
+    "clause": "3.3",
+    "requirement": "Whether the building is of TYPE 1/ Type 2 / Type 3/ Type 4 construction as per clause 3.3 of NBC Part 4 lift & safety?"
+  },
+  {
+    "id": "G-GEN-8",
+    "block": "Type of construction",
+    "clause": "4.3 & 4.4.2.1",
+    "requirement": "Is the occupant load determined as per table 3 (clauses 4.3 and 4.4.2.1)"
+  },
+  {
+    "id": "G-GEN-9",
+    "block": "Type of construction",
+    "clause": "",
+    "requirement": "Ground floor"
+  },
+  {
+    "id": "G-GEN-10",
+    "block": "Type of construction",
+    "clause": "",
+    "requirement": "First floor"
+  },
+  {
+    "id": "G-GEN-11",
+    "block": "Type of construction",
+    "clause": "",
+    "requirement": "Second floor"
+  },
+  {
+    "id": "G-GEN-12",
+    "block": "Type of construction",
+    "clause": "",
+    "requirement": "Thrid floor"
+  },
+  {
+    "id": "G-GEN-13",
+    "block": "Type of construction",
+    "clause": "",
+    "requirement": "Fourth floor"
+  },
+  {
+    "id": "G-GEN-14",
+    "block": "Type of construction",
+    "clause": "3.4.4.3",
+    "requirement": "Weather the open space around the building is maintained according to clause 3.4.4.3"
+  },
+  {
+    "id": "G-GEN-15",
+    "block": "Type of construction",
+    "clause": "",
+    "requirement": "Set backs maintained"
+  },
+  {
+    "id": "G-GEN-16",
+    "block": "Type of construction",
+    "clause": "",
+    "requirement": "North side"
+  },
+  {
+    "id": "G-GEN-17",
+    "block": "Type of construction",
+    "clause": "",
+    "requirement": "East side"
+  },
+  {
+    "id": "G-GEN-18",
+    "block": "Type of construction",
+    "clause": "",
+    "requirement": "West side"
+  },
+  {
+    "id": "G-GEN-19",
+    "block": "Type of construction",
+    "clause": "",
+    "requirement": "South side"
+  },
+  {
+    "id": "G-GEN-20",
+    "block": "Fire prevention",
+    "clause": "3.1",
+    "requirement": "What is the current classification of occupancy as per clause 3.1?"
+  },
+  {
+    "id": "G-GEN-21",
+    "block": "Fire prevention",
+    "clause": "3.1.11",
+    "requirement": "Does the building has multiple occupancies  as per 3.1.11?"
+  },
+  {
+    "id": "G-GEN-22",
+    "block": "Fire prevention",
+    "clause": "3.4",
+    "requirement": "Are the general requirements of individual occupancies met as per clause 3.4."
+  },
+  {
+    "id": "G-GEN-23",
+    "block": "Fire prevention",
+    "clause": "3.4.5",
+    "requirement": "Are structural and non structural elements has sufficent fire resistance ratings as per table 3? Clause 3.4.5"
+  },
+  {
+    "id": "G-GEN-24",
+    "block": "Fire prevention",
+    "clause": "3.4.5.2",
+    "requirement": "Are doorway or opening in a fire resistant wall on any floor is 5.6 m2 in area with a maximum height/width of 2.75 m for type 1 - 3 construction? Clause 3.4.5.2"
+  },
+  {
+    "id": "G-GEN-25",
+    "block": "Fire prevention",
+    "clause": "3.4.5.2",
+    "requirement": "Are wall opening protected with fire resistance doors with fire rating not less than 120 min? clause 3.4.5.2"
+  },
+  {
+    "id": "G-GEN-26",
+    "block": "Fire prevention",
+    "clause": "3.4.5.4",
+    "requirement": "Openings in walls or floors which are necessary to be provided to allow passages of all building services like cables, electrical wirings, telephone cables, plumbing pipes, etc, shall be protected by enclosure in the form of ducts/shafts having a fire resistance not less than 120 min? clause 3.4.5.4"
+  },
+  {
+    "id": "G-GEN-27",
+    "block": "Fire prevention",
+    "clause": "3.4.5.4",
+    "requirement": "The space between the electrical cables/conduits and the walls/slabs shall be filled in by a fire stop material having fire resistance rating of not less than 120 min? Clause 3.4.5.4"
+  },
+  {
+    "id": "G-GEN-28",
+    "block": "Fire prevention",
+    "clause": "3.4.5.4",
+    "requirement": "For plumbing shafts in the core of the building, with shaft door opening inside the building, the shafts shall have inspection doors having fire resistance rating not less than 30 min? Clause 3.4.5.4"
+  },
+  {
+    "id": "G-GEN-29",
+    "block": "Fire prevention",
+    "clause": "3.4.6.2",
+    "requirement": "Are emergency power supplying distribution system for critical requirement for functioning of fire and life safety system and equipment planned for efficient and reliable power? Clause 3.4.6.2"
+  },
+  {
+    "id": "G-GEN-30",
+    "block": "Fire prevention",
+    "clause": "3.4.6.2 & 3.4.6.4",
+    "requirement": "Is there a stand by generator as back up to the critical building systems including fire pumps, pressurization & smoke venting, fire lifts, exit signages lighting, emergency lighting, fire alarm system, PAGA, magnetic door locks, ligthing in fire command center? clause 3.4.6.2 & 3.4.6.4"
+  },
+  {
+    "id": "G-GEN-31",
+    "block": "Fire prevention",
+    "clause": "3.4.6.2",
+    "requirement": "Is the power supply to the panel/ Distribution boards of these fire and life safety systems safeguarded with fire proof enclosures and location of such systems are in fire safe zone ensuring power supply to these systems? Clause 3.4.6.2"
+  },
+  {
+    "id": "G-GEN-32",
+    "block": "Fire prevention",
+    "clause": "3.4.7",
+    "requirement": "Whether adequate illumination with alternate power supply is provided for safe movement of persons towards and through the exits? Clause 3.4.7"
+  },
+  {
+    "id": "G-GEN-33",
+    "block": "Fire prevention",
+    "clause": "3.4.7",
+    "requirement": "Whether adequate illumination with alternate power supply is provided for locating fire alarm call points and fire fighting equipments? Clause 3.4.7"
+  },
+  {
+    "id": "G-GEN-34",
+    "block": "Fire prevention",
+    "clause": "3.4.7",
+    "requirement": "Whether emergency lighting is independently connected and can be operated by one switch on the ground floor which is easily accessible to Fire Fighters? Clause 3.4.7"
+  },
+  {
+    "id": "G-GEN-35",
+    "block": "Fire prevention",
+    "clause": "3.4.6.5",
+    "requirement": "Are lighting arrestors provided in accordance with NBC part 4 life & safety clause 3.4.6.5 ligthing protection of buildings?"
+  },
+  {
+    "id": "G-GEN-36",
+    "block": "Fire prevention",
+    "clause": "3.4.8",
+    "requirement": "Are air conditioning and ventillation systems installed such that the danger ofspread of fire, smoke or fumes from one floor to other or from outside to any occupied building or structure is minimized as per clause 3.4.8"
+  },
+  {
+    "id": "G-GEN-37",
+    "block": "Fire prevention",
+    "clause": "3.4.8.2.2",
+    "requirement": "Are fire dampers installed which has minimum fire resistance rating of 120 min as per 3.4.8.2.2"
+  },
+  {
+    "id": "G-GEN-38",
+    "block": "Fire prevention",
+    "clause": "3.4.8.3.1",
+    "requirement": "Air ducts serving main floor areas, corridors, etc, shall not pass through the exits/exit passageway/ exit enclosure. Exits and lift lobbies, etc, shall not be used as return air passage. As per 3.4.8.3.1"
+  },
+  {
+    "id": "G-GEN-39",
+    "block": "Fire prevention",
+    "clause": "3.4.8.3.3",
+    "requirement": "the ducts pass through fire walls or floors, the opening around the ducts shall be sealed with materials having fire resistance rating of the compartment. Such duct shall also be provided with fire dampers at all fire walls and floors with fire resitance rating of not less than 120 min. for clause 3.4.8.3.3"
+  },
+  {
+    "id": "G-GEN-40",
+    "block": "Fire prevention",
+    "clause": "3.4.8.4",
+    "requirement": "Are fire/ smoke dampers installed to supply air ducts , fresh air and return air ducts  which shall provide proper passive fire protection sealing in case of fire. As per clause 3.4.8.4"
+  },
+  {
+    "id": "G-GEN-41",
+    "block": "Fire prevention",
+    "clause": "3.4.11",
+    "requirement": "Are the surface interior finishing materials used such that it will reduce the flame spread and do not generate toxic smoke/ fumes? Clause 3.4.11"
+  },
+  {
+    "id": "G-GEN-42",
+    "block": "Fire prevention",
+    "clause": "3.4.12",
+    "requirement": "Is there a separate fire command center or designated space to house Fire alarm system, CCTV system,PAGA, building managements system, and constructed with 120 min fire resistance rating walls? Clause 3.4.12"
+  },
+  {
+    "id": "G-GEN-43",
+    "block": "Fire prevention",
+    "clause": "3.4.12",
+    "requirement": "Detailed floor plan along with details of fire fighting equipment and installations maintained in Fire command center? Clause 3.4.12"
+  },
+  {
+    "id": "G-GEN-44",
+    "block": "Exits",
+    "clause": "4.4.1, 4.5.1 & 4.5.2",
+    "requirement": "Whether the floors of the building are provided with exits for every travel distance of 30 meters (TYPE 1 & 2 constructions) as per table 22 under clause 4.4.1, 4.5.1 and 4.5.2,  TYPE 3 & 4 constructions the travel distance is 22.5 Meters. Part 4 of NBC."
+  },
+  {
+    "id": "G-GEN-45",
+    "block": "Exits",
+    "clause": "4.4.1 & 4.4.2.1",
+    "requirement": "Whether the minimum number of two separate exits are provided for each floor as per clause 4.4.1 & 4.4.2.1?"
+  },
+  {
+    "id": "G-GEN-46",
+    "block": "Exits",
+    "clause": "4.2.3",
+    "requirement": "Every exit, exit passageway and exit discharge shall be continuously maintained free of all obstructions or impediments to full use in the case of fire or other\nemergency. Clause 4.2.3"
+  },
+  {
+    "id": "G-GEN-47",
+    "block": "Exits",
+    "clause": "4.2.8",
+    "requirement": "Exits shall be so arranged that they may be reached without passing through another occupied unit/passage in others control, if they pose challenge or restriction in means of egress. Clause 4.2.8"
+  },
+  {
+    "id": "G-GEN-48",
+    "block": "Exits",
+    "clause": "7.3",
+    "requirement": "Whether all the internal stair cases, lift, lobbies and corridors are adequately ventilated and illuminated as per clause 7.3 of IS 14435:1997?"
+  },
+  {
+    "id": "G-GEN-49",
+    "block": "Exits",
+    "clause": "4.2.9",
+    "requirement": "Doors in exits shall open in the direction of exit. Clause 4.2.9"
+  },
+  {
+    "id": "G-GEN-50",
+    "block": "Exits",
+    "clause": "4.2.11",
+    "requirement": "Whether the height of exit door ways is 02-00 meters and more. Caluse 4.2.11"
+  },
+  {
+    "id": "G-GEN-51",
+    "block": "Exits",
+    "clause": "4.2.12 & 4.4.2.4.3.2",
+    "requirement": "Are ramps , sloped surfaces, staricases shall be used with handrails. Clause 4.2.12 & 4.4.2.4.3.2"
+  },
+  {
+    "id": "G-GEN-52",
+    "block": "Exits",
+    "clause": "4.2.13",
+    "requirement": "The capacity of the means of egress required from any storey of the building shall not be reduced along the path of egress travel until arrival to the exit discharge. Clause 4.2.13"
+  },
+  {
+    "id": "G-GEN-53",
+    "block": "Exits",
+    "clause": "4.2.16",
+    "requirement": "Suitable means shall be provided so that all access controlled exit doors, turnstiles, boom barriers and other such exits shall automatically operate to open\nmode during emergencies like fire, smoke, acts of terrorism, etc, so that people can safely and quickly egress into safe areas outside. clause 4.2.16"
+  },
+  {
+    "id": "G-GEN-54",
+    "block": "Exits",
+    "clause": "4.2.18 & 4.4.2.4.3.5",
+    "requirement": "Are walking surfaces, ramps slip resistant and in line with clause 4.2.18 & 4.4.2.4.3.5"
+  },
+  {
+    "id": "G-GEN-55",
+    "block": "Exits",
+    "clause": "4.2.19",
+    "requirement": "Are basements having sufficent exits others and in line with requirements of clause 4.2.19"
+  },
+  {
+    "id": "G-GEN-56",
+    "block": "Exits",
+    "clause": "4.3 & 4.4.2.1",
+    "requirement": "Are numnber of exits determined as per occupant load table 3 and clause 4.3 and 4.4.2.1"
+  },
+  {
+    "id": "G-GEN-57",
+    "block": "Exits",
+    "clause": "4.4.1",
+    "requirement": "Are exit clear of any obstructions, materials are ensures free flow of occupants while evacuation clause 4.4.1"
+  },
+  {
+    "id": "G-GEN-58",
+    "block": "Exits",
+    "clause": "4.4.2.4",
+    "requirement": "Are exit access is calculated as per 4.4.2.4"
+  },
+  {
+    "id": "G-GEN-59",
+    "block": "Exits",
+    "clause": "4.4.2.4.3",
+    "requirement": "Are all exit staircases shall discharge, at the level of exit discharge, to the exit discharge as per clause 4.4.2.4.3"
+  },
+  {
+    "id": "G-GEN-60",
+    "block": "Exits",
+    "clause": "4.4.2.4.3.2",
+    "requirement": "Are Internal stairs shall be constructed of non- combustible materials throughout, and shall have fire resistant rating of minimum 120 min, shall not be built around lift shaft. Clause 4.4.2.4.3.2"
+  },
+  {
+    "id": "G-GEN-61",
+    "block": "Exits",
+    "clause": "4.4.2.4.3.4 & 4.4.2.4.3.5",
+    "requirement": "Are external staricases, ramps connected to ground and hand rails provided on either end. There shall be no obstructions on the external staircase section. Clause 4.4.2.4.3.4 & 4.4.2.4.3.5"
+  },
+  {
+    "id": "G-GEN-62",
+    "block": "Exits",
+    "clause": "4.4.2.5 & Table 6",
+    "requirement": "Are staricases and lift lobbies designed and constructed in accordance with pressurization of staricases and lobbies. Clause 4.4.2.5 & Table 6"
+  },
+  {
+    "id": "G-GEN-63",
+    "block": "Exits",
+    "clause": "4.5",
+    "requirement": "Are proper compartmentation areas maintained for large spaces to prevent spread of fire. Clause 4.5"
+  },
+  {
+    "id": "G-GEN-64",
+    "block": "Exits",
+    "clause": "4.6",
+    "requirement": "Are All exit passageway (from exit to exit discharge) shall be pressurized or naturally ventilated. Clause 4.6"
+  },
+  {
+    "id": "G-GEN-65",
+    "block": "Exits",
+    "clause": "4.6.1 & 4.6.2",
+    "requirement": "Smoke exhaust system / mechanical ventillation systems where provided, for above areas and occupancies shall have a minimum of 12 air changes  per  hour. Clause 4.6.1 & 4.6.2"
+  },
+  {
+    "id": "G-GEN-66",
+    "block": "Exits",
+    "clause": "4.6.2",
+    "requirement": "Are each basement seperately ventillated. Clause 4.6.2"
+  },
+  {
+    "id": "G-GEN-67",
+    "block": "Exits",
+    "clause": "4.6.2",
+    "requirement": "Are Inlets and extracts terminated at ground level with stall board or pavement lights as before. Stall board and pavement lights should be in positions easily accessible to the fire brigade and clearly marked AIR INLET or SMOKE OUTLET with an indication of area served at or near the opening. Clause 4.6.2"
+  },
+  {
+    "id": "G-GEN-68",
+    "block": "Exits",
+    "clause": "4.6.2",
+    "requirement": "Does the smoke extraction system operate on actuation of flow switch actuation of sprinkler system. In addition, a local and/or remote manual start-stop control/switch shall be provided for operations by the fire fighters. Clause 4.6.2"
+  },
+  {
+    "id": "G-GEN-69",
+    "block": "Exits",
+    "clause": "4.7",
+    "requirement": "Is there a gas supply run through manifold and pipes attached to cluster of cylinders and satisfy requirements of Clause 4.7"
+  },
+  {
+    "id": "G-GEN-70",
+    "block": "Exits",
+    "clause": "4.7.2",
+    "requirement": "Are thermal detectors installed in fume hoods and arrangements made for automatic tripping of the exhaust fan in case of fire. Clause 4.7.2"
+  },
+  {
+    "id": "G-GEN-71",
+    "block": "Exits",
+    "clause": "4.7.4",
+    "requirement": "Are manifold installed are away from any air intakes/smoke exhaust openings/ any windows. Clause 4.7.4"
+  },
+  {
+    "id": "G-GEN-72",
+    "block": "Exits",
+    "clause": "4.7.5",
+    "requirement": "Pressure regulating stations shall be designed and installed at critical locations for excess flow shut off valves. Clause 4.7.5"
+  },
+  {
+    "id": "G-GEN-73",
+    "block": "Exits",
+    "clause": "4.7.9",
+    "requirement": "Kitchens working on LPG fuel shall not be permitted in basements. Clause 4.7.9"
+  },
+  {
+    "id": "G-GEN-74",
+    "block": "Exits",
+    "clause": "4.8",
+    "requirement": "Rooms containing high pressure boilers, refrigerating machinery, transformers or other service equipment subject to possible explosion shall not be located directly under or adjacent to exits. Clause 4.8"
+  },
+  {
+    "id": "G-GEN-75",
+    "block": "Exits",
+    "clause": "3.4.7.4",
+    "requirement": "Fire exit sign with arrow to be provided"
+  },
+  {
+    "id": "G-GEN-76",
+    "block": "Fire detection and alarm",
+    "clause": "Table 7",
+    "requirement": "IS fire detection system and alarm system installed in accordance with Table 7 minimum requirements of fire fighting installations"
+  },
+  {
+    "id": "G-GEN-77",
+    "block": "Fire detection and alarm",
+    "clause": "4.9",
+    "requirement": "Are detectors installad covering  all occupied areas including lifts, electrical shafts and false ceilings. Clause 4.9"
+  },
+  {
+    "id": "G-GEN-78",
+    "block": "Fire detection and alarm",
+    "clause": "4.9",
+    "requirement": "Are proper visual alarms like strobe lights installed and can are visisble? Clause 4.9"
+  },
+  {
+    "id": "G-GEN-79",
+    "block": "Fire detection and alarm",
+    "clause": "4.9",
+    "requirement": "Are hooters with decible range of min 110 dB installed. Clause 4.9"
+  },
+  {
+    "id": "G-GEN-80",
+    "block": "Fire detection and alarm",
+    "clause": "4.9",
+    "requirement": "Are voice evacuations systems installed has Hindi and english languages for annunciations and for local langugae annunciations done by PAGA. Clause 4.9"
+  },
+  {
+    "id": "G-GEN-81",
+    "block": "Fire detection and alarm",
+    "clause": "4.9",
+    "requirement": "Are manual call points installed in every floor as accessible. Clause 4.9"
+  },
+  {
+    "id": "G-GEN-82",
+    "block": "Fire Officer",
+    "clause": "4.1",
+    "requirement": "A dedicated & qualified fire officer with experience of minimum 3 years employeed  Clause 4.10"
+  },
+  {
+    "id": "G-GEN-83",
+    "block": "Fire Officer",
+    "clause": "4.10.2",
+    "requirement": "Is he competent in delivering fire safety trainings, handling emergency evacucaitons, mock drills, inspecting and maintaining all fire fighting equipment. Clasue 4.10.2"
+  },
+  {
+    "id": "G-GEN-84",
+    "block": "Fire Officer",
+    "clause": "4.10.2",
+    "requirement": "Shall maintain proper liasion between local fire authorities. 4.10.2"
+  },
+  {
+    "id": "G-GEN-85",
+    "block": "Fire Officer",
+    "clause": "4.10.2",
+    "requirement": "ensure fire operational plans, fire orders and fire notices are prepared and implemented. Clasue 4.10.2"
+  },
+  {
+    "id": "G-GEN-86",
+    "block": "Fire Officer",
+    "clause": "4.10.2",
+    "requirement": "Are all inspection & maintenance records well maintained and documented. Clause 4.10.2"
+  },
+  {
+    "id": "G-GEN-87",
+    "block": "Fire drills & Fire orders",
+    "clause": "4.11",
+    "requirement": "Is there a proper emergency evacuaction plan designed. Clause 4.11"
+  },
+  {
+    "id": "G-GEN-88",
+    "block": "Fire drills & Fire orders",
+    "clause": "4.11",
+    "requirement": "Are periodic mock drills conducted as per NOC and as per this clause 4.11"
+  },
+  {
+    "id": "G-GEN-89",
+    "block": "Fire drills & Fire orders",
+    "clause": "4.11",
+    "requirement": "Are mock drills effective and are performed as per the laid evacuation plan and procedures 4. 11"
+  },
+  {
+    "id": "G-GEN-90",
+    "block": "Fire protection",
+    "clause": "5.1 & Table 7",
+    "requirement": "Are fire extinguighers installed in accordance with IS 2190. and clasue 5.1 and table 7"
+  },
+  {
+    "id": "G-GEN-91",
+    "block": "Fire protection",
+    "clause": "Table 7",
+    "requirement": "Are yard hydrants, down comers, hose reels with nozzles installed in accordance to requirements of table 7"
+  },
+  {
+    "id": "G-GEN-92",
+    "block": "Fire protection",
+    "clause": "Table7 & 5.1.22",
+    "requirement": "Are fire pumps installed in accordance with table 7 clause 5.1.22"
+  },
+  {
+    "id": "G-GEN-93",
+    "block": "Fire protection",
+    "clause": "Table 7",
+    "requirement": "Pump specifications (Plz specify)"
+  },
+  {
+    "id": "G-GEN-94",
+    "block": "Fire protection",
+    "clause": "",
+    "requirement": "Electrical pump"
+  },
+  {
+    "id": "G-GEN-95",
+    "block": "Fire protection",
+    "clause": "",
+    "requirement": "Diesel pump"
+  },
+  {
+    "id": "G-GEN-96",
+    "block": "Fire protection",
+    "clause": "",
+    "requirement": "Jockey pump"
+  },
+  {
+    "id": "G-GEN-97",
+    "block": "Fire protection",
+    "clause": "Table 7",
+    "requirement": "Is the fire pump house well constructed and maintained."
+  },
+  {
+    "id": "G-GEN-98",
+    "block": "Fire protection",
+    "clause": "",
+    "requirement": "Are all pumps kept in auto mode"
+  },
+  {
+    "id": "G-GEN-99",
+    "block": "Fire protection",
+    "clause": "5.1",
+    "requirement": "IS there Fire brigade inlet and out let / fire man valve installed at the ground level and all other levels wehre required to deliver required water for fire fighting clause 5.1"
+  },
+  {
+    "id": "G-GEN-100",
+    "block": "Fire protection",
+    "clause": "5.1.2.1",
+    "requirement": "Is there a overhed water tank for fire fighting specify capacity. Clause 5.1.2.1"
+  },
+  {
+    "id": "G-GEN-101",
+    "block": "Fire protection",
+    "clause": "5.1.2",
+    "requirement": "Is there a unground water storage tank for fire fighting. Clause 5.1.2"
+  },
+  {
+    "id": "G-GEN-102",
+    "block": "Fire protection",
+    "clause": "Table 7",
+    "requirement": "Are automatic sprinkler installed where ever required as per table 7"
+  },
+  {
+    "id": "G-GEN-103",
+    "block": "Fire protection",
+    "clause": "Table 7",
+    "requirement": "Are fire suppression system based installed"
+  },
+  {
+    "id": "G-GEN-104",
+    "block": "Fire protection",
+    "clause": "5.1.9",
+    "requirement": "Is there a requirement to install clean agent based suppression system. If yes, then is it installed in accordance to guidelines of 5.1.9"
+  }
+]

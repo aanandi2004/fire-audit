@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Initial Report II</title>
+  <style>
+    :root {
+      --navy: #0b3a6b;
+      --blue: #0f5fa8;
+      --green: #118a49;
+      --orange: #f59e0b;
+      --dark: #0f172a;
+      --muted: #64748b;
+      --border: #1f2937;
+      --table-border: #e5e7eb;
+      --white: #ffffff;
+    }
+    @page {
+      size: A4;
+      margin: 12mm;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--dark);
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8mm;
+    }
+    .bar-top {
+      background: var(--navy);
+      color: var(--white);
+      padding: 6mm 8mm;
+      font-size: 11pt;
+      font-weight: 700;
+      text-align: center;
+    }
+    .bar-title {
+      background: var(--blue);
+      color: var(--white);
+      padding: 6mm 8mm;
+      font-size: 16pt;
+      font-weight: 800;
+      text-align: center;
+      letter-spacing: 0.3px;
+    }
+    .section-header-green {
+      background: var(--green);
+      color: var(--white);
+      padding: 5mm 8mm;
+      font-size: 14pt;
+      font-weight: 800;
+      text-align: center;
+    }
+    .block {
+      border: 1px solid var(--table-border);
+    }
+    .grid-rows {
+      display: grid;
+      grid-template-columns: 42mm 1fr;
+      border-top: 1px solid var(--table-border);
+    }
+    .row {
+      display: contents;
+    }
+    .cell-key {
+      background: var(--navy);
+      color: var(--white);
+      padding: 4mm 5mm;
+      font-size: 11pt;
+      font-weight: 700;
+      border-right: 1px solid var(--table-border);
+      border-bottom: 1px solid var(--table-border);
+    }
+    .cell-value {
+      background: var(--orange);
+      color: var(--dark);
+      padding: 4mm 5mm;
+      font-size: 11pt;
+      font-weight: 600;
+      border-bottom: 1px solid var(--table-border);
+    }
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid var(--border);
+      font-size: 11pt;
+    }
+    .table th {
+      background: var(--orange);
+      color: var(--dark);
+      padding: 4mm;
+      border: 1px solid var(--border);
+      text-align: left;
+      font-weight: 800;
+    }
+    .table td {
+      padding: 3.5mm;
+      border: 1px solid var(--table-border);
+      vertical-align: top;
+    }
+    .table .sl {
+      width: 12mm;
+      text-align: center;
+      font-weight: 700;
+    }
+    .table .clause {
+      width: 22mm;
+      text-align: center;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .table .status {
+      width: 32mm;
+      font-weight: 700;
+    }
+    .table .comment {
+      width: 48mm;
+    }
+  </style>
+  <meta name="generator" content="Trae Template" />
+</head>
+<body>
+  <div class="page">
+    <div class="bar-top">FIRE & LIFE SAFETY AUDIT REPORT</div>
+    <div class="bar-title">FIRE & LIFE SAFETY AUDIT CHECK LIST</div>
+
+    <div class="block">
+      <div class="grid-rows">
+        <div class="row">
+          <div class="cell-key">Client Details</div>
+          <div class="cell-value">{{CLIENT_DETAILS}}</div>
+        </div>
+        <div class="row">
+          <div class="cell-key">Name of the Building</div>
+          <div class="cell-value">{{BUILDING_NAME}}</div>
+        </div>
+        <div class="row">
+          <div class="cell-key">Scope of Audit</div>
+          <div class="cell-value">{{SCOPE_OF_AUDIT}}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-header-green">BUILDING DETAILS</div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th class="sl">Sl. No.</th>
+          <th>Requirement</th>
+          <th class="status">Organization Status</th>
+          <th class="status">Monitor Status</th>
+          <th class="comment">Auditor Comment</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="sl">1</td>
+          <td>Height (in meters)</td>
+          <td>{{BD_ORG_STATUS_1}}</td>
+          <td>{{BD_AUD_STATUS_1}}</td>
+          <td>{{BD_COMMENT_1}}</td>
+        </tr>
+        <tr>
+          <td class="sl">2</td>
+          <td>No. of Floors (Including basement Floors)</td>
+          <td>{{BD_ORG_STATUS_2}}</td>
+          <td>{{BD_AUD_STATUS_2}}</td>
+          <td>{{BD_COMMENT_2}}</td>
+        </tr>
+        <tr>
+          <td class="sl">3</td>
+          <td>Total Floor area (in sq m) (Including basement Floors) under scope</td>
+          <td>{{BD_ORG_STATUS_3}}</td>
+          <td>{{BD_AUD_STATUS_3}}</td>
+          <td>{{BD_COMMENT_3}}</td>
+        </tr>
+        <tr>
+          <td class="sl">4</td>
+          <td>Plot Area (in sq m)</td>
+          <td>{{BD_ORG_STATUS_4}}</td>
+          <td>{{BD_AUD_STATUS_4}}</td>
+          <td>{{BD_COMMENT_4}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="section-header-green">TYPE OF CONSTRUCTION</div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th class="sl">Sl. No.</th>
+          <th>Requirement</th>
+          <th class="status">Organization Status</th>
+          <th class="status">Monitor Status</th>
+          <th class="comment">Auditor Comment</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="sl">1</td>
+          <td>Whether the Building is of permanent construction?</td>
+          <td>{{TC_ORG_STATUS_1}}</td>
+          <td>{{TC_AUD_STATUS_1}}</td>
+          <td>{{TC_COMMENT_1}}</td>
+        </tr>
+        <tr>
+          <td class="sl">2</td>
+          <td>Whether the building is of TYPE 1/ TYPE 2/ TYPE 3/ TYPE 4 construction of NBC Part 4 lift & safety?</td>
+          <td>{{TC_ORG_STATUS_2}}</td>
+          <td>{{TC_AUD_STATUS_2}}</td>
+          <td>{{TC_COMMENT_2}}</td>
+        </tr>
+        <tr>
+          <td class="sl">3</td>
+          <td>Is the occupant load determined as per table 3</td>
+          <td>{{TC_ORG_STATUS_3}}</td>
+          <td>{{TC_AUD_STATUS_3}}</td>
+          <td>{{TC_COMMENT_3}}</td>
+        </tr>
+        <tr>
+          <td class="sl">4</td>
+          <td>Whether the open space around the building is maintained according to clause 3.4.4.3</td>
+          <td>{{TC_ORG_STATUS_4}}</td>
+          <td>{{TC_AUD_STATUS_4}}</td>
+          <td>{{TC_COMMENT_4}}</td>
+        </tr>
+        <tr>
+          <td class="sl">5</td>
+          <td>Set backs maintained</td>
+          <td>{{TC_ORG_STATUS_5}}</td>
+          <td>{{TC_AUD_STATUS_5}}</td>
+          <td>{{TC_COMMENT_5}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

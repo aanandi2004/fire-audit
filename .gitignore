@@ -1,0 +1,48 @@
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Node
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Environment
+.env
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# OS
+.DS_Store
+
+# Ignore root node_modules
+node_modules/
+
+# Ignore documents
+*.pdf
+*.xlsx
+*.docx
+
+# Ignore images folder if not required
+images of fire audit system images using trae/
+images of fire audit system images using trae 2/
+
+# Vite build
+.vite/
+
+# Firebase service account
+backend/service-account.json
