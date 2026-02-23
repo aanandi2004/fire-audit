@@ -5,6 +5,15 @@ function AuditorDashboard({ user, assignments, onStartAudit, orgs }) {
   // Filter assignments for the current auditor
   const myAssignments = assignments ? assignments.filter(a => (a.auditorId || a.auditor_id) === user?.id) : []
 
+  const completedAssignments = myAssignments.filter(a => String(a.status || '').toUpperCase() === 'COMPLETED')
+  const completedOrgIds = Array.from(new Set(completedAssignments.map(a => a.org_id || a.orgId).filter(Boolean)))
+  const completedCount = completedOrgIds.length
+  const completedOrgs = completedOrgIds.map(id => {
+    const o = Array.isArray(orgs) ? orgs.find(x => x.id === id) : null
+    return { id, name: o?.name || id }
+  })
+  const [showCompletedList, setShowCompletedList] = React.useState(false)
+
   // Map assignments to tasks
   const assignedTasks = myAssignments.map(a => {
     const groupId = a.group || a.groupId
@@ -35,6 +44,33 @@ function AuditorDashboard({ user, assignments, onStartAudit, orgs }) {
           <p style={{ color: '#64748b', fontSize: '14px', marginBottom: '24px' }}>
             View and manage your assigned audit categories.
           </p>
+          <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
+            <button
+              type="button"
+              onClick={() => setShowCompletedList(prev => !prev)}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 12px', borderRadius: 8, border: '1px solid #dbeafe', background: '#eff6ff', color: '#1e40af' }}
+              title="Completed Organizations"
+            >
+              <span style={{ fontSize: 12, fontWeight: 700 }}>Completed Organizations</span>
+              <span style={{ background: 'white', border: '1px solid #cbd5e1', borderRadius: 999, padding: '2px 8px', fontSize: 12, color: '#0f172a' }}>{completedCount}</span>
+            </button>
+          </div>
+          {showCompletedList && (
+            <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 8, padding: 12, marginBottom: 16 }}>
+              {completedOrgs.length === 0 ? (
+                <div style={{ color: '#64748b', fontSize: 13 }}>No completed organizations</div>
+              ) : (
+                <div>
+                  {completedOrgs.map(o => (
+                    <div key={o.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px dashed #e2e8f0' }}>
+                      <div style={{ fontSize: 13, color: '#0f172a', fontWeight: 600 }}>{o.name}</div>
+                      <button type="button" className="btn btn-outline" title="View Archive">View Archive</button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         <div className="table-container" style={{ padding: '0 24px 24px 24px' }}>

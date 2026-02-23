@@ -417,9 +417,7 @@ function SummaryDashboard({ statusMap, commentMap, blocks, organizationData, all
 function InputRow({ label, value, onChange, onCommit, placeholder, sr }) {
   const [v, setV] = React.useState(value || '')
   React.useEffect(() => {
-    if (value !== undefined && value !== null) {
-      setV(value)
-    }
+    setV(value || '')
   }, [value])
   return (
     <div style={{ display: 'flex', borderBottom: '1px solid #e2e8f0', padding: '12px 0' }}>
@@ -553,7 +551,7 @@ function DocumentsListSection() {
     </div>
   )
 }
-function OrganizationDetails({ data, onUpdate, jumpToSection, orgId, auditId }) {
+function OrganizationDetails({ data, onUpdate, jumpToSection, orgId, auditId, blocks, assignments }) {
   const partI = ORGANIZATION_PARTS.find(p => p.id === 'part_i')
   const partII = ORGANIZATION_PARTS.find(p => p.id === 'part_ii')
   const partIII = ORGANIZATION_PARTS.find(p => p.id === 'part_iii')
@@ -565,10 +563,11 @@ function OrganizationDetails({ data, onUpdate, jumpToSection, orgId, auditId }) 
   const partIIISections = partIIISectionIds.map(id => ORGANIZATION_SECTIONS.find(s => s.id === id)).filter(Boolean)
   const [activeSection, setActiveSection] = useState(() => partISectionIds[0] || 'general')
   const [localData, setLocalData] = useState(data)
+  const [selectedBlockId, setSelectedBlockId] = useState(() => {
+    const b0 = Array.isArray(blocks) && blocks.length > 0 ? (blocks[0]?.id || blocks[0]?.name) : ''
+    return String(b0 || '')
+  })
   const CUSTOMER_LOCKED = false
-  useEffect(() => {
-    setLocalData(data)
-  }, [data])
   useEffect(() => {
     if (jumpToSection) {
       setActiveSection(jumpToSection)
@@ -578,9 +577,16 @@ function OrganizationDetails({ data, onUpdate, jumpToSection, orgId, auditId }) 
     ;(async () => {
       try {
         if (!auditId) return
+        const b0 = String(selectedBlockId || '')
+        if (!b0) return
+        setLocalData({})
+        const list = Array.isArray(assignments) ? assignments : []
+        const match = list.filter(x => (x.org_id === orgId || x.orgId === orgId) && (x.block_name === b0 || x.blockId === b0 || x.block_id === b0))
+        const effAuditId = (match[0]?.audit_id || auditId || '').trim()
+        if (!effAuditId) return
         const token = await auth.currentUser?.getIdToken?.()
         const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8010'
-        const res = await fetch(`${BASE_URL}/org-responses/building-details/list?audit_id=${encodeURIComponent(auditId)}`, {
+        const res = await fetch(`${BASE_URL}/org-responses/building-details/list?audit_id=${encodeURIComponent(effAuditId)}&block_id=${encodeURIComponent(String(b0))}`, {
           method: 'GET',
           headers: {
             Authorization: token ? `Bearer ${token}` : undefined
@@ -589,51 +595,57 @@ function OrganizationDetails({ data, onUpdate, jumpToSection, orgId, auditId }) 
         if (res.ok) {
           const payload = await res.json()
           const merged = payload?.fields || {}
-          if (merged && Object.keys(merged).length > 0) {
-            setLocalData(prev => ({ ...(prev || {}), ...merged }))
-            if (typeof onUpdate === 'function') {
-              onUpdate(prev => ({ ...(prev || {}), ...merged }))
-            }
-          }
+          setLocalData(merged || {})
         }
       } catch { void 0 }
     })()
-  }, [auditId, onUpdate])
+  }, [auditId, onUpdate, selectedBlockId, blocks, assignments, orgId])
 
   const updateField = (key, val) => {
     setLocalData(prev => ({ ...(prev || {}), [key]: val }))
     ;(async () => {
       try {
-        if (!orgId) return
+        const b0 = String(selectedBlockId || '')
+        if (!b0) return
+        const list = Array.isArray(assignments) ? assignments : []
+        const match = list.filter(x => (x.org_id === orgId || x.orgId === orgId) && (x.block_name === b0 || x.blockId === b0 || x.block_id === b0))
+        const effAuditId = (match[0]?.id || match[0]?.assignment_id || auditId || '').trim()
+        const effOrgId = (match[0]?.org_id || orgId || '').trim()
         const token2 = await auth.currentUser?.getIdToken?.()
         const BASE_URL2 = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8010'
-        await fetch(`${BASE_URL2}/api/organizations/${encodeURIComponent(orgId)}/self-assessment/save`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: token2 ? `Bearer ${token2}` : undefined
-          },
-          body: JSON.stringify({
-            section: activeSection || 'general',
-            field: key,
-            value: val
+        if (effOrgId) {
+          await fetch(`${BASE_URL2}/api/organizations/${encodeURIComponent(effOrgId)}/self-assessment/save`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: token2 ? `Bearer ${token2}` : undefined
+            },
+            body: JSON.stringify({
+              section: activeSection || 'general',
+              field: key,
+              value: val
+            })
           })
-        })
-        if (!auditId) return
+        }
+        if (!effAuditId) return
         const token3 = await auth.currentUser?.getIdToken?.()
         const BASE_URL3 = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8010'
-        await fetch(`${BASE_URL3}/org-responses/building-details/save`, {
+        const resp = await fetch(`${BASE_URL3}/org-responses/building-details/save`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             Authorization: token3 ? `Bearer ${token3}` : undefined
           },
           body: JSON.stringify({
-            audit_id: auditId,
-            org_id: orgId,
+            audit_id: effAuditId,
+            org_id: effOrgId || orgId,
+            block_id: String(b0),
             sections: [{ section_id: activeSection || 'general', fields: { [key]: val } }]
           })
         })
+        if (!resp.ok) {
+          console.error('BD save failed', await resp.text().catch(() => ''))
+        }
       } catch { void 0 }
     })()
   }
@@ -645,12 +657,17 @@ function OrganizationDetails({ data, onUpdate, jumpToSection, orgId, auditId }) 
   const handleSaveOrgDetails = async () => {
     try {
       
-      if (!orgId) {
-        alert('Organization not linked. Unable to save.')
+      const b0 = String(selectedBlockId || '')
+      if (!b0) {
+        alert('No block defined to save building details')
         return
       }
-      if (!auditId) {
-        alert('Active audit not found for organization')
+      const list = Array.isArray(assignments) ? assignments : []
+      const match = list.filter(x => (x.org_id === orgId || x.orgId === orgId) && (x.block_name === b0 || x.blockId === b0 || x.block_id === b0))
+      const effAuditId = (match[0]?.audit_id || auditId || '').trim()
+      const effOrgId = (match[0]?.org_id || orgId || '').trim()
+      if (!effAuditId || !effOrgId) {
+        alert('Active audit or org not found for selected block')
         return
       }
       const token = await auth.currentUser?.getIdToken?.()
@@ -661,15 +678,21 @@ function OrganizationDetails({ data, onUpdate, jumpToSection, orgId, auditId }) 
         keys.forEach(k => { fields[k] = (localData && localData[k] !== undefined && localData[k] !== null) ? localData[k] : '' })
         return { section_id: sectionId, fields }
       })
-      await fetch(`${BASE_URL}/org-responses/building-details/save`, {
+      const resp = await fetch(`${BASE_URL}/org-responses/building-details/save`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: token ? `Bearer ${token}` : undefined
         },
-        body: JSON.stringify({ audit_id: auditId, org_id: orgId, sections })
+        body: JSON.stringify({ audit_id: effAuditId, org_id: effOrgId, block_id: String(b0), sections })
       })
-      alert('Organization details saved')
+      if (!resp.ok) {
+        const txt = await resp.text().catch(() => '')
+        console.error('BD bulk save failed', txt)
+        alert('Failed to save organization details')
+      } else {
+        alert('Organization details saved')
+      }
     } catch {
       alert('Failed to save organization details')
     }
@@ -2051,19 +2074,46 @@ function OrganizationDetails({ data, onUpdate, jumpToSection, orgId, auditId }) 
           </div>
         ))}
       </div>
-      <div style={{ flex: 1, padding: '0 20px' }}>
+      <div key={String(selectedBlockId || '')} style={{ flex: 1, padding: '0 20px' }}>
         <div style={{ marginBottom: '10px', fontSize: '12px', fontWeight: 800, color: '#1e3a8a', textTransform: 'uppercase' }}>
           {(partISectionIds.includes(activeSection) ? partI?.label : partIISectionIds.includes(activeSection) ? partII?.label : partIII?.label) || ''}
         </div>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
           <div style={{ fontSize: '16px', fontWeight: 700, color: '#1e3a8a' }}>{ORGANIZATION_SECTIONS.find(s => s.id === activeSection)?.label}</div>
-          <button
-            onClick={handleSaveOrgDetails}
-            style={{ background: '#1e3a8a', color: 'white', border: 'none', borderRadius: 6, padding: '8px 12px', fontWeight: 700, cursor: 'pointer', fontSize: '12px' }}
-            disabled={CUSTOMER_LOCKED}
-          >
-            Save Organization Details
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div style={{ display: 'flex', gap: 8, marginRight: 8 }}>
+              {(Array.isArray(blocks) ? blocks : []).map(b => {
+                const id = b?.id || b?.name
+                const active = String(selectedBlockId) === String(id)
+                return (
+                  <button
+                    key={String(id)}
+                    type="button"
+                    onClick={() => setSelectedBlockId(String(id))}
+                    style={{ 
+                      background: active ? '#1e3a8a' : '#f1f5f9', 
+                      color: active ? 'white' : '#334155',
+                      border: '1px solid #e2e8f0', 
+                      borderRadius: 6, 
+                      padding: '6px 10px', 
+                      fontWeight: 700, 
+                      cursor: 'pointer', 
+                      fontSize: '12px' 
+                    }}
+                  >
+                    {String(id)}
+                  </button>
+                )
+              })}
+            </div>
+            <button
+              onClick={handleSaveOrgDetails}
+              style={{ background: '#1e3a8a', color: 'white', border: 'none', borderRadius: 6, padding: '8px 12px', fontWeight: 700, cursor: 'pointer', fontSize: '12px' }}
+              disabled={CUSTOMER_LOCKED}
+            >
+              Save Organization Details
+            </button>
+          </div>
         </div>
         {renderContent()}
       </div>
@@ -2546,6 +2596,8 @@ export default function FireSafetyAuditSummary({ statusMap = {}, commentMap = {}
             jumpToSection={forceOrgSection} 
             orgId={resolveOrgId(user, orgs)} 
             auditId={ACTIVE_AUDIT_ID}
+            blocks={blocksDerived}
+            assignments={assignments}
           />
         )}
         {activeTab === 'blocks' && (

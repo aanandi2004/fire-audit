@@ -16,6 +16,7 @@ import AdminUserManagement from './components/AdminUserManagement'
 import AdminCreateUser from './components/AdminCreateUser'
 import AdminAssignment from './components/AdminAssignment'
 import AdminAuditDataRegistry from './components/AdminAuditDataRegistry'
+import AdminAuditDetailView from './components/AdminAuditDetailView'
 import AdminSettings from './components/AdminSettings'
 import { auth } from './firebase'
 import { onAuthStateChanged } from 'firebase/auth'
@@ -65,9 +66,28 @@ function App() {
   const [user, setUser] = useState(null)
   const [active, setActive] = useState('home')
   const [auditContext, setAuditContext] = useState({ auditId: null, blockId: null, groupId: null, subdivisionId: null })
+  const onAuditContextChange = React.useCallback((ctx) => {
+    setAuditContext(prev => {
+      const next = {
+        auditId: ctx?.auditId !== undefined ? String(ctx.auditId || '') : (prev.auditId || ''),
+        blockId: ctx?.blockId !== undefined ? String(ctx.blockId || '') : (prev.blockId || ''),
+        groupId: ctx?.groupId !== undefined ? String(ctx.groupId || '') : (prev.groupId || ''),
+        subdivisionId: ctx?.subdivisionId !== undefined ? String(ctx.subdivisionId || '') : (prev.subdivisionId || '')
+      }
+      const same =
+        (next.auditId === (prev.auditId || '')) &&
+        (next.blockId === (prev.blockId || '')) &&
+        (next.groupId === (prev.groupId || '')) &&
+        (next.subdivisionId === (prev.subdivisionId || ''))
+      return same ? prev : next
+    })
+  }, [])
   React.useEffect(() => {
     try { window.__AUDITOR_LOCK__ = 'false' } catch { /* noop */ }
   }, [])
+  React.useEffect(() => {
+    try { console.log("APP STATE:", active, auditContext) } catch { /* noop */ }
+  }, [active, auditContext.auditId, auditContext.blockId, auditContext.groupId, auditContext.subdivisionId])
   const enterAudit = React.useCallback((auditId, blockId, groupId, subdivisionId) => {
     setAuditContext({
       auditId: String(auditId || ''),
@@ -235,6 +255,7 @@ function App() {
   const [valueMap, setValueMap] = useState({})
   const [auditorStatusMap, setAuditorStatusMap] = useState({})
   const [auditorCommentMap, setAuditorCommentMap] = useState({})
+  const [adminViewState, setAdminViewState] = useState(null)
 
   // Recent Activity Log (Persisted)
   const [RECENT_ACTIVITIES, setRecentActivities] = useState([])
@@ -265,6 +286,61 @@ function App() {
       setActive('home')
     }
   }, [user])
+  React.useEffect(() => {
+    function onAdminView(ev) {
+      const state = (ev && ev.detail) || (window.history && window.history.state) || null
+      setAdminViewState(state)
+      setActive('adminView')
+    }
+    window.addEventListener('admin:viewdata', onAdminView)
+    window.addEventListener('popstate', onAdminView)
+    return () => {
+      window.removeEventListener('admin:viewdata', onAdminView)
+      window.removeEventListener('popstate', onAdminView)
+    }
+  }, [])
+
+  // Derive auditContext defaults for CUSTOMER from assignments without overriding user selection
+  React.useEffect(() => {
+    try {
+      if (!user || (user.role || '').toUpperCase() !== 'CUSTOMER') return
+      const orgId = user.orgId || null
+      if (!orgId) return
+      const list = Array.isArray(assignments) ? assignments : []
+      const scoped = list.filter(a => a.org_id === orgId || a.orgId === orgId)
+      if (scoped.length === 0) return
+      const byGroup = scoped.find(a => String(a.group || '').trim() === String(assessmentGroupId || '').trim()) || scoped[0]
+      const auditId = (byGroup.audit_id || byGroup.id || '').trim()
+      const blockId = (byGroup.block_id || byGroup.blockId || '').trim()
+      const groupId = String(assessmentGroupId || '').trim()
+      const customerOrgLocal = user?.orgId ? (Array.isArray(orgs) ? orgs.find(o => o.id === user.orgId) : null) : (Array.isArray(orgs) ? orgs.find(o => o.name === user.organizationName) : null)
+      const allowedGroupLocal = customerOrgLocal ? RECORD_GROUPS.find(g => g.label === customerOrgLocal.type) : null
+      const allowedSubsLocal = (() => {
+        if (!customerOrgLocal) return []
+        const sub = customerOrgLocal.subdivision
+        if (Array.isArray(sub)) {
+          const cleaned = sub
+            .map(s => (allowedGroupLocal?.id === 'C' && s === 'C-1') ? 'C-2' : s)
+            .filter(Boolean)
+          return cleaned
+        } else {
+          if (allowedGroupLocal?.id === 'C' && sub === 'C-1') return ['C-2']
+          return sub ? [sub] : []
+        }
+      })()
+      const subId = (() => {
+        if (Array.isArray(allowedSubsLocal) && allowedSubsLocal.length > 0) return String(allowedSubsLocal[0]).trim()
+        return String(assessmentSubdivisionId || '').trim()
+      })()
+      if (!auditId || !groupId) return
+      setAuditContext(prev => ({
+        auditId: (prev.auditId && prev.auditId.length > 0) ? prev.auditId : auditId,
+        blockId: (prev.blockId && prev.blockId.length > 0) ? prev.blockId : blockId,
+        groupId,
+        subdivisionId: (prev.subdivisionId && prev.subdivisionId.length > 0) ? prev.subdivisionId : subId
+      }))
+    } catch { /* noop */ }
+  }, [user, assignments, assessmentGroupId, assessmentSubdivisionId, orgs])
 
   if (!authUser) {
     return (
@@ -349,6 +425,7 @@ function App() {
         setOrgs={setOrgs} 
         customers={customers} 
         setCustomers={setCustomers}
+        assignments={assignments}
         statusMap={statusMap}
         commentMap={commentMap}
         auditorStatusMap={auditorStatusMap}
@@ -392,6 +469,9 @@ function App() {
         auditorStatusMap={auditorStatusMap}
         auditorCommentMap={auditorCommentMap}
       />
+    )
+    if (active === 'adminView') return (
+      <AdminAuditDetailView initialState={adminViewState} onBack={() => { try { window.history.pushState({}, '', '/admin') } catch (e) { void e } setActive('orgManagement') }} />
     )
     if (active === 'settings') return (
       <AdminSettings 
@@ -507,7 +587,6 @@ function App() {
   })()
 
   // --- MAIN RENDER ---
-  try { console.log("APP STATE:", active, auditContext) } catch (e) { void e }
   return (
     <div className="app-shell">
       <Sidebar active={active} onChange={setActive} role={user?.role} />
@@ -565,6 +644,9 @@ function App() {
                 auditorStatusMap={auditorStatusMap}
                 auditorCommentMap={auditorCommentMap}
                 assignments={assignments}
+                selectedBlockId={auditContext.blockId}
+                onChangeBlockId={(bid) => onAuditContextChange({ blockId: bid })}
+                onAuditContextChange={onAuditContextChange}
               />
             )}
             {active === 'closeAuditObservations' && (
@@ -582,6 +664,9 @@ function App() {
                   setAuditorCommentMap={setAuditorCommentMap}
                   user={user}
                   assignments={assignments}
+                  selectedBlockId={auditContext.blockId}
+                  onChangeBlockId={(bid) => onAuditContextChange({ blockId: bid })}
+                  onAuditContextChange={onAuditContextChange}
                 />
               </ErrorBoundary>
             )}

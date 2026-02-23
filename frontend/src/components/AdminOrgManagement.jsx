@@ -178,6 +178,7 @@ function AdminOrgManagement({
   setOrgs, 
   customers, 
   setCustomers,
+  assignments,
   valueMap,
   setValueMap,
 }) {
@@ -969,7 +970,21 @@ function AdminOrgManagement({
                     <button 
                       className="btn btn-outline" 
                       style={{ padding: '4px 8px', fontSize: '12px' }}
-                      onClick={() => setViewOrgId(org.id)}
+                      onClick={() => {
+                        const scoped = (Array.isArray(assignments) ? assignments : []).filter(a => (a.org_id === org.id || a.orgId === org.id))
+                        const auditId = scoped.length ? (scoped[0].audit_id || scoped[0].id) : null
+                        const blocks = scoped.map(a => ({
+                          id: a.block_id || a.blockId,
+                          name: a.block_name || a.blockName || a.block_id || a.blockId,
+                          auditId: a.audit_id || a.id || auditId
+                        })).filter(b => b.id)
+                        const orgName = org.name || org.org_name || '-'
+                        const orgId = org.id
+                        try { console.log('[AdminOrgManagement] Navigating with auditId:', auditId, 'blocks:', blocks) } catch { /* noop */ }
+                        const state = { auditId, blocks, orgName, orgId }
+                        try { window.history.pushState(state, '', '/admin/view') } catch { /* noop */ }
+                        try { window.dispatchEvent(new CustomEvent('admin:viewdata', { detail: state })) } catch { /* noop */ }
+                      }}
                     >
                       View Data
                     </button>

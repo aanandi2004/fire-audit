@@ -1,50 +1,16 @@
 import React, { useState } from 'react'
-// frontend-only: mocked persistence via localStorage
-import { RECORD_GROUPS } from '../config/groups'
-import { getQuestions } from '../config/questionBanks'
 import { auth } from '../firebase'
 
-const normalizeBlock = (s) => (s || '').toLowerCase().trim()
-const isInputOnlyBlock = (b) => {
-  const x = normalizeBlock(b)
-  return x === 'building details' || x === 'bulding details' || x === 'building materials' || x === 'type of construction'
-}
-
-function AdminUserManagement({ 
-  auditors, 
-  assignments,
-  statusMap,
-  commentMap,
-  valueMap,
-  setValueMap,
-  auditorStatusMap,
-  setAuditorStatusMap,
-  auditorCommentMap,
-  setAuditorCommentMap
-}) {
+function AdminUserManagement({ auditors, assignments }) {
   const [activeTab] = useState('auditors') // fixed to auditors
   const [showCreateAuditor, setShowCreateAuditor] = useState(false)
   const [viewAuditorId, setViewAuditorId] = useState(null)
   const isAdminLocked = String(((import.meta.env && import.meta.env.VITE_ADMIN_LOCK) || window.__ADMIN_LOCK__ || 'false')).toLowerCase() === 'true'
   
   // Edit State
-  const [editState, setEditState] = useState({ id: null, field: null, value: '' })
+  const [progress, setProgress] = useState({ total: 0, pending: 0, completed: 0, loading: false })
 
-  const startEdit = (id, field, currentValue) => {
-    setEditState({ id, field, value: currentValue || '' })
-  }
-
-  const saveEdit = () => {
-    const { id, field, value } = editState
-    if (field === 'value') setValueMap(prev => ({ ...prev, [id]: value }))
-    if (field === 'auditorStatus') setAuditorStatusMap(prev => ({ ...prev, [id]: value }))
-    if (field === 'auditorComment') setAuditorCommentMap(prev => ({ ...prev, [id]: value }))
-    setEditState({ id: null, field: null, value: '' })
-  }
-
-  const cancelEdit = () => {
-    setEditState({ id: null, field: null, value: '' })
-  }
+  // No inline edit features in this view
 
   const [auditorForm, setAuditorForm] = useState({
     name: '',
@@ -89,6 +55,43 @@ function AdminUserManagement({
   // customer deletion handled via handleDelete when needed
   
   // disable/reset actions wired in table section below
+
+  React.useEffect(() => {
+    ;(async () => {
+      if (!viewAuditorId) {
+        setProgress({ total: 0, pending: 0, completed: 0, loading: false })
+        return
+      }
+      try {
+        const idToken = await auth.currentUser.getIdToken()
+        const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8010'
+        const assigned = Array.isArray(assignments) ? assignments.filter(a => a.auditor_id === viewAuditorId || a.auditorId === viewAuditorId) : []
+        let pending = 0
+        let completed = 0
+        const tasks = assigned.map(async (a) => {
+          const auditId = a.audit_id || a.id
+          const blockId = a.block_id || a.blockId
+          if (!auditId || !blockId) { pending += 1; return }
+          const url = `${BASE_URL}/audit/observations?${new URLSearchParams({ audit_id: String(auditId), block_id: String(blockId) }).toString()}`
+          const res = await fetch(url, { headers: { idToken } })
+          if (!res.ok) { pending += 1; return }
+          const list = await res.json().catch(() => [])
+          if (!Array.isArray(list) || list.length === 0) { pending += 1; return }
+          const allClosed = list.every(x => {
+            const s = String(x.auditor_closure_status || (x.auditor && x.auditor.closure_status) || '').toUpperCase()
+            return s === 'IN_PLACE' || s === 'CLOSED'
+          })
+          if (allClosed) completed += 1
+          else pending += 1
+        })
+        setProgress({ total: assigned.length, pending: 0, completed: 0, loading: true })
+        await Promise.all(tasks)
+        setProgress({ total: assigned.length, pending, completed, loading: false })
+      } catch {
+        setProgress(prev => ({ ...prev, loading: false }))
+      }
+    })()
+  }, [viewAuditorId, assignments])
 
   const handleCreateAuditor = (e) => {
     e.preventDefault()
@@ -143,10 +146,9 @@ function AdminUserManagement({
   if (viewAuditorId) {
     const auditor = auditors.find(a => a.id === viewAuditorId)
     const assigned = Array.isArray(assignments) ? assignments.filter(a => a.auditor_id === viewAuditorId) : []
-    // Calculate stats based on global map (simulating this auditor's work)
-    const answers = Object.keys(auditorStatusMap || {}).length
-    const completed = Object.values(auditorStatusMap || {}).filter(s => s === 'In Place').length
-    const gaps = Object.values(auditorStatusMap || {}).filter(s => s === 'Not In Place').length
+    const totalAssigned = progress.total
+    const pending = progress.pending
+    const completed = progress.completed
 
     return (
       <div className="page-body">
@@ -179,7 +181,25 @@ function AdminUserManagement({
               <tbody>
                 {assigned.map(asg => (
                   <tr key={asg.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                    <td style={{ padding: '12px' }}>{asg.org_name || '-'}</td>
+                    <td 
+                      style={{ padding: '12px', color: '#3b82f6', cursor: 'pointer' }} 
+                      onClick={() => {
+                        const orgId = asg.org_id || asg.orgId
+                        const orgName = asg.org_name || '-'
+                        const scoped = (Array.isArray(assignments) ? assignments : []).filter(a => (a.org_id === orgId || a.orgId === orgId))
+                        const auditId = scoped.length ? (scoped[0].audit_id || scoped[0].id) : null
+                        const blocks = scoped.map(a => ({
+                          id: a.block_id || a.blockId,
+                          name: a.block_name || a.blockName || a.block_id || a.blockId,
+                          auditId: a.audit_id || a.id || auditId
+                        })).filter(b => b.id)
+                        const state = { auditId, blocks, orgName, orgId }
+                        try { window.history.pushState(state, '', '/admin/view') } catch { /* noop */ }
+                        try { window.dispatchEvent(new CustomEvent('admin:viewdata', { detail: state })) } catch { /* noop */ }
+                      }}
+                    >
+                      {asg.org_name || '-'}
+                    </td>
                     <td style={{ padding: '12px' }}>{asg.block_name || '-'}</td>
                     <td style={{ padding: '12px' }}>{asg.occupancy_group || '-'}</td>
                     <td style={{ padding: '12px' }}>{Array.isArray(asg.subdivision) ? asg.subdivision.join(', ') : (asg.subdivision || '-')}</td>
@@ -190,209 +210,19 @@ function AdminUserManagement({
           )}
            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '20px', marginBottom: '24px' }}>
             <div style={{ padding: '16px', background: '#f8fafc', borderRadius: '8px' }}>
-              <div style={{ fontSize: '12px', color: '#64748b' }}>Total Audited</div>
-              <div style={{ fontSize: '24px', fontWeight: 700, color: '#3b82f6' }}>{answers}</div>
+              <div style={{ fontSize: '12px', color: '#64748b' }}>Total Assigned</div>
+              <div style={{ fontSize: '24px', fontWeight: 700, color: '#3b82f6' }}>{totalAssigned}</div>
             </div>
             <div style={{ padding: '16px', background: '#f8fafc', borderRadius: '8px' }}>
-               <div style={{ fontSize: '12px', color: '#64748b' }}>Gaps Identified</div>
-               <div style={{ fontSize: '24px', fontWeight: 700, color: '#ef4444' }}>{gaps}</div>
+               <div style={{ fontSize: '12px', color: '#64748b' }}>Pending</div>
+               <div style={{ fontSize: '24px', fontWeight: 700, color: '#ef4444' }}>{pending}</div>
             </div>
             <div style={{ padding: '16px', background: '#f8fafc', borderRadius: '8px' }}>
-               <div style={{ fontSize: '12px', color: '#64748b' }}>Closed / In Place</div>
+               <div style={{ fontSize: '12px', color: '#64748b' }}>Completed</div>
                <div style={{ fontSize: '24px', fontWeight: 700, color: '#166534' }}>{completed}</div>
             </div>
           </div>
 
-          <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '16px' }}>Detailed Audit Responses</h3>
-          {answers === 0 ? (
-            <div style={{ padding: '24px', textAlign: 'center', color: '#64748b', background: '#f8fafc', borderRadius: '8px' }}>
-              No audit data recorded yet.
-            </div>
-          ) : (
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
-              <thead style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
-                <tr>
-                  <th style={{ padding: '12px', textAlign: 'left', color: '#64748b' }}>Group / Sub</th>
-                  <th style={{ padding: '12px', textAlign: 'left', color: '#64748b' }}>Question</th>
-                  <th style={{ padding: '12px', textAlign: 'left', color: '#64748b' }}>Customer Input</th>
-                  <th style={{ padding: '12px', textAlign: 'left', color: '#64748b' }}>Auditor Status</th>
-                  <th style={{ padding: '12px', textAlign: 'left', color: '#64748b' }}>Auditor Comment</th>
-                </tr>
-              </thead>
-              <tbody>
-                {RECORD_GROUPS.map(group => (
-                  group.subdivisions.map(sub => {
-                    const questions = getQuestions(group.id, sub.id)
-                    // Filter questions that have an answer (either customer or auditor)
-                    const relevantQuestions = questions.filter(q => 
-                      (auditorStatusMap && auditorStatusMap[q.id]) || 
-                      (statusMap && statusMap[q.id]) ||
-                      (valueMap && valueMap[q.id])
-                    )
-                    
-                    if (relevantQuestions.length === 0) return null
-
-                    return relevantQuestions.map(q => {
-                      const isInputOnly = isInputOnlyBlock(q.block)
-                      const isEditingValue = editState.id === q.id && editState.field === 'value'
-                      const isEditingAuditorStatus = editState.id === q.id && editState.field === 'auditorStatus'
-                      const isEditingAuditorComment = editState.id === q.id && editState.field === 'auditorComment'
-
-                      return (
-                        <tr key={q.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                           <td style={{ padding: '12px' }}>
-                              <div style={{ fontWeight: 500 }}>{group.title}</div>
-                              <div style={{ fontSize: '11px', color: '#64748b' }}>{sub.title}</div>
-                           </td>
-                           <td style={{ padding: '12px' }}>
-                             <div style={{ marginBottom: '4px' }}>{q.requirement}</div>
-                             {q.block && <span style={{ fontSize: '10px', background: '#f1f5f9', padding: '2px 6px', borderRadius: '4px', color: '#64748b' }}>{q.block}</span>}
-                           </td>
-                           
-                           {/* Customer Input Column */}
-                           <td style={{ padding: '12px' }}>
-                             {isInputOnly ? (
-                               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                 {isEditingValue ? (
-                                   <>
-                                     <input 
-                                       value={editState.value} 
-                                       onChange={e => setEditState({...editState, value: e.target.value})}
-                                       style={{ padding: '4px', borderRadius: '4px', border: '1px solid #3b82f6', width: '100px' }}
-                                     />
-                                     <button onClick={saveEdit} style={{ border: 'none', background: 'none', cursor: 'pointer' }}>✅</button>
-                                     <button onClick={cancelEdit} style={{ border: 'none', background: 'none', cursor: 'pointer' }}>❌</button>
-                                   </>
-                                 ) : (
-                                   <>
-                                     <input 
-                                       disabled 
-                                       value={valueMap && valueMap[q.id] ? valueMap[q.id] : ''} 
-                                       style={{ 
-                                         padding: '4px', 
-                                         borderRadius: '4px', 
-                                         border: '1px solid #cbd5e1', 
-                                         background: '#f1f5f9', 
-                                         color: '#94a3b8',
-                                         width: '100px',
-                                         cursor: 'not-allowed'
-                                       }} 
-                                     />
-                                     <button 
-                                       onClick={() => startEdit(q.id, 'value', valueMap[q.id])} 
-                                       style={{ border: 'none', background: 'none', cursor: 'pointer', fontSize: '14px' }}
-                                       title="Edit Customer Value"
-                                     >
-                                       ✏️
-                                     </button>
-                                   </>
-                                 )}
-                               </div>
-                             ) : (
-                               <div>
-                                 {statusMap && statusMap[q.id] && (
-                                   <span style={{ 
-                                      padding: '2px 6px', borderRadius: '4px', fontSize: '11px',
-                                      background: statusMap[q.id] === 'in_place' ? '#dcfce7' : '#fee2e2',
-                                      color: statusMap[q.id] === 'in_place' ? '#166534' : '#991b1b',
-                                      display: 'inline-block', marginBottom: '4px'
-                                   }}>
-                                     {statusMap[q.id] === 'in_place' ? 'In Place' : statusMap[q.id]}
-                                   </span>
-                                 )}
-                                 {commentMap && commentMap[q.id] && (
-                                   <div style={{ fontSize: '11px', color: '#64748b', fontStyle: 'italic' }}>
-                                     "{commentMap[q.id]}"
-                                   </div>
-                                 )}
-                                 {(!statusMap?.[q.id] && !commentMap?.[q.id]) && <span style={{ color: '#cbd5e1' }}>-</span>}
-                               </div>
-                             )}
-                           </td>
-
-                           {/* Auditor Status Column */}
-                           <td style={{ padding: '12px' }}>
-                              {isInputOnly ? (
-                                <span style={{ fontSize: '11px', color: '#cbd5e1' }}>N/A (User Input)</span>
-                              ) : (
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                   {isEditingAuditorStatus ? (
-                                      <>
-                                        <select 
-                                          value={editState.value} 
-                                          onChange={e => setEditState({...editState, value: e.target.value})}
-                                          style={{ padding: '4px', borderRadius: '4px', border: '1px solid #3b82f6' }}
-                                        >
-                                          <option value="">Select...</option>
-                                          <option value="In Place">In Place</option>
-                                          <option value="Not In Place">Not In Place</option>
-                                          <option value="Partially In Place">Partially In Place</option>
-                                          <option value="Not Applicable">Not Applicable</option>
-                                        </select>
-                                        <button onClick={saveEdit} style={{ border: 'none', background: 'none', cursor: 'pointer' }}>✅</button>
-                                        <button onClick={cancelEdit} style={{ border: 'none', background: 'none', cursor: 'pointer' }}>❌</button>
-                                      </>
-                                   ) : (
-                                      <>
-                                        <span style={{ 
-                                          padding: '2px 6px', borderRadius: '4px', fontSize: '11px',
-                                          background: auditorStatusMap[q.id] === 'In Place' ? '#dcfce7' : (auditorStatusMap[q.id] ? '#fee2e2' : '#f1f5f9'),
-                                          color: auditorStatusMap[q.id] === 'In Place' ? '#166534' : (auditorStatusMap[q.id] ? '#991b1b' : '#64748b')
-                                        }}>
-                                          {auditorStatusMap[q.id] || '-'}
-                                        </span>
-                                        <button 
-                                          onClick={() => startEdit(q.id, 'auditorStatus', auditorStatusMap[q.id])}
-                                          style={{ border: 'none', background: 'none', cursor: 'pointer', fontSize: '14px', marginLeft: 'auto' }}
-                                        >
-                                          ✏️
-                                        </button>
-                                      </>
-                                   )}
-                                </div>
-                              )}
-                           </td>
-
-                           {/* Auditor Comment Column */}
-                           <td style={{ padding: '12px', color: '#64748b' }}>
-                              {isInputOnly ? (
-                                <span style={{ fontSize: '11px', color: '#cbd5e1' }}>-</span>
-                              ) : (
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                   {isEditingAuditorComment ? (
-                                      <>
-                                        <input 
-                                          value={editState.value} 
-                                          onChange={e => setEditState({...editState, value: e.target.value})}
-                                          style={{ padding: '4px', borderRadius: '4px', border: '1px solid #3b82f6', width: '100%' }}
-                                        />
-                                        <button onClick={saveEdit} style={{ border: 'none', background: 'none', cursor: 'pointer' }}>✅</button>
-                                        <button onClick={cancelEdit} style={{ border: 'none', background: 'none', cursor: 'pointer' }}>❌</button>
-                                      </>
-                                   ) : (
-                                      <>
-                                        <span style={{ fontStyle: 'italic', fontSize: '12px' }}>
-                                          {auditorCommentMap && auditorCommentMap[q.id] ? auditorCommentMap[q.id] : '-'}
-                                        </span>
-                                        <button 
-                                          onClick={() => startEdit(q.id, 'auditorComment', auditorCommentMap[q.id])}
-                                          style={{ border: 'none', background: 'none', cursor: 'pointer', fontSize: '14px', marginLeft: 'auto' }}
-                                        >
-                                          ✏️
-                                        </button>
-                                      </>
-                                   )}
-                                </div>
-                              )}
-                           </td>
-                        </tr>
-                      )
-                    })
-                  })
-                ))}
-              </tbody>
-            </table>
-          )}
         </div>
       </div>
     )

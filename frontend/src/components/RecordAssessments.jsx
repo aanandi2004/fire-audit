@@ -41,8 +41,10 @@ function RecordAssessments({
   valueMap,
   setValueMap,
   user,
-  auditorCommentMap,
   assignments,
+  selectedBlockId: controlledBlockId,
+  onChangeBlockId,
+  onAuditContextChange,
 }) {
   const [auditInfo, setAuditInfo] = React.useState({})
   const PAGE_LOCKED = String(auditInfo?.status || '').toUpperCase() === 'COMPLETED'
@@ -54,18 +56,31 @@ function RecordAssessments({
     const list = Array.isArray(assignments) ? assignments : []
     const orgId = user?.orgId || ''
     const scoped = list.filter(a => a.org_id === orgId || a.orgId === orgId)
-    const ids = Array.from(new Set(scoped.map(a => a.block_name || a.block_id).filter(Boolean)))
-    const next = ids.map(id => ({ id: String(id), name: String(id) }))
+    const ids = Array.from(new Set(scoped.map(a => a.block_id || a.block_name).filter(Boolean)))
+    const next = ids.map(raw => {
+      const s = String(raw || '')
+      const m = /^Block\s*(\d+)/i.exec(s)
+      const canonical = m ? `block_${parseInt(m[1], 10)}` : s.toLowerCase()
+      const display = m ? `Block ${parseInt(m[1], 10)}` : (/^block_(\d+)$/i.test(s) ? `Block ${parseInt((/^block_(\d+)$/i.exec(s) || [])[1] || '1', 10)}` : s)
+      return { id: canonical, name: display }
+    })
     setBlocks(next)
   }, [user, blocks.length, assignments])
-  const [selectedBlockId, setSelectedBlockId] = React.useState(() => blocks[0]?.id || '')
+  const [selectedBlockIdLocal, setSelectedBlockIdLocal] = React.useState(() => blocks[0]?.id || '')
+  const selectedBlockId = controlledBlockId || selectedBlockIdLocal
   React.useEffect(() => {
-    if (!selectedBlockId || !blocks.some(b => b.id === selectedBlockId)) {
-      setSelectedBlockId(blocks[0]?.id || '')
+    const match = blocks.some(b => String(b.id || '').toLowerCase() === String(selectedBlockId || '').toLowerCase())
+    if (!selectedBlockId || !match) {
+      const next = blocks[0]?.id || ''
+      if (!next || next === selectedBlockId) return
+      if (onChangeBlockId) onChangeBlockId(next)
+      else setSelectedBlockIdLocal(next)
     }
-  }, [blocks, selectedBlockId])
+  }, [blocks, selectedBlockId, onChangeBlockId])
   const getKey = React.useCallback((qId) => {
-    return selectedBlockId ? `${selectedBlockId}::${qId}` : qId
+    const bid = String(selectedBlockId || '').trim().toLowerCase()
+    const qn = String(qId || '').trim().toLowerCase()
+    return bid ? `${bid}::${qn}` : qn
   }, [selectedBlockId])
   
   
@@ -238,32 +253,36 @@ function RecordAssessments({
     )
     return byBlock || null
   })()
+  const assignmentIdForSelection = activeAssignment?.audit_id || activeAssignment?.id || ''
+  const blockIdForSelection = activeAssignment?.block_id || canonicalBlockId || selectedBlockId || ''
+  const lastRehydrateKeyRef = React.useRef('')
+  const lastBaselineKeyRef = React.useRef('')
   React.useEffect(() => {
-  console.log('[ASSIGNMENT MATCH DEBUG]', {
+    if (typeof onAuditContextChange === 'function') {
+      const aid = assignmentIdForSelection || ''
+      const bid = blockIdForSelection || ''
+      const gid = effectiveGroupId || groupId || ''
+      const sid = subdivisionId || ''
+      onAuditContextChange({ auditId: aid, blockId: bid, groupId: gid, subdivisionId: sid })
+    }
+  }, [assignmentIdForSelection, blockIdForSelection, effectiveGroupId, groupId, subdivisionId, onAuditContextChange])
+  React.useEffect(() => {
+    console.log('[ASSIGNMENT MATCH DEBUG]', {
+      orgIdResolved,
+      selectedBlockId,
+      canonicalBlockId,
+      effectiveGroupId,
+      subdivisionId,
+      assignmentIdForSelection
+    })
+  }, [
     orgIdResolved,
     selectedBlockId,
     canonicalBlockId,
     effectiveGroupId,
     subdivisionId,
-    activeAssignment,
-    assignments: (Array.isArray(assignments) ? assignments : []).map(a => ({
-      id: a.id,
-      org_id: a.org_id,
-      block_id: a.block_id,
-      group: a.group,
-      subdivision_id: a.subdivision_id,
-      is_active: a.is_active
-    }))
-  })
-}, [
-  orgIdResolved,
-  selectedBlockId,
-  canonicalBlockId,
-  effectiveGroupId,
-  subdivisionId,
-  activeAssignment,
-  assignments
-])
+    assignmentIdForSelection
+  ])
   React.useEffect(() => {
     ;(async () => {
       try {
@@ -271,6 +290,13 @@ function RecordAssessments({
         if (!auditId) return
         const data = await getAudit(auditId)
         setAuditInfo(data || {})
+        const locked = String((data || {}).status || '').toUpperCase() === 'COMPLETED'
+        if (locked) {
+          try {
+            window.__AUDIT_LOCK__ = true
+            window.dispatchEvent(new CustomEvent('audit:status', { detail: { auditId, status: 'COMPLETED' } }))
+          } catch { /* noop */ }
+        }
       } catch { /* noop */ }
     })()
   }, [activeAssignment])
@@ -329,15 +355,16 @@ function RecordAssessments({
   // removed Print and Preview actions per strict scope
 
   // Resolve canonical block_id from selection, preferring assignment canonical id
-  
-
-  const assignmentIdForSelection = activeAssignment?.audit_id || activeAssignment?.id || ''
   React.useEffect(() => {
     ;(async () => {
       try {
-        const auditId = activeAssignment?.audit_id || activeAssignment?.id
-        const blockId = activeAssignment?.block_id
+        if (!auth.currentUser) return
+        const auditId = assignmentIdForSelection || ''
+        const blockId = blockIdForSelection || ''
         if (!auditId || !blockId) return
+        const key = `${auditId}::${blockId}::${subdivisionId || ''}`
+        if (lastRehydrateKeyRef.current === key) return
+        lastRehydrateKeyRef.current = key
         const token = await auth.currentUser.getIdToken()
         const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8010'
         const params = new URLSearchParams({ audit_id: String(auditId), block_id: String(blockId) })
@@ -351,20 +378,25 @@ function RecordAssessments({
         const nextValue = {}
         ;(Array.isArray(list) ? list : []).forEach((d) => {
           const qid = d.question_id
-          nextStatus[getKey(qid)] = (d.status || '').toLowerCase()
-          nextValue[getKey(qid)] = d.value || ''
+          const org = d.org || {}
+          nextStatus[getKey(qid)] = String(org.status || '').toLowerCase()
+          nextValue[getKey(qid)] = org.value || ''
         })
         setStatusMap(nextStatus)
         setValueMap(nextValue)
         try { console.log('[RecordAssessments] Rehydrated from backend', { count: Object.keys(nextStatus).length, blockId }) } catch { void 0 }
       } catch { /* silent */ }
     })()
-  }, [assignmentIdForSelection, selectedBlockId, subdivisionId, getKey, setStatusMap, setValueMap, activeAssignment])
+  }, [assignmentIdForSelection, blockIdForSelection, subdivisionId, getKey, setStatusMap, setValueMap])
   React.useEffect(() => {
     ;(async () => {
       try {
-        const auditId = activeAssignment?.audit_id || activeAssignment?.id
+        if (!auth.currentUser) return
+        const auditId = assignmentIdForSelection || ''
         if (!auditId) return
+        const key = `${auditId}::baseline`
+        if (lastBaselineKeyRef.current === key) return
+        lastBaselineKeyRef.current = key
         const data = await getAuditBaseline(auditId)
         const baseline = (data && data.baseline) || {}
         const nextValue = {}
@@ -380,7 +412,7 @@ function RecordAssessments({
         }
       } catch { /* noop */ }
     })()
-  }, [activeAssignment, questions, getKey, setValueMap])
+  }, [assignmentIdForSelection, questions, getKey, setValueMap])
 
   // Source of truth: backend org_responses endpoints
 
@@ -389,7 +421,7 @@ function RecordAssessments({
       <div className="card">
         {PAGE_LOCKED && (
           <div style={{ background: '#fde68a', color: '#78350f', padding: '10px 12px', borderRadius: 6, marginBottom: 12, fontSize: 13, fontWeight: 600 }}>
-            Read-Only: Audit Locked
+            READ-ONLY: AUDIT COMPLETED
           </div>
         )}
         <div className="toolbar">
@@ -463,7 +495,10 @@ function RecordAssessments({
                     key={b.id}
                     type="button"
                     className={`group-chip ${selectedBlockId === b.id ? 'active' : ''}`}
-                    onClick={() => setSelectedBlockId(b.id)}
+                    onClick={() => {
+                      if (onChangeBlockId) onChangeBlockId(b.id)
+                      else setSelectedBlockIdLocal(b.id)
+                    }}
                   >
                     {b.name}
                   </button>
@@ -597,7 +632,6 @@ function RecordAssessments({
                     <th>Question</th>
                     <th style={{ width: 150 }}>Value</th>
                     <th style={{ width: 160 }}>Status</th>
-                    <th style={{ width: 220 }}>Auditor comment</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -648,13 +682,6 @@ function RecordAssessments({
                         )}
                         {(isInputOnly || valueOnly) && (
                           <span style={{ color: '#94a3b8' }}>—</span>
-                        )}
-                      </td>
-                      <td>
-                        {!isInputOnly && (
-                          <span style={{ fontSize: 12, color: '#1f2937' }}>
-                            {auditorCommentMap && auditorCommentMap[getKey(question.id)] ? auditorCommentMap[getKey(question.id)] : '-'}
-                          </span>
                         )}
                       </td>
                     </tr>

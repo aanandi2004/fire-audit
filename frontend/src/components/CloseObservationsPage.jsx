@@ -7,9 +7,11 @@ function CloseObservationsPage({
   allowedGroup,
   allowedSubdivision,
   groupId,
-  statusMap,
   user,
-  assignments
+  assignments,
+  selectedBlockId: controlledBlockId,
+  onChangeBlockId,
+  onAuditContextChange
 }) {
   const effAllowedGroup = React.useMemo(() => {
     if (allowedGroup) return allowedGroup
@@ -24,21 +26,33 @@ function CloseObservationsPage({
     const list = Array.isArray(assignments) ? assignments : []
     const orgId = user?.orgId || ''
     const scoped = list.filter(a => a.org_id === orgId || a.orgId === orgId)
-    const ids = Array.from(new Set(scoped.map(a => a.block_name || a.block_id).filter(Boolean)))
-    return ids.map(id => ({ id: String(id), name: String(id) }))
+    const ids = Array.from(new Set(scoped.map(a => a.block_id || a.block_name).filter(Boolean)))
+    return ids.map(raw => {
+      const s = String(raw || '')
+      const m = /^Block\s*(\d+)/i.exec(s)
+      const canonical = m ? `block_${parseInt(m[1], 10)}` : s.toLowerCase()
+      const display = m ? `Block ${parseInt(m[1], 10)}` : (/^block_(\d+)$/i.test(s) ? `Block ${parseInt((/^block_(\d+)$/i.exec(s) || [])[1] || '1', 10)}` : s)
+      return { id: canonical, name: display }
+    })
   }, [assignments, user])
-  const [selectedBlockId, setSelectedBlockId] = useState(() => (Array.isArray(blocks) && blocks[0]?.id) || '')
+  const [selectedBlockIdLocal, setSelectedBlockIdLocal] = useState(() => (Array.isArray(blocks) && blocks[0]?.id) || '')
+  const selectedBlockId = controlledBlockId || selectedBlockIdLocal
   useEffect(() => {
-    if (!selectedBlockId && blocks.length > 0) {
-      setSelectedBlockId(blocks[0].id)
+    const match = blocks.some(b => String(b.id || '').toLowerCase() === String(selectedBlockId || '').toLowerCase())
+    if ((!selectedBlockId || !match) && blocks.length > 0) {
+      const next = blocks[0].id
+      if (next === selectedBlockId) return
+      if (onChangeBlockId) onChangeBlockId(next)
+      else setSelectedBlockIdLocal(next)
     }
-  }, [blocks, selectedBlockId])
-  const getKey = React.useCallback((qId) => (selectedBlockId ? `${selectedBlockId}::${qId}` : qId), [selectedBlockId])
+  }, [blocks, selectedBlockId, onChangeBlockId])
+  // Unified docs from backend; no composite keys
+  const [unifiedDocs, setUnifiedDocs] = useState([])
   const [selectedGroupId, setSelectedGroupId] = useState(() => {
     if (effAllowedGroup && effAllowedGroup.id) return effAllowedGroup.id
     return groupId || 'A'
   })
-  const isCustomer = user?.role === 'Customer'
+  const isCustomer = String(user?.role || '').toUpperCase() === 'CUSTOMER'
   // Initialize with the first subdivision of the selected group
   const activeGroup = RECORD_GROUPS.find(g => g.id === selectedGroupId) || RECORD_GROUPS[0]
   
@@ -56,92 +70,155 @@ function CloseObservationsPage({
     if (effAllowedGroup && effAllowedGroup.id) setSelectedGroupId(effAllowedGroup.id)
   }, [groupId, effAllowedGroup])
 
-  const [observations, setObservations] = useState([])
+  const [observationMetaMap] = useState({})
+  const [closureDetailsMap] = useState({})
+  const [closedRows, setClosedRows] = useState([])
+  const [gapRows, setGapRows] = useState([])
+  const handleUpload = async (qid, file) => {
+    try {
+      if (!file) return
+      const orgId = user?.orgId || ''
+      const list = Array.isArray(assignments) ? assignments : []
+      const match = list.filter(x => (x.org_id === orgId || x.orgId === orgId) && (x.block_name === selectedBlockId || x.blockId === selectedBlockId || x.block_id === selectedBlockId))
+      const auditId = (match[0]?.audit_id || '').trim()
+      const blockId = String(selectedBlockId || '').trim()
+      if (!auditId || !blockId) return
+      const token = await auth.currentUser?.getIdToken?.()
+      const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8010'
+      const fd = new FormData()
+      fd.append('audit_id', auditId)
+      fd.append('block_id', blockId)
+      fd.append('question_id', String(qid).trim())
+      fd.append('file', file)
+      const resp = await fetch(`${BASE_URL}/audit/observations/upload`, {
+        method: 'POST',
+        headers: { idToken: token },
+        body: fd
+      })
+      const data = await resp.json().catch(() => ({}))
+      const url = data && data.url ? data.url : ''
+      const key = String(qid).trim().toUpperCase()
+      const meta = observationMetaMap[key] || { customer_uploads: [], auditor_uploads: [] }
+      const arr = Array.isArray(meta.customer_uploads) ? meta.customer_uploads : []
+      if (url) arr.push({ url, name: file.name })
+      observationMetaMap[key] = { ...meta, customer_uploads: arr }
+    } catch { /* noop */ }
+  }
   useEffect(() => {
     try {
       const groupCanonical = selectedGroupId
       const subId = selectedSubdivisionId
       if (!groupCanonical || !subId) {
-        setObservations([])
+        setClosedRows([])
+        setGapRows([])
         return
       }
-      const questions = getQuestions(groupCanonical, subId)
-      const res = []
-      for (const q of questions) {
-        try { console.log('CustomerHydrateKey', String(selectedBlockId), String(q.id), getKey(q.id)) } catch { /* noop */ }
-        const stLower = statusMap[getKey(q.id)] || ''
-        const stUpper = (stLower || '').toUpperCase().replace(' ', '_')
-        const isGap = stLower === 'partial' || stLower === 'not_in_place'
+      const qs = getQuestions(groupCanonical, subId) || []
+      const closed = []
+      const gaps = []
+      for (const q of qs) {
+        const doc = (Array.isArray(unifiedDocs) ? unifiedDocs : []).find(d =>
+          String(d.question_id).trim().toUpperCase() === String(q.id).trim().toUpperCase()
+        )
+        const orgStRaw = (doc?.org?.status || doc?.customer_status || doc?.status || '')
+        const audStRaw = (doc?.auditor?.status || doc?.auditor_status || '')
+        const orgSt = String(orgStRaw || '').toUpperCase().trim()
+        const audSt = String(audStRaw || '').toUpperCase().trim()
         const sec = q.block || 'General'
-        const catMatch = !selectedCategory || String(sec) === String(selectedCategory)
-        if (isGap && catMatch) {
-          res.push({
+        const row = {
             id: String(q.id),
-            category: groupCanonical,
-            subcategory: subId,
             section: sec,
-            status: stUpper,
-            requirement: q.requirement || ''
-          })
+            requirement: q.requirement || '',
+            org_status: (() => {
+              const isInputOnly = /^(building details|type of construction)$/i.test(String(sec || ''))
+              if (isInputOnly) {
+                const v = doc?.org?.value ?? doc?.value ?? ''
+                return String(v || '').trim() || '—'
+              }
+              return orgSt || '—'
+            })(),
+            auditor_status: audSt || '—',
+            auditor_observation: String(doc?.auditor?.observation || doc?.auditor_observation || doc?.observation || ''),
+            evidence_customer: (() => {
+              const e1 = Array.isArray(doc?.org?.uploads) ? doc.org.uploads : []
+              const e2 = Array.isArray(doc?.org?.evidence) ? doc.org.evidence : []
+              return [...e1, ...e2]
+            })(),
+            evidence_auditor: Array.isArray(doc?.auditor?.uploads) ? doc.auditor.uploads : []
+          }
+        const isClosed = (orgSt !== '' && audSt !== '' && orgSt === audSt)
+        if (isClosed) {
+          closed.push(row)
+        } else {
+          gaps.push(row)
         }
       }
-      setObservations(res)
+      setClosedRows(closed)
+      setGapRows(gaps)
     } catch {
-      setObservations([])
+      setClosedRows([])
+      setGapRows([])
     }
-  }, [selectedGroupId, selectedSubdivisionId, selectedCategory, statusMap, selectedBlockId, getKey])
+  }, [selectedGroupId, selectedSubdivisionId, unifiedDocs, selectedBlockId])
 
-  const [observationMetaMap] = useState({})
-  const [auditorStatusMap2, setAuditorStatusMap2] = useState({});
-  const [auditorObservationMap2, setAuditorObservationMap2] = useState({});
-  const [closureDetailsMap, setClosureDetailsMap] = useState({});
   useEffect(() => {
-  try {
-    const orgId = user?.orgId || ''
-    const list = Array.isArray(assignments) ? assignments : []
-    const match = list.filter(x => (x.org_id === orgId || x.orgId === orgId) && (x.block_name === selectedBlockId || x.blockId === selectedBlockId))
-    
-      const auditId = match[0]?.id || match[0]?.assignment_id || ''
-      const blockId = selectedBlockId || ''
-      if (!auditId || !blockId) return;
-      const aid = String(auditId).trim().toLowerCase();
-      const bid = String(blockId).trim().toLowerCase();
-      try { console.log('[CloseObs] Resolved AID/BID', { aid, bid }) } catch { /* noop */ }
+    try {
+      const orgId = user?.orgId || ''
+      const list = Array.isArray(assignments) ? assignments : []
+      const match = list.filter(x => (x.org_id === orgId || x.orgId === orgId) && (x.block_name === selectedBlockId || x.blockId === selectedBlockId || x.block_id === selectedBlockId))
+      const auditId = (match[0]?.audit_id || '').trim()
+      const blockId = String(selectedBlockId || '').trim()
+      if (!auditId || !blockId) return
+      ;(async () => {
+        const token = await auth.currentUser?.getIdToken?.()
+        const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8010'
+        const resp = await fetch(`${BASE_URL}/audit/responses?audit_id=${encodeURIComponent(auditId)}&block_id=${encodeURIComponent(blockId)}`, {
+          method: 'GET',
+          headers: { idToken: token }
+        })
+        if (!resp.ok) return
+        const list = await resp.json().catch(() => [])
+        setUnifiedDocs(Array.isArray(list) ? list : [])
+        if (typeof onAuditContextChange === 'function') {
+          onAuditContextChange({ auditId, blockId, groupId: selectedGroupId, subdivisionId: selectedSubdivisionId })
+        }
+      })()
+    } catch (err) { console.error("Unified Fetch Error:", err) }
+  }, [assignments, user, selectedBlockId, selectedGroupId, selectedSubdivisionId, onAuditContextChange])
 
-    ;(async () => {
-      const token = await auth.currentUser?.getIdToken?.()
-      const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8010'
-      const resp = await fetch(`${BASE_URL}/audit/responses?assignment_id=${encodeURIComponent(aid)}`, {
-        method: 'GET',
-        headers: { Authorization: token ? `Bearer ${token}` : undefined }
-      })
-      if (!resp.ok) return
-      const list = await resp.json().catch(() => [])
-      const s = {};
-      const c = {};
-      const mergedStatus = {};
-
-      ;(Array.isArray(list) ? list : []).forEach(item => {
-        const d = item || {};
-        const qid = String(d.question_id || item.id);
-        
-        // Use normalized keys to ensure UI sees them
-        const key = getKey(qid);
-        
-        const statusRaw = (d.status ?? d.auditor_status ?? d.customer_status ?? '');
-        const obsRaw = (d.observation ?? d.auditor_observation ?? d.customer_closure ?? '');
-        s[qid] = String(statusRaw || '').toUpperCase();
-        c[key] = obsRaw || '';
-        
-        const lower = String(statusRaw || '').toLowerCase()
-        if (lower) mergedStatus[key] = lower
-      });
-
-      setAuditorStatusMap2(s);
-      setAuditorObservationMap2(c);
+  useEffect(() => {
+    (async () => {
+      try {
+        const orgId = user?.orgId || ''
+        const list = Array.isArray(assignments) ? assignments : []
+        const match = list.filter(x => (x.org_id === orgId || x.orgId === orgId) && (x.block_name === selectedBlockId || x.blockId === selectedBlockId || x.block_id === selectedBlockId))
+        const auditId = (match[0]?.audit_id || '').trim()
+        const blockId = String(selectedBlockId || '').trim()
+        if (!auditId || !blockId) return
+        const token = await auth.currentUser?.getIdToken?.()
+        const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8010'
+        const params = new URLSearchParams({ audit_id: auditId, block_id: blockId })
+        const resp = await fetch(`${BASE_URL}/audit/observations?${params.toString()}`, {
+          headers: { idToken: token }
+        })
+        if (!resp.ok) return
+        const rows = await resp.json().catch(() => [])
+        rows.forEach(d => {
+          const qid = String(d.question_id || d.id).trim().toUpperCase()
+          const custUploads = Array.isArray(d.customer_uploads) ? d.customer_uploads : []
+          const orgUploads = Array.isArray(d.org?.uploads) ? d.org.uploads : (Array.isArray(d.org?.evidence) ? d.org.evidence : [])
+          const audUploads = Array.isArray(d.auditor_uploads) ? d.auditor_uploads : []
+          const custClosure = typeof d.customer_closure === 'string' ? d.customer_closure : (d.org?.closure_details || '')
+          observationMetaMap[qid] = { customer_uploads: [...custUploads, ...orgUploads], auditor_uploads: audUploads }
+          if (custClosure) {
+            closureDetailsMap[qid] = custClosure
+          }
+        })
+      } catch { /* noop */ }
     })()
-  } catch (err) { console.error("Firestore Error:", err) }
-}, [assignments, user, selectedBlockId, selectedGroupId, getKey]);
+  }, [assignments, user, selectedBlockId, selectedGroupId, observationMetaMap])
+  // useEffect(() => {
+  // Removed separate org-responses hydration; unifiedDocs covers both org and auditor
   // useEffect(() => {
   // useEffect(() => {
   //   try {
@@ -166,7 +243,7 @@ function CloseObservationsPage({
  
 
   // (removed duplicate state) 
-  const [sectionFrozen, setSectionFrozen] = useState(false)
+  const [sectionFrozen] = useState(false)
   const CUSTOMER_LOCKED = sectionFrozen
 
   const activeSubdivision = activeGroup?.subdivisions.find(s => s.id === selectedSubdivisionId)
@@ -205,10 +282,14 @@ function CloseObservationsPage({
       let closed = 0
       let gap = 0
       subQuestions.forEach(q => {
-        const status = statusMap[getKey(q.id)]
-        if (status === 'in_place' || status === 'not_relevant') {
+        const doc = (Array.isArray(unifiedDocs) ? unifiedDocs : []).find(d =>
+          String(d.question_id).trim().toUpperCase() === String(q.id).trim().toUpperCase()
+        )
+        const orgSt = String((doc?.org?.status || doc?.customer_status || doc?.status || '')).toUpperCase()
+        const audSt = String((doc?.auditor?.status || doc?.auditor_status || '')).toUpperCase()
+        if (orgSt !== '' && audSt !== '' && orgSt === audSt) {
           closed++
-        } else if (status === 'not_in_place' || status === 'partial') {
+        } else {
           gap++
         }
       })
@@ -236,8 +317,8 @@ function CloseObservationsPage({
                     <button
                       key={b.id}
                       type="button"
-                      className={`group-chip ${selectedBlockId === b.id ? 'active' : ''}`}
-                      onClick={() => setSelectedBlockId(b.id)}
+                                  className={`group-chip ${String(selectedBlockId || '').toLowerCase() === String(b.id || '').toLowerCase() ? 'active' : ''}`}
+                      onClick={() => { if (onChangeBlockId) onChangeBlockId(b.id); else setSelectedBlockIdLocal(b.id) }}
                     >
                       {b.name}
                     </button>
@@ -300,9 +381,13 @@ function CloseObservationsPage({
                             const map = {}
                             for (const q of list) {
                               const cat = q.block || 'General'
-                              const st = statusMap[getKey(q.id)] || ''
-                              const isClosed = st === 'in_place' || st === 'not_relevant'
-                              const isGap = st === 'partial' || st === 'not_in_place'
+                              const doc = (Array.isArray(unifiedDocs) ? unifiedDocs : []).find(d =>
+                                String(d.question_id).trim().toUpperCase() === String(q.id).trim().toUpperCase()
+                              )
+                              const orgSt = String((doc?.org?.status || doc?.customer_status || doc?.status || '')).toUpperCase()
+                              const audSt = String((doc?.auditor?.status || doc?.auditor_status || '')).toUpperCase()
+                              const isClosed = (orgSt !== '' && audSt !== '' && orgSt === audSt)
+                              const isGap = !isClosed
                               if (!map[cat]) map[cat] = { closed: 0, gap: 0 }
                               if (isClosed) map[cat].closed += 1
                               if (isGap) map[cat].gap += 1
@@ -340,7 +425,7 @@ function CloseObservationsPage({
       </div>
 
       {/* Right Content */}
-      <div className="close-main-panel">
+      <div className="close-main-panel" style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 160px)' }}>
         <div className="close-main-header">
             <h2 className="section-title">{activeSubdivision ? activeSubdivision.label : 'Selected Section'}</h2>
         </div>
@@ -355,189 +440,212 @@ function CloseObservationsPage({
                       }
                       const orgId = user?.orgId || ''
                       const list = Array.isArray(assignments) ? assignments : []
-                      const match = list.filter(x => (x.org_id === orgId || x.orgId === orgId) && (x.block_id === selectedBlockId || x.blockId === selectedBlockId))
-                      const auditId = (match[0]?.id || match[0]?.assignment_id || '').trim()
+                      const match = list.filter(x => (x.org_id === orgId || x.orgId === orgId) && (x.block_id === selectedBlockId || x.blockId === selectedBlockId || x.block_name === selectedBlockId))
+                      const auditId = (match[0]?.audit_id || '').trim()
                       const blockId = (selectedBlockId || '').trim()
                       if (!auditId || !blockId) return
                       const token = await auth.currentUser.getIdToken()
-                      for (const q of observations) {
-                        const details = closureDetailsMap[getKey(q.id)] || ''
+                      for (const q of gapRows) {
+                        const details = closureDetailsMap[String(q.id)] || ''
                         {
                           const BASE_URL_SAVE = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8010'
-                          await fetch(`${BASE_URL_SAVE}/audit/observations/customer/save`, {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json', idToken: token },
-                          body: JSON.stringify({
-                            audit_id: auditId,
-                            block_id: blockId,
-                            group: selectedGroupId,
-                            subgroup: selectedSubdivisionId,
-                            section: q.section || '',
-                            question_id: String(q.id),
-                            customer_closure: details,
-                            customer_status: q.status
+                          const qs = new URLSearchParams({
+                            audit_id: String(auditId).trim(),
+                            block_id: String(blockId).trim(),
+                            group: String(selectedGroupId || ''),
+                            subgroup: String(selectedSubdivisionId || ''),
+                            section: String(q.section || ''),
+                            question_id: String(q.id).trim(),
+                            customer_closure: String(details || ''),
+                            customer_status: String(q.org_status || '').toUpperCase()
                           })
+                          await fetch(`${BASE_URL_SAVE}/audit/observations/customer/save?${qs.toString()}`, {
+                            method: 'POST',
+                            headers: { idToken: token }
                           })
                         }
                       }
-                      alert('Changes saved')
+                      try {
+                        const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8010'
+                        const params = new URLSearchParams({ audit_id: auditId, block_id: blockId })
+                        const resp = await fetch(`${BASE_URL}/audit/observations?${params.toString()}`, {
+                          headers: { idToken: token }
+                        })
+                        if (resp.ok) {
+                          const rows = await resp.json().catch(() => [])
+                          rows.forEach(d => {
+                            const qidKey = String(d.question_id || d.id).trim().toUpperCase()
+                            const custUploads = Array.isArray(d.customer_uploads) ? d.customer_uploads : []
+                            const orgUploads = Array.isArray(d.org?.uploads) ? d.org.uploads : (Array.isArray(d.org?.evidence) ? d.org.evidence : [])
+                            const combinedUploads = [...custUploads, ...orgUploads]
+                            const audUploads = Array.isArray(d.auditor_uploads) ? d.auditor_uploads : []
+                            const custClosure = typeof d.customer_closure === 'string' ? d.customer_closure : (d.org?.closure_details || '')
+                            observationMetaMap[qidKey] = { customer_uploads: combinedUploads, auditor_uploads: audUploads }
+                            if (custClosure) {
+                              closureDetailsMap[qidKey] = custClosure
+                            }
+                          })
+                        }
+                      } catch { /* noop */ }
+                      alert('Changes saved and hydrated')
                     } catch (e) { console.error('[CloseObservations] Save failed', e) }
                 }}>
                     <span className="icon">💾</span> Save changes
                 </button>
-                <button className="btn-tool btn-submit" disabled={CUSTOMER_LOCKED} onClick={async () => {
-                    try {
-                      if (CUSTOMER_LOCKED) {
-                        alert('Customer system is locked')
-                        return
-                      }
-                      const orgId = user?.orgId || ''
-                      const list = Array.isArray(assignments) ? assignments : []
-                      const match = list.filter(x => (x.org_id === orgId || x.orgId === orgId) && (x.block_id === selectedBlockId || x.blockId === selectedBlockId))
-                      const auditId = (match[0]?.id || match[0]?.assignment_id || '').trim()
-                      const blockId = (selectedBlockId || '').trim()
-                      if (!auditId || !blockId) return
-                      const token = await auth.currentUser.getIdToken()
-                      const BASE_URL_SUBMIT = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8010'
-                      const resp = await fetch(`${BASE_URL_SUBMIT}/audit/observations/customer/submit`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json', idToken: token },
-                        body: JSON.stringify({
-                          audit_id: auditId,
-                          block_id: blockId,
-                          group: selectedGroupId,
-                          subgroup: selectedSubdivisionId,
-                          section: activeSubdivision ? activeSubdivision.label : ''
-                        })
-                      })
-                      if (resp.ok) {
-                        setSectionFrozen(true)
-                        alert('Closure submitted. Section is now frozen.')
-                        try {
-                          const BASE_URL_READY = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8010'
-                          const markReady = await fetch(`${BASE_URL_READY}/audits/${auditId}/ready`, {
-                            method: 'POST',
-                            headers: { idToken: token }
-                          })
-                          if (!markReady.ok) {
-                            console.error('[Finalize] Failed to mark audit READY')
-                          }
-                        } catch (e) {
-                          console.error('[Finalize] Error marking audit READY', e)
-                        }
-                      }
-                    } catch (e) { console.error('[CloseObservations] Submit failed', e) }
-                }}>
-                    <span className="icon">✔</span> Submit (final)
-                </button>
-            </div>
-            <div className="toolbar-right">
-                <button className="btn-tool btn-refresh">
-                    <span className="icon">↻</span> Refresh
-                </button>
+                
             </div>
         </div>
 
-        <div className="close-table-container">
-            <table className="close-audit-table">
-                <thead>
-                    <tr>
-                        <th style={{ textAlign: 'left' }}>Question</th>
-                        <th style={{ width: '20%' }}>Org Status</th>
-                        <th style={{ width: '15%' }}>Auditor Status</th>
-                        <th style={{ width: '15%' }}>Auditor Observation</th>
-                        <th style={{ width: '25%' }}>Closure Details</th>
-                        <th style={{ width: '20%' }}>Evidence</th>
+        <div style={{ marginTop: 16, overflowX: 'auto', width: '100%', maxWidth: '100%' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, tableLayout: 'fixed', minWidth: '1400px' }}>
+            <thead style={{ background: '#f8fafc' }}>
+              <tr>
+                <th style={{ border: '1px solid #e2e8f0', padding: 12, width: 50 }}>Sr.</th>
+                <th style={{ border: '1px solid #e2e8f0', padding: 12, textAlign: 'left', width: '28%' }}>Question</th>
+                <th style={{ border: '1px solid #e2e8f0', padding: 12, width: 110 }}>Org Status</th>
+                <th style={{ border: '1px solid #e2e8f0', padding: 12, width: 110 }}>Auditor Status</th>
+                <th style={{ border: '1px solid #e2e8f0', padding: 12, width: '20%' }}>Auditor Observation</th>
+                <th style={{ border: '1px solid #e2e8f0', padding: 12, width: '30%' }}>Closure Details</th>
+                <th style={{ border: '1px solid #e2e8f0', padding: 12, width: '15%' }}>Evidence</th>
+              </tr>
+            </thead>
+            <tbody>
+              {(Array.isArray(gapRows) ? (selectedCategory ? gapRows.filter(r => String(r.section) === String(selectedCategory)) : gapRows) : []).map((row, idx) => {
+                const qid = String(row.id)
+                const meta = observationMetaMap[String(qid).trim().toUpperCase()] || {}
+                const custUp = Array.isArray(meta.customer_uploads) ? meta.customer_uploads : []
+                const custUpFromRow = Array.isArray(row.evidence_customer) ? row.evidence_customer : []
+                const custEvidence = (custUpFromRow.length > 0) ? custUpFromRow : custUp
+                const renderUploads = (uploads) => {
+                  const arr = Array.isArray(uploads) ? uploads : []
+                  if (arr.length === 0) return <span style={{ color: '#6b7280' }}>—</span>
+                  return (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 4, whiteSpace: 'nowrap', overflowX: 'auto', maxWidth: '100%' }}>
+                      {arr.map((u, i) => {
+                        const href = typeof u === 'string' ? u : (u.url || '')
+                        const name = typeof u === 'string' ? `file_${i+1}` : (u.name || u.filename || `file_${i+1}`)
+                        return href ? <a key={i} href={href} target="_blank" rel="noreferrer" style={{ color: '#2563eb' }}>{name}</a> : <span key={i}>{name}</span>
+                      })}
+                    </div>
+                  )
+                }
+                const hasCustEvidence = Array.isArray(custEvidence) && custEvidence.length > 0
+                return (
+                  <tr key={qid}>
+                    <td style={{ border: '1px solid #e2e8f0', padding: 12, verticalAlign: 'top', textAlign: 'center' }}>{String.fromCharCode(97 + (idx % 26))}</td>
+                    <td style={{ border: '1px solid #e2e8f0', padding: 12, verticalAlign: 'top', textAlign: 'left', width: '28%', whiteSpace: 'normal', wordBreak: 'break-word', overflowWrap: 'anywhere' }}>{row.requirement}</td>
+                    <td style={{ border: '1px solid #e2e8f0', padding: 12, verticalAlign: 'top', color: '#334155', width: 110 }}>{row.org_status}</td>
+                    <td style={{ border: '1px solid #e2e8f0', padding: 12, verticalAlign: 'top', color: '#334155', width: 110 }}>{row.auditor_status}</td>
+                    <td style={{ border: '1px solid #e2e8f0', padding: 12, verticalAlign: 'top', width: '20%', whiteSpace: 'normal', wordBreak: 'break-word', overflowWrap: 'anywhere' }}>
+                      <div style={{ whiteSpace: 'normal', wordBreak: 'break-word', overflowWrap: 'anywhere' }}>{row.auditor_observation || '—'}</div>
+                    </td>
+                    <td style={{ border: '1px solid #e2e8f0', padding: 12, verticalAlign: 'top', width: '30%', maxWidth: 0 }}>
+                      <textarea
+                        style={{ width: '100%', minWidth: '100%', minHeight: '100px', border: '1px solid #cbd5e1', borderRadius: 4, padding: 8, boxSizing: 'border-box', resize: 'vertical', display: 'block' }}
+                        defaultValue={closureDetailsMap[String(qid).trim().toUpperCase()] || ''}
+                        onChange={e => { closureDetailsMap[String(qid).trim().toUpperCase()] = e.target.value }}
+                        placeholder="Enter detailed closure actions taken..."
+                      />
+                    </td>
+                    <td style={{ border: '1px solid #e2e8f0', padding: 12, verticalAlign: 'top', width: '15%', whiteSpace: 'nowrap', overflowX: 'auto', maxWidth: '100%' }}>
+                      {hasCustEvidence && (
+                        <div style={{ whiteSpace: 'nowrap', overflowX: 'auto', maxWidth: '100%' }}>
+                          <div style={{ fontSize: 12, fontWeight: 600, color: '#334155' }}>Customer</div>
+                          {renderUploads(custEvidence)}
+                        </div>
+                      )}
+                      {isCustomer && !CUSTOMER_LOCKED && (
+                        <div style={{ marginTop: 8, whiteSpace: 'nowrap', overflowX: 'auto', maxWidth: '100%' }}>
+                          <input type="file" accept="image/*" onChange={e => { const f = e.target.files?.[0]; if (f) handleUpload(qid, f) }} />
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                )
+              })}
+              {(selectedCategory ? gapRows.filter(r => String(r.section) === String(selectedCategory)).length === 0 : gapRows.length === 0) && (
+                <tr>
+                  <td colSpan={7} style={{ border: '1px solid #e2e8f0', padding: 12, color: '#6b7280', textAlign: 'center' }}>
+                    No gaps or differences for the current selection
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+          <div style={{ marginTop: 24, overflowX: 'auto', width: '100%', maxWidth: '100%', borderRight: '1px solid #e2e8f0' }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: '#334155', marginBottom: 8 }}>Closed (matches)</div>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, tableLayout: 'fixed', minWidth: '1400px' }}>
+              <thead style={{ background: '#f8fafc' }}>
+                <tr>
+                  <th style={{ border: '1px solid #e2e8f0', padding: 12, width: 50 }}>Sr.</th>
+                  <th style={{ border: '1px solid #e2e8f0', padding: 12, textAlign: 'left', width: '28%' }}>Question</th>
+                  <th style={{ border: '1px solid #e2e8f0', padding: 12, width: 110 }}>Org Status</th>
+                  <th style={{ border: '1px solid #e2e8f0', padding: 12, width: 120 }}>Auditor Status</th>
+                  <th style={{ border: '1px solid #e2e8f0', padding: 12, width: '20%' }}>Auditor Observation</th>
+                  <th style={{ border: '1px solid #e2e8f0', padding: 12, width: '15%' }}>Evidence</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(Array.isArray(closedRows) ? (selectedCategory ? closedRows.filter(r => String(r.section) === String(selectedCategory)) : closedRows) : []).map((row, idx) => {
+                  const qid = String(row.id)
+                  const meta = observationMetaMap[String(qid).trim().toUpperCase()] || {}
+                  const custUp = Array.isArray(meta.customer_uploads) ? meta.customer_uploads : []
+                  const custUpFromRow = Array.isArray(row.evidence_customer) ? row.evidence_customer : []
+                  const custEvidence = (custUpFromRow.length > 0) ? custUpFromRow : custUp
+                  const renderUploads = (uploads) => {
+                    const arr = Array.isArray(uploads) ? uploads : []
+                    if (arr.length === 0) return <span style={{ color: '#6b7280' }}>—</span>
+                    return (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 4, whiteSpace: 'nowrap', overflowX: 'auto', maxWidth: '100%' }}>
+                        {arr.map((u, i) => {
+                          const href = typeof u === 'string' ? u : (u.url || '')
+                          const name = typeof u === 'string' ? `file_${i+1}` : (u.name || u.filename || `file_${i+1}`)
+                          return href ? <a key={i} href={href} target="_blank" rel="noreferrer" style={{ color: '#2563eb' }}>{name}</a> : <span key={i}>{name}</span>
+                        })}
+                      </div>
+                    )
+                  }
+                  const hasCustEvidence = Array.isArray(custEvidence) && custEvidence.length > 0
+                  return (
+                    <tr key={qid}>
+                      <td style={{ border: '1px solid #e2e8f0', padding: 12, verticalAlign: 'top', textAlign: 'center' }}>{String.fromCharCode(97 + (idx % 26))}</td>
+                      <td style={{ border: '1px solid #e2e8f0', padding: 12, verticalAlign: 'top', textAlign: 'left', width: '28%', whiteSpace: 'normal', wordBreak: 'break-word', overflowWrap: 'anywhere' }}>{row.requirement}</td>
+                      <td style={{ border: '1px solid #e2e8f0', padding: 12, verticalAlign: 'top', color: '#334155', width: 110 }}>{row.org_status}</td>
+                      <td style={{ border: '1px solid #e2e8f0', padding: 12, verticalAlign: 'top', color: '#334155', width: 120 }}>{row.auditor_status}</td>
+                      <td style={{ border: '1px solid #e2e8f0', padding: 12, verticalAlign: 'top', width: '20%', whiteSpace: 'normal', wordBreak: 'break-word', overflowWrap: 'anywhere' }}>
+                        <div style={{ whiteSpace: 'normal', wordBreak: 'break-word', overflowWrap: 'anywhere' }}>{row.auditor_observation || '—'}</div>
+                      </td>
+                      <td style={{ border: '1px solid #e2e8f0', padding: 12, verticalAlign: 'top', width: '15%', whiteSpace: 'nowrap', overflowX: 'auto', maxWidth: '100%' }}>
+                        {hasCustEvidence && (
+                          <div style={{ whiteSpace: 'nowrap', overflowX: 'auto', maxWidth: '100%' }}>
+                            <div style={{ fontSize: 12, fontWeight: 600, color: '#334155' }}>Customer</div>
+                            {renderUploads(custEvidence)}
+                          </div>
+                        )}
+                        {isCustomer && !CUSTOMER_LOCKED && (
+                          <div style={{ marginTop: 8, whiteSpace: 'nowrap', overflowX: 'auto', maxWidth: '100%' }}>
+                            <input type="file" accept="image/*" onChange={e => { const f = e.target.files?.[0]; if (f) handleUpload(qid, f) }} />
+                          </div>
+                        )}
+                      </td>
                     </tr>
-                </thead>
-                <tbody>
-                    {observations.length === 0 ? (
-                        <tr>
-                            <td colSpan="6" style={{ padding: 20, textAlign: 'center', color: '#64748b' }}>
-                                No open observations for this section.
-                            </td>
-                        </tr>
-                    ) : (
-                        observations.map((q) => {
-                            const meta = observationMetaMap[String(q.id)] || {}
-                            const orgStRaw = (statusMap[getKey(q.id)] || '').toUpperCase()
-                            const orgSt = orgStRaw === 'IN_PLACE' ? 'In Place' : orgStRaw === 'PARTIAL' ? 'Partially in Place' : orgStRaw === 'NOT_RELEVANT' ? 'Not Relevant' : orgStRaw === 'NOT_IN_PLACE' ? 'Not in Place' : '-'
-                            const auditorStRaw = String(auditorStatusMap2[getKey(q.id)] || '').toUpperCase()
-                            const auditorSt = auditorStRaw === 'IN_PLACE' ? 'In Place' : auditorStRaw === 'PARTIAL' ? 'Partially in Place' : auditorStRaw === 'NOT_RELEVANT' ? 'Not Relevant' : auditorStRaw === 'NOT_IN_PLACE' ? 'Not in Place' : '-'
-                            try { console.log('CustomerRenderKey', String(selectedBlockId), String(q.id), getKey(q.id), orgStRaw, auditorStRaw) } catch { /* noop */ }
-                            const auditorObsText = (auditorObservationMap2[getKey(q.id)] || '').toString() || '-'
-                            const uploads = Array.isArray(meta.customer_uploads) ? meta.customer_uploads : []
-
-                            return (
-                                <tr key={q.id}>
-                                    <td className="cell-question">
-                                        {q.requirement}
-                                    </td>
-                                    <td className="text-center">{orgSt}</td>
-                                    <td className="text-center">{auditorSt}</td>
-                                    <td className="text-center">{auditorObsText}</td>
-                                    <td className="cell-closure">
-                                        <div className="closure-inputs">
-                                            <textarea
-                                                className="closure-select"
-                                                value={closureDetailsMap[getKey(q.id)] || ''}
-                                                onChange={(e) => setClosureDetailsMap(prev => ({ ...prev, [getKey(q.id)]: e.target.value }))}
-                                                placeholder="Describe closure actions taken..."
-                                                disabled={sectionFrozen}
-                                                rows={3}
-                                            />
-                                        </div>
-                                    </td>
-                                    <td className="cell-closure">
-                                        <div style={{ marginBottom: 8 }}>
-                                          {uploads.length === 0 ? <span style={{ color: '#94a3b8' }}>No evidence</span> : uploads.map((u, idx) => (
-                                            <div key={`${q.id}::up::${idx}`}><a href={u} target="_blank" rel="noreferrer">Evidence {idx+1}</a></div>
-                                          ))}
-                                        </div>
-                                        <input
-                                          type="file"
-                                          accept="image/*,application/pdf"
-                                          disabled={sectionFrozen}
-                                          onChange={async (e) => {
-                                            try {
-                                              const file = e.target.files?.[0]
-                                              if (!file) return
-                                              const orgId = user?.orgId || ''
-                                              const list = Array.isArray(assignments) ? assignments : []
-                                              const match = list.filter(x => (x.org_id === orgId || x.orgId === orgId) && (x.block_id === selectedBlockId || x.blockId === selectedBlockId))
-                                              const auditId = (match[0]?.id || match[0]?.assignment_id || '').trim()
-                                              const blockId = (selectedBlockId || '').trim()
-                                              const token = await auth.currentUser.getIdToken()
-                                              const form = new FormData()
-                                              form.append('audit_id', auditId)
-                                              form.append('block_id', blockId)
-                                              form.append('question_id', String(q.id))
-                                              form.append('file', file)
-                                              {
-                                                const BASE_URL_UPLOAD = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8010'
-                                                await fetch(`${BASE_URL_UPLOAD}/audit/observations/upload`, {
-                                                method: 'POST',
-                                                headers: { idToken: token },
-                                                body: form
-                                                })
-                                              }
-                                            } catch { /* silent */ }
-                                          }}
-                                        />
-                                    </td>
-                                   
-                                </tr>
-                            )
-                        })
-                    )}
-                </tbody>
+                  )
+                })}
+                {closedRows.length === 0 && (
+                  <tr>
+                    <td colSpan={6} style={{ border: '1px solid #e2e8f0', padding: 12, color: '#6b7280', textAlign: 'center' }}>
+                      No closed items for the current selection
+                    </td>
+                  </tr>
+                )}
+              </tbody>
             </table>
+          </div>
         </div>
-        
-        {/* Removed extra free-form observation section to maintain strict scope */}
       </div>
     </div>
   )
 }
+
 
 export default CloseObservationsPage

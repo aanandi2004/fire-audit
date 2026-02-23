@@ -100,12 +100,7 @@ function AdminDashboard() {
         ))}
       </div>
       
-      <div style={{ marginTop: '32px' }}>
-        <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '16px', color: '#334155' }}>Recent Activity</h3>
-        <div className="card" style={{ padding: '24px', color: '#64748b', fontStyle: 'italic' }}>
-          No recent activity logs available in this mock version.
-        </div>
-      </div>
+      {/* Recent Activity section removed as requested */}
     </div>
   )
 }

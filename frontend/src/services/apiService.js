@@ -91,6 +91,8 @@ export async function getAuditorsAdmin() {
 }
 
 export async function getUsersByRole(role) {
+  // Backend does not expose GET /users?role=; avoid 405s
+  if (String(role || '').toUpperCase() === 'CUSTOMER') return []
   try {
     const token = await getToken()
     const resp = await fetch(`${BASE_URL}/users?role=${encodeURIComponent(role)}`, {
@@ -232,31 +234,14 @@ export async function verifyAuditorObservation(body) {
 }
 
 export async function upsertQuestionsMasterAdmin() {
-  try {
-    const token = await getToken()
-    const resp = await fetch(`${BASE_URL}/api/admin/questions/seed`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', ...(token ? { idToken: token } : {}) },
-      body: JSON.stringify({})
-    })
-    return resp.ok ? resp.json().catch(() => ({})) : {}
-  } catch {
-    return {}
-  }
+  // Endpoint not available; no-op to avoid 404 noise
+  return {}
 }
 
 export async function ensureBuildingInfoSchemaForOrgAdmin(orgId) {
-  try {
-    const token = await getToken()
-    const resp = await fetch(`${BASE_URL}/api/admin/orgs/${encodeURIComponent(orgId)}/building-info/schema`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', ...(token ? { idToken: token } : {}) },
-      body: JSON.stringify({})
-    })
-    return resp.ok ? resp.json().catch(() => ({})) : {}
-  } catch {
-    return {}
-  }
+  String(orgId || '')
+  try { console.warn('[apiService] ensureBuildingInfoSchemaForOrgAdmin skipped: endpoint unavailable'); } catch { /* noop */ }
+  return {}
 }
 
 export async function createAudit(orgId, buildingId, auditorId) {
