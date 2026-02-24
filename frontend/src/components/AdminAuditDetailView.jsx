@@ -42,9 +42,9 @@ function AdminAuditDetailView({ initialState, onBack }) {
         for (const a of scoped) {
           const bid = String(a.block_id || a.blockId || '').trim()
           if (!bid) continue
-          map[bid] = a.audit_id || a.id
+          map[bid] = a.audit_id
           meta[bid] = { 
-            auditId: a.audit_id || a.id, 
+            auditId: a.audit_id, 
             group: a.group || null, 
             subdivision_id: a.subdivision_id || null,
             auditor_id: a.auditor_id || a.auditorId || null,
@@ -70,6 +70,13 @@ function AdminAuditDetailView({ initialState, onBack }) {
       }
     })()
   }, [initialState, onBack])
+
+  React.useEffect(() => {
+    const bid = String(activeBlock || '')
+    if (!bid) return
+    const next = blockAuditMap[bid] || null
+    setCurrentAuditId(next)
+  }, [activeBlock, blockAuditMap])
 
   React.useEffect(() => {
     const blockId = activeBlock
@@ -173,12 +180,15 @@ function AdminAuditDetailView({ initialState, onBack }) {
             ;(async () => {
               const idToken = await auth.currentUser.getIdToken()
               const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || (typeof window !== 'undefined' ? window.__BACKEND_URL__ : undefined) || 'http://localhost:8010'
-              const currentAuditId = (fullAuditData.blocks || []).find(b => String(b.id) === String(activeBlock))?.auditId || fullAuditData.auditId
+              const currentAuditId = blockAuditMap[activeBlock] || fullAuditData.auditId
               const orgId = fullAuditData.orgId
               if (!currentAuditId) {
                 alert('Data not fully loaded')
                 return
               }
+              console.log('DEBUG: activeBlock is:', activeBlock)
+              console.log('DEBUG: Sending to Backend:', currentAuditId)
+              console.log('DEBUG: Available map:', blockAuditMap)
               console.log('[PDF] Fetching from unified backend hydration service.... Audit ID:', currentAuditId)
               try {
                 const res1 = await fetch(`${BASE_URL}/api/pdf/self-assessment`, {
@@ -189,13 +199,23 @@ function AdminAuditDetailView({ initialState, onBack }) {
                 if (res1.ok) {
                   const blob = await res1.blob()
                   const url = window.URL.createObjectURL(blob)
-                  const a = document.createElement('a')
-                  a.href = url
-                  a.download = `Self_Assessment_${currentAuditId}.pdf`
-                  a.click()
+                  const t = String(blob.type || '')
+                  if (t === 'application/pdf' || t === 'text/html') {
+                    window.open(url, '_blank')
+                  } else {
+                    try {
+                      const text = await blob.text()
+                      const data = JSON.parse(text)
+                      alert(`Error ${res1.status}: ${data?.detail || 'Invalid response'}`)
+                    } catch {
+                      alert('Unexpected response type')
+                    }
+                  }
                   return
                 } else {
-                  throw new Error('sa2 preview failed')
+                  const errorBody = await res1.json().catch(() => ({}))
+                  alert(`Error ${res1.status}: ${errorBody?.detail || 'Failed to generate PDF'}`)
+                  return
                 }
               } catch {
                 const data = { detail: 'Failed to generate PDF' }
