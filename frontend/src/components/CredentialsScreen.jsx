@@ -23,9 +23,15 @@ function CredentialsScreen({ onNext }) {
         const idToken = await user.getIdToken()
         console.log('idToken prefix:', (idToken || '').slice(0, 20))
         const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8010'
+        try {
+          await fetch(`${BASE_URL}/users/self-upsert`, {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${idToken}` }
+          })
+        } catch { /* noop */ }
         const res = await fetch(`${BASE_URL}/auth/session`, {
           method: 'GET',
-          headers: { idToken }
+          headers: { Authorization: `Bearer ${idToken}` }
         })
         if (!res.ok) {
           const data = await res.json().catch(() => ({}))

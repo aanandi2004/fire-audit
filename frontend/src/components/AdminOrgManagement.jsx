@@ -254,7 +254,7 @@ function AdminOrgManagement({
     if (window.confirm(`Delete organization "${orgName}"?`)) {
       try {
         const idToken = await auth.currentUser.getIdToken()
-        const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8010'
+        const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8011'
         const res = await fetch(`${BASE_URL}/api/organizations/${orgId}`, {
           method: 'DELETE',
           headers: { idToken }
@@ -281,7 +281,7 @@ function AdminOrgManagement({
     ;(async () => {
       try {
         const idToken = await auth.currentUser.getIdToken()
-        const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8010'
+        const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8011'
         const res = await fetch(`${BASE_URL}/api/pdf/self-assessment/html`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', idToken },
@@ -303,7 +303,7 @@ function AdminOrgManagement({
           window.alert('Latest audit not found for organization')
           return
         }
-        const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8010'
+        const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8011'
         const res = await fetch(`${BASE_URL}/reports/preview/initial/${auditId}`, {
           method: 'GET',
           headers: { idToken }
@@ -330,7 +330,7 @@ function AdminOrgManagement({
           window.alert('Latest audit not found for organization')
           return
         }
-        const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8010'
+        const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8011'
         const res = await fetch(`${BASE_URL}/reports/preview/final/${auditId}`, {
           method: 'GET',
           headers: { idToken }

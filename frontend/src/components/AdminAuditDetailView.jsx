@@ -130,56 +130,11 @@ function AdminAuditDetailView({ initialState, onBack }) {
           </div>
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <label style={{ fontSize: 12, color: '#64748b' }}>Status</label>
-            <select
-              value={auditStatus}
-              onChange={async (e) => {
-                const next = String(e.target.value || 'ACTIVE').toUpperCase()
-                setAuditStatus(next)
-                if (next === 'COMPLETED') {
-                  try {
-                    const idToken = await auth.currentUser.getIdToken()
-                    const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || (typeof window !== 'undefined' ? window.__BACKEND_URL__ : undefined) || 'http://localhost:8010'
-                    const resp = await fetch(`${BASE_URL}/api/admin/audits/complete`, {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json', idToken },
-                      body: JSON.stringify({ audit_id: currentAuditId })
-                    })
-                    if (!resp.ok) {
-                      const data = await resp.json().catch(() => ({}))
-                      alert(data?.detail || 'Failed to mark audit completed')
-                      setAuditStatus('ACTIVE')
-                      return
-                    }
-                    const data = await resp.json().catch(() => ({}))
-                    console.log('[AdminAuditDetailView] Audit marked completed', data)
-                    try {
-                      window.__AUDIT_LOCK__ = true
-                      window.dispatchEvent(new CustomEvent('audit:status', { detail: { auditId: currentAuditId, status: 'COMPLETED' } }))
-                    } catch { /* noop */ }
-                  } catch {
-                    alert('Network error while completing audit')
-                    setAuditStatus('ACTIVE')
-                  }
-                } else {
-                  try {
-                    window.__AUDIT_LOCK__ = false
-                    window.dispatchEvent(new CustomEvent('audit:status', { detail: { auditId: currentAuditId, status: next } }))
-                  } catch { /* noop */ }
-                }
-              }}
-              style={{ padding: '6px 8px', borderRadius: 6, border: '1px solid #cbd5e1', background: 'white', fontSize: 12 }}
-            >
-              <option value="ACTIVE">ACTIVE</option>
-              <option value="COMPLETED">COMPLETED</option>
-              <option value="REOPEN">REOPEN</option>
-            </select>
-          </div>
+          
           <button className="btn btn-outline" onClick={() => {
             ;(async () => {
               const idToken = await auth.currentUser.getIdToken()
-              const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || (typeof window !== 'undefined' ? window.__BACKEND_URL__ : undefined) || 'http://localhost:8010'
+              const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || (typeof window !== 'undefined' ? window.__BACKEND_URL__ : undefined) || 'http://localhost:8011'
               const currentAuditId = blockAuditMap[activeBlock] || fullAuditData.auditId
               const orgId = fullAuditData.orgId
               if (!currentAuditId) {
@@ -191,26 +146,16 @@ function AdminAuditDetailView({ initialState, onBack }) {
               console.log('DEBUG: Available map:', blockAuditMap)
               console.log('[PDF] Fetching from unified backend hydration service.... Audit ID:', currentAuditId)
               try {
-                const res1 = await fetch(`${BASE_URL}/api/pdf/self-assessment`, {
+                const res1 = await fetch(`${BASE_URL}/api/pdf/self-assessment/html`, {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json', idToken },
                   body: JSON.stringify({ org_id: orgId, audit_id: currentAuditId })
                 })
                 if (res1.ok) {
-                  const blob = await res1.blob()
+                  const html = await res1.text()
+                  const blob = new Blob([html], { type: 'text/html' })
                   const url = window.URL.createObjectURL(blob)
-                  const t = String(blob.type || '')
-                  if (t === 'application/pdf' || t === 'text/html') {
-                    window.open(url, '_blank')
-                  } else {
-                    try {
-                      const text = await blob.text()
-                      const data = JSON.parse(text)
-                      alert(`Error ${res1.status}: ${data?.detail || 'Invalid response'}`)
-                    } catch {
-                      alert('Unexpected response type')
-                    }
-                  }
+                  try { window.open(url, '_blank') } catch { /* noop */ }
                   return
                 } else {
                   const errorBody = await res1.json().catch(() => ({}))
@@ -228,29 +173,35 @@ function AdminAuditDetailView({ initialState, onBack }) {
               try {
                 const idToken = await auth.currentUser.getIdToken()
                 const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || (typeof window !== 'undefined' ? window.__BACKEND_URL__ : undefined) || 'http://localhost:8010'
-                const currentAuditId = (fullAuditData.blocks || []).find(b => String(b.id) === String(activeBlock))?.auditId || fullAuditData.auditId
-                const activeBlockId = String(activeBlock || '')
-                if (!currentAuditId || !activeBlockId) {
+                const currentAuditId = blockAuditMap[activeBlock] || fullAuditData.auditId
+                const orgId = fullAuditData.orgId
+                if (!currentAuditId) {
                   alert('Data not fully loaded')
                   return
                 }
-                const res = await fetch(`${BASE_URL}/reports/preview/initial/${currentAuditId}`, {
-                  method: 'GET',
-                  headers: { idToken }
+                const res = await fetch(`${BASE_URL}/api/pdf/initial-report/html`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json', idToken },
+                  body: JSON.stringify({ org_id: orgId, audit_id: currentAuditId })
                 })
-                if (!res.ok) return
+                if (!res.ok) {
+                  const errorBody = await res.json().catch(() => ({}))
+                  alert(`Error ${res.status}: ${errorBody?.detail || 'Failed to generate Initial Report'}`)
+                  return
+                }
                 const html = await res.text()
                 const blob = new Blob([html], { type: 'text/html' })
                 const url = URL.createObjectURL(blob)
                 window.open(url, '_blank')
-              } catch { /* noop */ }
+              } catch {
+              }
             })()
           }} style={{ background: '#dcfce7', borderColor: '#86efac' }}>Initial Report</button>
           <button className="btn btn-outline" onClick={() => {
             ;(async () => {
               try {
                 const idToken = await auth.currentUser.getIdToken()
-                const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || (typeof window !== 'undefined' ? window.__BACKEND_URL__ : undefined) || 'http://localhost:8010'
+                const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || (typeof window !== 'undefined' ? window.__BACKEND_URL__ : undefined) || 'http://localhost:8011'
                 const currentAuditId = (fullAuditData.blocks || []).find(b => String(b.id) === String(activeBlock))?.auditId || fullAuditData.auditId
                 const activeBlockId = String(activeBlock || '')
                 if (!currentAuditId || !activeBlockId) {
@@ -371,31 +322,46 @@ function AdminAuditDetailView({ initialState, onBack }) {
                   <th style={{ padding: 8, textAlign: 'left' }}>Requirement</th>
                   <th style={{ padding: 8, textAlign: 'left' }}>Customer Value</th>
                   <th style={{ padding: 8, textAlign: 'left' }}>Auditor Status</th>
-                  <th style={{ padding: 8, textAlign: 'left' }}>Auditor Comment</th>
                 </tr>
               </thead>
               <tbody>
-                {(getQuestions(fullAuditData.groupId, fullAuditData.subdivisionId) || []).map((q) => {
-                  const qid = String(q.id || q.question_id || '').toUpperCase()
-                  const a = (Array.isArray(fullAuditData.assessments) ? fullAuditData.assessments : []).find(x => String(x.question_id || '').toUpperCase() === qid) || {}
-                  const customerValue = ((a.org || {}).value || (a.org || {}).status || (a.org || {}).remark || (a.org || {}).closure_details || a.customer_input || a.customer_closure || '')
-                  const auditorStatus = a.auditor_status || ((a.auditor || {}).status) || ''
-                  const auditorComment = a.auditor_comment || ((a.auditor || {}).comment) || ''
-                  const statusUpper = String(auditorStatus || '').toUpperCase()
-                  const chipColor = statusUpper === 'IN_PLACE' ? '#10b981' : statusUpper === 'NOT_IN_PLACE' ? '#ef4444' : statusUpper === 'PARTIAL' ? '#f59e0b' : statusUpper === 'NOT_RELEVANT' ? '#6b7280' : '#94a3b8'
-                  return (
-                    <tr key={qid} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                      <td style={{ padding: 8 }}>{q.requirement || q.text || qid}</td>
-                      <td style={{ padding: 8 }}>{customerValue || '-'}</td>
-                      <td style={{ padding: 8 }}>
-                        <span style={{ display: 'inline-block', padding: '4px 8px', borderRadius: 999, background: chipColor, color: 'white' }}>
-                          {auditorStatus || '-'}
-                        </span>
-                      </td>
-                      <td style={{ padding: 8 }}>{auditorComment || '-'}</td>
-                    </tr>
-                  )
-                })}
+                {(() => {
+                  const list = getQuestions(fullAuditData.groupId, fullAuditData.subdivisionId) || []
+                  const grouped = list.reduce((acc, q) => {
+                    const key = String(q.block || '').trim() || 'General'
+                    if (!acc[key]) acc[key] = []
+                    acc[key].push(q)
+                    return acc
+                  }, {})
+                  const rows = []
+                  for (const [section, qs] of Object.entries(grouped)) {
+                    rows.push(
+                      <tr key={`sec_${section}`} style={{ background: '#f1f5f9' }}>
+                        <td colSpan={3} style={{ padding: 8, fontWeight: 700, color: '#334155' }}>{section}</td>
+                      </tr>
+                    )
+                    for (const q of qs) {
+                      const qid = String(q.id || q.question_id || '').toUpperCase()
+                      const a = (Array.isArray(fullAuditData.assessments) ? fullAuditData.assessments : []).find(x => String(x.question_id || '').toUpperCase() === qid) || {}
+                      const customerValue = ((a.org || {}).value || (a.org || {}).status || (a.org || {}).remark || (a.org || {}).closure_details || a.customer_input || a.customer_closure || '')
+                      const auditorStatus = a.auditor_status || ((a.auditor || {}).status) || ''
+                      const statusUpper = String(auditorStatus || '').toUpperCase()
+                      const chipColor = statusUpper === 'IN_PLACE' ? '#10b981' : statusUpper === 'NOT_IN_PLACE' ? '#ef4444' : statusUpper === 'PARTIAL' ? '#f59e0b' : statusUpper === 'NOT_RELEVANT' ? '#6b7280' : '#94a3b8'
+                      rows.push(
+                        <tr key={qid} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                          <td style={{ padding: 8 }}>{q.requirement || q.text || qid}</td>
+                          <td style={{ padding: 8 }}>{customerValue || '-'}</td>
+                          <td style={{ padding: 8 }}>
+                            <span style={{ display: 'inline-block', padding: '4px 8px', borderRadius: 999, background: chipColor, color: 'white' }}>
+                              {auditorStatus || '-'}
+                            </span>
+                          </td>
+                        </tr>
+                      )
+                    }
+                  }
+                  return rows
+                })()}
               </tbody>
             </table>
           </div>

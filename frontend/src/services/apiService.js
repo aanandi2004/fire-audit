@@ -4,7 +4,7 @@ const IS_PROD = !!(import.meta.env && import.meta.env.PROD)
 if (IS_PROD && !HAS_ENV_URL && !HAS_WINDOW_URL) {
   throw new Error('VITE_BACKEND_URL is missing in production')
 }
-const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || (typeof window !== 'undefined' ? window.__BACKEND_URL__ : undefined) || 'http://localhost:8010'
+const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || (typeof window !== 'undefined' ? window.__BACKEND_URL__ : undefined) || 'http://localhost:8011'
 if (!IS_PROD && !HAS_ENV_URL && !HAS_WINDOW_URL) {
   try { console.warn('[apiService] VITE_BACKEND_URL missing; defaulting to', BASE_URL) } catch { void 0 }
 }

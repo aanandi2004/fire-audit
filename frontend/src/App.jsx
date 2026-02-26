@@ -111,7 +111,7 @@ function App() {
         }
         const idToken = await fbUser.getIdToken()
         const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || (typeof window !== 'undefined' ? window.__BACKEND_URL__ : undefined) || 'http://localhost:8010'
-        const resp = await fetch(`${BASE_URL}/auth/session`, { headers: { idToken } })
+        const resp = await fetch(`${BASE_URL}/auth/session`, { headers: { Authorization: `Bearer ${idToken}` } })
         let session = {}
         if (resp.ok) {
           session = await resp.json().catch(() => ({}))

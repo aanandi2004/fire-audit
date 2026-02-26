@@ -47,7 +47,7 @@ function RecordAssessments({
   onAuditContextChange,
 }) {
   const [auditInfo, setAuditInfo] = React.useState({})
-  const PAGE_LOCKED = String(auditInfo?.status || '').toUpperCase() === 'COMPLETED'
+  const PAGE_LOCKED = false
   const effAllowedSubdivision = Array.isArray(allowedSubdivision) ? allowedSubdivision : []
   const [blocks, setBlocks] = React.useState(() => {
     return []
@@ -196,7 +196,6 @@ function RecordAssessments({
   }
 
   function handleStatusChange(questionId, value) {
-    if (PAGE_LOCKED) return
     setStatusMap((previous) => ({
       ...previous,
       [getKey(questionId)]: value,
@@ -301,10 +300,6 @@ function RecordAssessments({
     })()
   }, [activeAssignment])
   async function handleSave() {
-    if (PAGE_LOCKED) {
-      alert('Assessments are locked')
-      return
-    }
     try {
       if (!activeAssignment) {
         alert('No assignment found for this block. Please select a block with an active assignment.')
@@ -329,7 +324,7 @@ function RecordAssessments({
         })
       }
       const token = await auth.currentUser.getIdToken()
-      const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8010'
+      const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8011'
       // Persist ONLY via backend; org_responses is the single source of truth (v1)
       const resp = await fetch(`${BASE_URL}/org-responses/save`, {
         method: 'POST',
@@ -366,7 +361,7 @@ function RecordAssessments({
         if (lastRehydrateKeyRef.current === key) return
         lastRehydrateKeyRef.current = key
         const token = await auth.currentUser.getIdToken()
-        const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8010'
+        const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8011'
         const params = new URLSearchParams({ audit_id: String(auditId), block_id: String(blockId) })
         const resp = await fetch(`${BASE_URL}/org-responses/list?${params.toString()}`, {
           method: 'GET',
@@ -419,11 +414,7 @@ function RecordAssessments({
   return (
     <div className="page-body">
       <div className="card">
-        {PAGE_LOCKED && (
-          <div style={{ background: '#fde68a', color: '#78350f', padding: '10px 12px', borderRadius: 6, marginBottom: 12, fontSize: 13, fontWeight: 600 }}>
-            READ-ONLY: AUDIT COMPLETED
-          </div>
-        )}
+        
         <div className="toolbar">
           <div>
             <div style={{ fontSize: 15, fontWeight: 600 }}>Record assessments</div>
@@ -432,7 +423,7 @@ function RecordAssessments({
             </div>
           </div>
           <div className="toolbar-right">
-            <button type="button" className="btn btn-outline" onClick={handleSave} disabled={PAGE_LOCKED}>
+            <button type="button" className="btn btn-outline" onClick={handleSave}>
               Save
             </button>
             {user?.role === 'Admin' && (
@@ -656,7 +647,6 @@ function RecordAssessments({
                               handleValueChange(question.id, event.target.value)
                             }
                             placeholder="Type value"
-                            disabled={PAGE_LOCKED}
                           />
                         ) : (
                           <span style={{ color: '#94a3b8' }}>—</span>
@@ -670,7 +660,7 @@ function RecordAssessments({
                           onChange={(event) =>
                             handleStatusChange(question.id, event.target.value)
                           }
-                          disabled={PAGE_LOCKED}
+                          
                         >
                           <option value="">Select status</option>
                           {STATUS_OPTIONS.map((option) => (
