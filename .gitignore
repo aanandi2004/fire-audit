@@ -46,3 +46,4 @@ images of fire audit system images using trae 2/
 
 # Firebase service account
 backend/service-account.json
+frontend/src/firebase.js
