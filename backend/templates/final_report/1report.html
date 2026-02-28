@@ -1,0 +1,277 @@
+<div class="page" style="width:210mm; min-height:297mm; margin:10mm auto; background:#fff; box-sizing:border-box; padding:12mm; box-shadow:0 2mm 6mm rgba(0,0,0,0.08); page-break-after:always;">
+  <div style="text-align:center; color:#6b7280; font-weight:700; letter-spacing:.5px; margin-bottom:8mm;">FINAL FIRE AUDIT REPORT</div>
+  <div style="text-align:center; font-weight:700; margin-bottom:10mm;">CONTENT SHEET</div>
+  <table style="width:100%; border-collapse:collapse; font-size:12pt;">
+    <tr>
+      <td style="width:10mm; padding:2mm 0; text-align:right; padding-right:4mm;">1.</td>
+      <td>Basic and Preliminary Information on Organization</td>
+    </tr>
+    <tr>
+      <td style="padding:2mm 0; text-align:right; padding-right:4mm;">2.</td>
+      <td>Introduction of the Building of the Organization</td>
+    </tr>
+    <tr>
+      <td style="padding:2mm 0; text-align:right; padding-right:4mm;">3.</td>
+      <td>Building Specific Self Assessment Report</td>
+    </tr>
+  </table>
+</div>
+<div class="page" style="width:210mm; min-height:297mm; margin:10mm auto; background:#fff; box-sizing:border-box; padding:12mm; box-shadow:0 2mm 6mm rgba(0,0,0,0.08); page-break-after:always;">
+  <div style="text-align:center; color:#6b7280; font-weight:700; letter-spacing:.5px; margin-bottom:8mm;">FINAL FIRE AUDIT REPORT</div>
+  <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 6mm; text-transform: uppercase;">FINAL FIRE AUDIT REPORT</div>
+  <div style="background:#1e3a8a; color:#fff; padding:3mm 2mm; font-weight:700; border-radius:4px; margin-bottom:3mm;">{{ block.name }}</div>
+  <div style="background:#0ea5e9; color:#fff; padding:3mm 2mm; font-weight:700; border-radius:4px; margin-bottom:6mm;">{{ organization.name }}</div>
+  <div style="background:#1e3a8a; color:#fff; padding:3mm 2mm; font-weight:700; border-radius:4px; margin-bottom:3mm;">01 NAME AND ADDRESS OF THE BUILDING</div>
+  <table class="content-table" style="margin-bottom: 8mm; width:100%;">
+    <tr>
+      <td style="width:70mm;">(a) Name of Building</td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:60mm; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_NAME_BUILDING}}</div></td>
+    </tr>
+    <tr>
+      <td>(b) Address of Building</td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:3mm; width:90mm; height:20mm; display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{P1_ADDR_BUILDING}}</div></td>
+    </tr>
+    <tr>
+      <td>(c) Telephone</td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:40mm; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_TELEPHONE}}</div></td>
+    </tr>
+    <tr>
+      <td>(d) Email ID</td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:50mm; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_EMAIL}}</div></td>
+    </tr>
+    <tr>
+      <td>(e) Website Address</td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:60mm; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_WEBSITE}}</div></td>
+    </tr>
+  </table>
+  <div style="background:#1e3a8a; color:#fff; padding:3mm 2mm; font-weight:700; border-radius:4px; margin-bottom:3mm;">02 YEAR OF ESTABLISHMENT</div>
+  <table class="content-table" style="margin-bottom: 8mm; width:100%;">
+    <tr>
+      <td style="width:70mm;">Type of Building</td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:60mm; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_EST_TYPE}}</div></td>
+    </tr>
+    <tr>
+      <td>Ownership type (rented, leased, partially owned)</td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:60mm; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_OWNERSHIP}}</div></td>
+    </tr>
+    <tr>
+      <td>Total Manpower (Employees, Contractors)</td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:40mm; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_TOTAL_MANPOWER}}</div></td>
+    </tr>
+    <tr>
+      <td>Total No of Buildings</td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:40mm; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_TOTAL_BUILDINGS}}</div></td>
+    </tr>
+    <tr>
+      <td>Total No of Departments</td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:40mm; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_TOTAL_DEPARTMENTS}}</div></td>
+    </tr>
+    <tr>
+      <td>Total Area</td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:40mm; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_TOTAL_AREA}}</div></td>
+    </tr>
+    <tr>
+      <td>Built Up Area</td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:40mm; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_BUILT_UP_AREA}}</div></td>
+    </tr>
+  </table>
+  <table class="content-table" style="width:100%; border:1px solid #9ca3af; border-radius:6px; padding:3mm; margin-bottom:8mm;">
+    <tr style="background:#f1f5f9; font-weight:700;">
+      <td style="width:40mm;">No of Building and Details</td>
+      <td style="width:50mm;">Building Name</td>
+      <td style="width:30mm; text-align:right;">Building height (m)</td>
+      <td style="width:50mm;">Building Name</td>
+      <td style="width:30mm; text-align:right;">Building height (m)</td>
+    </tr>
+    <tr>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:28mm; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_BUILD_COUNT}}</div></td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:32mm; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_BUILD_1_NAME}}</div></td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:20mm; text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_BUILD_1_HEIGHT}}</div></td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:32mm; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_BUILD_2_NAME}}</div></td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:20mm; text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_BUILD_2_HEIGHT}}</div></td>
+    </tr>
+  </table>
+  <div style="background:#1e3a8a; color:#fff; padding:3mm 2mm; font-weight:700; border-radius:4px; margin-bottom:3mm;">03 CONTACTS</div>
+  <table class="content-table" style="margin-bottom: 8mm; width:100%;">
+    <tr>
+      <td style="width:70mm;">Plant Head</td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:60mm; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_CONTACT_PLANT_HEAD}}</div></td>
+    </tr>
+    <tr>
+      <td>Contact person for the Fire Audit</td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:60mm; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_CONTACT_AUDIT_PERSON}}</div></td>
+    </tr>
+  </table>
+  <div style="background:#1e3a8a; color:#fff; padding:3mm 2mm; font-weight:700; border-radius:4px; margin-bottom:3mm;">04 LANDMARK AND APPROACH ROADS TO THE BUILDING</div>
+  <table class="content-table" style="margin-bottom: 8mm; width:96%; margin-left:2mm; border:1px solid #9ca3af; border-radius:6px; table-layout: fixed;">
+    <tr style="background:#f1f5f9; font-weight:700;">
+      <td style="width:40mm;">(a) Landmark</td>
+      <td style="width:25mm; text-align:center;">EAST</td>
+      <td style="width:25mm; text-align:center;">WEST</td>
+      <td style="width:25mm; text-align:center;">SOUTH</td>
+      <td style="width:25mm; text-align:center;">NORTH</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; display:block; width:100%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; box-sizing:border-box;">{{P1_LANDMARK_E}}</div></td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; display:block; width:100%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; box-sizing:border-box;">{{P1_LANDMARK_W}}</div></td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; display:block; width:100%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; box-sizing:border-box;">{{P1_LANDMARK_S}}</div></td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; display:block; width:100%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; box-sizing:border-box;">{{P1_LANDMARK_N}}</div></td>
+    </tr>
+    <tr style="background:#f1f5f9; font-weight:700;">
+      <td>(b) Approach Roads (m)</td>
+      <td style="text-align:center;">EAST</td>
+      <td style="text-align:center;">WEST</td>
+      <td style="text-align:center;">SOUTH</td>
+      <td style="text-align:center;">NORTH</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; text-align:right; display:inline-block; width:25mm; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_APPROACH_E}}</div></td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; text-align:right; display:inline-block; width:25mm; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_APPROACH_W}}</div></td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; text-align:right; display:inline-block; width:25mm; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_APPROACH_S}}</div></td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; text-align:right; display:inline-block; width:25mm; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_APPROACH_N}}</div></td>
+    </tr>
+    <tr style="background:#f1f5f9; font-weight:700;">
+      <td>(c) Nearest Fire</td>
+      <td colspan="2">Name</td>
+      <td colspan="2">Distance</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td colspan="2"><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; display:inline-block; width:60mm; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_FIRE_NAME}}</div></td>
+      <td colspan="2"><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; text-align:right; display:inline-block; width:30mm; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_FIRE_DIST}}</div></td>
+    </tr>
+    <tr style="background:#f1f5f9; font-weight:700;">
+      <td>(d) Nearest Police station</td>
+      <td colspan="2">Name</td>
+      <td colspan="2">Distance</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td colspan="2"><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; display:inline-block; width:60mm; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_POLICE_NAME}}</div></td>
+      <td colspan="2"><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; text-align:right; display:inline-block; width:30mm; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_POLICE_DIST}}</div></td>
+    </tr>
+    <tr style="background:#f1f5f9; font-weight:700;">
+      <td>(e) Nearest Hospital</td>
+      <td colspan="2">Name</td>
+      <td colspan="2">Distance</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td colspan="2"><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; display:inline-block; width:60mm; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_HOSPITAL_NAME}}</div></td>
+      <td colspan="2"><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; text-align:right; display:inline-block; width:30mm; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_HOSPITAL_DIST}}</div></td>
+    </tr>
+    <tr style="background:#f1f5f9; font-weight:700;">
+      <td>(f) Width of the main entrance gate (m)</td>
+      <td colspan="4"><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:30mm; text-align:right; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_GATE_WIDTH}}</div></td>
+    </tr>
+  </table>
+  <div style="background:#1e3a8a; color:#fff; padding:3mm 2mm; font-weight:700; border-radius:4px; margin-bottom:3mm;">05 MAIN POWER SUPPLY</div>
+  <table class="content-table" style="margin-bottom: 8mm; width:100%; border:1px solid #9ca3af; border-radius:6px; padding:3mm;">
+    <tr style="background:#e0f2fe; font-weight:700;">
+      <td style="width:20mm;">Sr.</td>
+      <td>Type</td>
+      <td style="width:28mm; text-align:right;">Capacity</td>
+      <td style="width:28mm; text-align:right;">Make / Brand</td>
+      <td style="width:35mm; text-align:right;">Source of Supply</td>
+    </tr>
+    <tr>
+      <td>(a)</td>
+      <td>Substation</td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:20mm; display:inline-block; text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_MAIN_SUB_CAP}}</div></td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:20mm; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_MAIN_SUB_MAKE}}</div></td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:26mm; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_MAIN_SUB_SOURCE}}</div></td>
+    </tr>
+    <tr>
+      <td>(b)</td>
+      <td>Transformer</td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:20mm; display:inline-block; text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_MAIN_TR_CAP}}</div></td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:20mm; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_MAIN_TR_MAKE}}</div></td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:26mm; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_MAIN_TR_SOURCE}}</div></td>
+    </tr>
+    <tr>
+      <td>(c)</td>
+      <td>Solar</td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:20mm; display:inline-block; text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_MAIN_SOL_CAP}}</div></td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:20mm; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_MAIN_SOL_MAKE}}</div></td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:26mm; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_MAIN_SOL_SOURCE}}</div></td>
+    </tr>
+  </table>
+  <div style="background:#1e3a8a; color:#fff; padding:3mm 2mm; font-weight:700; border-radius:4px; margin-bottom:3mm;">06 STANDBY POWER SUPPLY</div>
+  <table class="content-table" style="margin-bottom: 8mm; width:100%; border:1px solid #9ca3af; border-radius:6px; padding:3mm;">
+    <tr style="background:#e0f2fe; font-weight:700;">
+      <td style="width:20mm;">Sr.</td>
+      <td>Type</td>
+      <td style="width:28mm; text-align:right;">Capacity</td>
+      <td style="width:28mm; text-align:right;">Make / Brand</td>
+      <td style="width:35mm; text-align:right;">Source of Supply</td>
+    </tr>
+    <tr>
+      <td>(a)</td>
+      <td>DG Set</td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:20mm; display:inline-block; text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_STBY_DG_CAP}}</div></td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:20mm; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_STBY_DG_MAKE}}</div></td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:26mm; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_STBY_DG_SOURCE}}</div></td>
+    </tr>
+    <tr>
+      <td>(b)</td>
+      <td>UPS</td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:20mm; display:inline-block; text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_STBY_UPS_CAP}}</div></td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:20mm; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_STBY_UPS_MAKE}}</div></td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:26mm; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{P1_STBY_UPS_SOURCE}}</div></td>
+    </tr>
+  </table>
+</div>
+<div class="page" style="width:210mm; min-height:297mm; margin:10mm auto; background:#fff; box-sizing:border-box; padding:12mm; box-shadow:0 2mm 6mm rgba(0,0,0,0.08); page-break-after:always;">
+  <div style="font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 6mm; text-transform: uppercase;">INITIAL REPORT</div>
+  <div style="background:#1e3a8a; color:#fff; padding:3mm 2mm; font-weight:700; border-radius:4px; margin-bottom:3mm;">{{ block.name }}</div>
+  <div style="background:#0ea5e9; color:#fff; padding:3mm 2mm; font-weight:700; border-radius:4px; margin-bottom:6mm;">{{ organization.name }}</div>
+  <div style="font-weight:700; margin-bottom: 6mm;">PART II: BASIC DATA ABOUT THE BUILDING</div>
+  <div style="background:#f59e0b; color:#fff; padding:3mm 2mm; font-weight:700; margin-bottom: 4mm;">I. BUILDING INFORMATION</div>
+  <table class="content-table" style="margin-bottom: 8mm; width:100%;">
+    <tr>
+      <td style="width:70mm;">Nature of Occupancy</td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:55mm; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{BUILDING_INFO_OCCUPANCY}}</div></td>
+    </tr>
+    <tr>
+      <td>Total Departments</td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:55mm; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{BUILDING_INFO_TOTAL_DEPARTMENTS}}</div></td>
+    </tr>
+    <tr>
+      <td>Name of the Departments</td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:3mm; width:90mm; height:25mm; display:block; overflow:hidden;">{{BUILDING_INFO_DEPT_NAMES}}</div></td>
+    </tr>
+    <tr>
+      <td>Total number of Process</td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:55mm; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{BUILDING_INFO_TOTAL_PROCESS}}</div></td>
+    </tr>
+    <tr>
+      <td>Total number of Process out sourced</td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:55mm; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{BUILDING_INFO_TOTAL_PROCESS_OUTSOURCED}}</div></td>
+    </tr>
+    <tr>
+      <td>Total number of Contractor</td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:55mm; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{BUILDING_INFO_TOTAL_CONTRACTOR}}</div></td>
+    </tr>
+  </table>
+  <div style="background:#f59e0b; color:#fff; padding:3mm 2mm; font-weight:700; margin-bottom: 3mm;">II. CONSTRUCTION DETAILS OF THE BUILDING</div>
+  <table class="content-table" style="margin-bottom: 6mm; width:98%; margin-left:2mm; border:1px solid #e5e7eb; border-radius:6px; padding:3mm;">
+    <tr>
+      <td style="width:70mm;">Built up Area (SQ.MT)</td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:55mm; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{CONST_BUILT_UP_AREA}}</div></td>
+    </tr>
+    <tr>
+      <td>Structures (Number)</td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:55mm; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{CONST_STRUCTURES_NUMBER}}</div></td>
+    </tr>
+    <tr>
+      <td>Height of the Building (Meters)</td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:55mm; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{CONST_HEIGHT_METERS}}</div></td>
+    </tr>
+    <tr>
+      <td>Floors in each Building (including basement)</td>
+      <td><div style="border:1px solid #d1d5db; border-radius:4px; padding:2mm; width:55mm; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{CONST_FLOORS_INCL_BASEMENT}}</div></td>
+    </tr>
+  </table>
+</div>

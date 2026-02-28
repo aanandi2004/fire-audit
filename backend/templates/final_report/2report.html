@@ -1,0 +1,42 @@
+<div class="page" style="width:210mm; min-height:297mm; margin:10mm auto; background:#fff; box-sizing:border-box; padding:12mm; box-shadow:0 2mm 6mm rgba(0,0,0,0.08); page-break-after:always;">
+  <div style="text-align:center; color:#6b7280; font-weight:700; letter-spacing:.5px; margin-bottom:8mm;">FINAL FIRE AUDIT REPORT</div>
+  <div style="font-size: 16px; font-weight: 700; margin-bottom: 6mm;">Fire Audit Checklist</div>
+  <table style="width:100%; border-collapse: collapse;">
+    <thead>
+      <tr>
+        <th style="background:#f8fafc; color:#111827; font-weight:700; border-bottom:1px solid #e5e7eb; padding:2mm; text-align:left; width:14mm;">Sr. No.</th>
+        <th style="background:#f8fafc; color:#111827; font-weight:700; border-bottom:1px solid #e5e7eb; padding:2mm; text-align:left;">Description</th>
+        <th style="background:#f8fafc; color:#111827; font-weight:700; border-bottom:1px solid #e5e7eb; padding:2mm; text-align:left; width:20mm;">Target</th>
+        <th style="background:#f8fafc; color:#111827; font-weight:700; border-bottom:1px solid #e5e7eb; padding:2mm; text-align:left; width:28mm;">Org Status</th>
+        <th style="background:#f8fafc; color:#111827; font-weight:700; border-bottom:1px solid #e5e7eb; padding:2mm; text-align:left; width:20mm;">Org Score</th>
+        <th style="background:#f8fafc; color:#111827; font-weight:700; border-bottom:1px solid #e5e7eb; padding:2mm; text-align:left; width:20mm;">Aud Score</th>
+        <th style="background:#f8fafc; color:#111827; font-weight:700; border-bottom:1px solid #e5e7eb; padding:2mm; text-align:left; width:28mm;">Aud Status</th>
+        <th style="background:#f8fafc; color:#111827; font-weight:700; border-bottom:1px solid #e5e7eb; padding:2mm; text-align:left; width:40mm;">Auditor Observation</th>
+        <th style="background:#f8fafc; color:#111827; font-weight:700; border-bottom:1px solid #e5e7eb; padding:2mm; text-align:left; width:40mm;">closure details</th>
+        <th style="background:#f8fafc; color:#111827; font-weight:700; border-bottom:1px solid #e5e7eb; padding:2mm; text-align:left; width:40mm;">auditor closure status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for section_name, questions in grouped_sections.items() %}
+      {% set sname = section_name|lower %}
+      {% if sname not in ['building details', 'type of construction'] %}
+      <tr><td colspan="11" style="background:#f1f5f9; font-weight:700;">{{ section_name }}</td></tr>
+        {% for r in questions %}
+        <tr>
+          <td style="border-bottom:1px solid #e5e7eb; padding:2mm; font-size:12px;">{{ loop.index }}</td>
+          <td style="border-bottom:1px solid #e5e7eb; padding:2mm; font-size:12px;">{{ r.description }}</td>
+          <td style="border-bottom:1px solid #e5e7eb; padding:2mm; font-size:12px;">5</td>
+          <td style="border-bottom:1px solid #e5e7eb; padding:2mm; font-size:12px;">{{ r.org_status }}</td>
+          <td style="border-bottom:1px solid #e5e7eb; padding:2mm; font-size:12px;">{{ r.org_score }}</td>
+          <td style="border-bottom:1px solid #e5e7eb; padding:2mm; font-size:12px;">{{ r.auditor_score }}</td>
+          <td style="border-bottom:1px solid #e5e7eb; padding:2mm; font-size:12px;">{{ r.auditor_status }}</td>
+          <td style="border-bottom:1px solid #e5e7eb; padding:2mm; font-size:12px;">{% if r.org_status != r.auditor_status %}{{ r.observation }}{% endif %}</td>
+          <td style="border-bottom:1px solid #e5e7eb; padding:2mm; font-size:12px;">{{ r.closure_details }}</td>
+          <td style="border-bottom:1px solid #e5e7eb; padding:2mm; font-size:12px;">{{ r.auditor_closure_status }}</td>
+        </tr>
+        {% endfor %}
+      {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
+</div>

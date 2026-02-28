@@ -5,6 +5,10 @@ import { getQuestions } from '../config/questionBanks'
 import { SECTION_FIELDS, ORG_FIELD_LABELS } from '../config/orgDetailsConfig'
 // import * as api from '../services/apiService'
 
+function isValidId(v) {
+  return typeof v === 'string' && v.trim().length > 0
+}
+
 function AdminAuditDetailView({ initialState, onBack }) {
   const [loading, setLoading] = React.useState(true)
   const [fullAuditData, setFullAuditData] = React.useState({ building: {}, assessments: [], observations: [], orgRows: [], blocks: [], orgId: null, auditId: null, groupId: null, subdivisionId: null })
@@ -33,7 +37,7 @@ function AdminAuditDetailView({ initialState, onBack }) {
     ;(async () => {
       try {
         const idToken = await auth.currentUser.getIdToken()
-        const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || (typeof window !== 'undefined' ? window.__BACKEND_URL__ : undefined) || 'http://localhost:8010'
+        const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || (typeof window !== 'undefined' ? window.__BACKEND_URL__ : undefined) || 'http://localhost:8011'
         const asgRes = await fetch(`${BASE_URL}/assignments`, { headers: { idToken } })
         const asgList = await (asgRes.ok ? asgRes.json().catch(() => []) : Promise.resolve([]))
         const scoped = (Array.isArray(asgList) ? asgList : []).filter(a => String(a.org_id || a.orgId) === String(orgId))
@@ -87,7 +91,7 @@ function AdminAuditDetailView({ initialState, onBack }) {
     ;(async () => {
       try {
         const idToken = await auth.currentUser.getIdToken()
-        const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || (typeof window !== 'undefined' ? window.__BACKEND_URL__ : undefined) || 'http://localhost:8010'
+        const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || (typeof window !== 'undefined' ? window.__BACKEND_URL__ : undefined) || 'http://localhost:8011'
         const assessUrl = `${BASE_URL}/audit/responses?${new URLSearchParams({ audit_id: String(auditId), block_id: String(blockId) }).toString()}`
         const buildingUrl = `${BASE_URL}/org-responses/building-details/list?${new URLSearchParams({ audit_id: String(auditId), block_id: String(blockId) }).toString()}`
         const obsUrl = `${BASE_URL}/audit/observations?${new URLSearchParams({ audit_id: String(auditId), block_id: String(blockId) }).toString()}`
@@ -133,66 +137,30 @@ function AdminAuditDetailView({ initialState, onBack }) {
           
           <button className="btn btn-outline" onClick={() => {
             ;(async () => {
-              const idToken = await auth.currentUser.getIdToken()
               const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || (typeof window !== 'undefined' ? window.__BACKEND_URL__ : undefined) || 'http://localhost:8011'
-              const currentAuditId = blockAuditMap[activeBlock] || fullAuditData.auditId
+              const currentAuditIdLocal = currentAuditId || blockAuditMap[activeBlock] || fullAuditData.auditId
               const orgId = fullAuditData.orgId
-              if (!currentAuditId) {
+              if (!isValidId(currentAuditIdLocal)) {
                 alert('Data not fully loaded')
                 return
               }
-              console.log('DEBUG: activeBlock is:', activeBlock)
-              console.log('DEBUG: Sending to Backend:', currentAuditId)
-              console.log('DEBUG: Available map:', blockAuditMap)
-              console.log('[PDF] Fetching from unified backend hydration service.... Audit ID:', currentAuditId)
-              try {
-                const res1 = await fetch(`${BASE_URL}/api/pdf/self-assessment/html`, {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json', idToken },
-                  body: JSON.stringify({ org_id: orgId, audit_id: currentAuditId })
-                })
-                if (res1.ok) {
-                  const html = await res1.text()
-                  const blob = new Blob([html], { type: 'text/html' })
-                  const url = window.URL.createObjectURL(blob)
-                  try { window.open(url, '_blank') } catch { /* noop */ }
-                  return
-                } else {
-                  const errorBody = await res1.json().catch(() => ({}))
-                  alert(`Error ${res1.status}: ${errorBody?.detail || 'Failed to generate PDF'}`)
-                  return
-                }
-              } catch {
-                const data = { detail: 'Failed to generate PDF' }
-                alert(data.detail)
-              }
+              const idToken = await auth.currentUser.getIdToken()
+              const previewUrl = `${BASE_URL}/preview/self-assessment/${encodeURIComponent(currentAuditIdLocal)}?idToken=${encodeURIComponent(idToken)}`
+              try { window.open(previewUrl, '_blank') } catch { /* noop */ }
             })()
           }} style={{ background: '#dbeafe', borderColor: '#93c5fd' }}>Self Assessment</button>
           <button className="btn btn-outline" onClick={() => {
             ;(async () => {
               try {
-                const idToken = await auth.currentUser.getIdToken()
-                const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || (typeof window !== 'undefined' ? window.__BACKEND_URL__ : undefined) || 'http://localhost:8010'
-                const currentAuditId = blockAuditMap[activeBlock] || fullAuditData.auditId
-                const orgId = fullAuditData.orgId
-                if (!currentAuditId) {
+                const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || (typeof window !== 'undefined' ? window.__BACKEND_URL__ : undefined) || 'http://localhost:8011'
+                const currentAuditIdLocal = currentAuditId || blockAuditMap[activeBlock] || fullAuditData.auditId
+                const blockId = String(activeBlock || '')
+                if (!isValidId(currentAuditIdLocal) || !isValidId(blockId)) {
                   alert('Data not fully loaded')
                   return
                 }
-                const res = await fetch(`${BASE_URL}/api/pdf/initial-report/html`, {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json', idToken },
-                  body: JSON.stringify({ org_id: orgId, audit_id: currentAuditId })
-                })
-                if (!res.ok) {
-                  const errorBody = await res.json().catch(() => ({}))
-                  alert(`Error ${res.status}: ${errorBody?.detail || 'Failed to generate Initial Report'}`)
-                  return
-                }
-                const html = await res.text()
-                const blob = new Blob([html], { type: 'text/html' })
-                const url = URL.createObjectURL(blob)
-                window.open(url, '_blank')
+                const previewUrl = `${BASE_URL}/reports/preview/initial/${encodeURIComponent(currentAuditIdLocal)}/${encodeURIComponent(blockId)}`
+                window.open(previewUrl, '_blank')
               } catch {
               }
             })()
@@ -200,26 +168,122 @@ function AdminAuditDetailView({ initialState, onBack }) {
           <button className="btn btn-outline" onClick={() => {
             ;(async () => {
               try {
-                const idToken = await auth.currentUser.getIdToken()
                 const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || (typeof window !== 'undefined' ? window.__BACKEND_URL__ : undefined) || 'http://localhost:8011'
-                const currentAuditId = (fullAuditData.blocks || []).find(b => String(b.id) === String(activeBlock))?.auditId || fullAuditData.auditId
-                const activeBlockId = String(activeBlock || '')
-                if (!currentAuditId || !activeBlockId) {
+                const currentAuditIdLocal = currentAuditId || blockAuditMap[activeBlock] || fullAuditData.auditId
+                const blockId = String(activeBlock || '')
+                if (!isValidId(currentAuditIdLocal) || !isValidId(blockId)) {
                   alert('Data not fully loaded')
                   return
                 }
-                const res = await fetch(`${BASE_URL}/reports/preview/final/${currentAuditId}`, {
-                  method: 'GET',
-                  headers: { idToken }
-                })
-                if (!res.ok) return
-                const html = await res.text()
-                const blob = new Blob([html], { type: 'text/html' })
-                const url = URL.createObjectURL(blob)
-                window.open(url, '_blank')
+                const previewUrl = `${BASE_URL}/reports/preview/final/${encodeURIComponent(currentAuditIdLocal)}/${encodeURIComponent(blockId)}`
+                window.open(previewUrl, '_blank')
               } catch { /* noop */ }
             })()
           }} style={{ background: '#dbeafe', borderColor: '#93c5fd' }}>Final Report</button>
+
+          <button className="btn btn-outline" onClick={() => {
+            ;(async () => {
+              try {
+                const token = await auth.currentUser.getIdToken()
+                const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || (typeof window !== 'undefined' ? window.__BACKEND_URL__ : undefined) || 'http://localhost:8011'
+                const currentAuditIdLocal = currentAuditId || blockAuditMap[activeBlock] || fullAuditData.auditId
+                const orgId = fullAuditData.orgId
+                if (!isValidId(currentAuditIdLocal)) {
+                  alert('Data not fully loaded')
+                  return
+                }
+                const res = await fetch(`${BASE_URL}/api/pdf/self-assessment`, {
+                  method: 'POST',
+                  headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ org_id: orgId, audit_id: currentAuditIdLocal })
+                })
+                if (!res.ok) {
+                  const err = await res.json().catch(() => ({}))
+                  alert(`Error ${res.status}: ${err?.detail || 'Failed to download Self Assessment'}`)
+                  return
+                }
+                const blob = await res.blob()
+                const url = URL.createObjectURL(blob)
+                const a = document.createElement('a')
+                a.href = url
+                a.download = `self_assessment_${currentAuditIdLocal}.pdf`
+                document.body.appendChild(a)
+                a.click()
+                a.remove()
+                setTimeout(() => URL.revokeObjectURL(url), 2000)
+              } catch {
+              }
+            })()
+          }} style={{ background: '#bfdbfe', borderColor: '#60a5fa', color: '#0c4a6e' }}>Download Self Assessment</button>
+
+          <button className="btn btn-outline" onClick={() => {
+            ;(async () => {
+              try {
+                const token = await auth.currentUser.getIdToken()
+                const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || (typeof window !== 'undefined' ? window.__BACKEND_URL__ : undefined) || 'http://localhost:8011'
+                const currentAuditIdLocal = currentAuditId || blockAuditMap[activeBlock] || fullAuditData.auditId
+                const blockId = String(activeBlock || '')
+                if (!isValidId(currentAuditIdLocal) || !isValidId(blockId)) {
+                  alert('Data not fully loaded')
+                  return
+                }
+                const res = await fetch(`${BASE_URL}/reports/initial/${encodeURIComponent(currentAuditIdLocal)}/${encodeURIComponent(blockId)}`, {
+                  method: 'POST',
+                  headers: { Authorization: `Bearer ${token}` }
+                })
+                if (!res.ok) {
+                  const err = await res.json().catch(() => ({}))
+                  alert(`Error ${res.status}: ${err?.detail || 'Failed to download Initial Report'}`)
+                  return
+                }
+                const blob = await res.blob()
+                const url = URL.createObjectURL(blob)
+                const a = document.createElement('a')
+                a.href = url
+                a.download = `initial_${currentAuditIdLocal}_${blockId}.pdf`
+                document.body.appendChild(a)
+                a.click()
+                a.remove()
+                setTimeout(() => URL.revokeObjectURL(url), 2000)
+              } catch {
+              }
+            })()
+          }} style={{ background: '#bbf7d0', borderColor: '#4ade80', color: '#064e3b' }}>Download Initial</button>
+
+          <button className="btn btn-outline" onClick={() => {
+            ;(async () => {
+              try {
+                const token = await auth.currentUser.getIdToken()
+                const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || (typeof window !== 'undefined' ? window.__BACKEND_URL__ : undefined) || 'http://localhost:8011'
+                const currentAuditIdLocal = currentAuditId || blockAuditMap[activeBlock] || fullAuditData.auditId
+                const blockId = String(activeBlock || '')
+                if (!isValidId(currentAuditIdLocal) || !isValidId(blockId)) {
+                  alert('Data not fully loaded')
+                  return
+                }
+                const res = await fetch(`${BASE_URL}/reports/final/${encodeURIComponent(currentAuditIdLocal)}/${encodeURIComponent(blockId)}`, {
+                  method: 'POST',
+                  headers: { Authorization: `Bearer ${token}` }
+                })
+                if (!res.ok) {
+                  const err = await res.json().catch(() => ({}))
+                  alert(`Error ${res.status}: ${err?.detail || 'Failed to download Final Report'}`)
+                  return
+                }
+                const blob = await res.blob()
+                const url = URL.createObjectURL(blob)
+                const a = document.createElement('a')
+                a.href = url
+                a.download = `final_${currentAuditIdLocal}_${blockId}.pdf`
+                document.body.appendChild(a)
+                a.click()
+                a.remove()
+                setTimeout(() => URL.revokeObjectURL(url), 2000)
+              } catch {
+              }
+            })()
+          }} style={{ background: '#c7d2fe', borderColor: '#a78bfa', color: '#3730a3' }}>Download Final</button>
+
         </div>
       </div>
       {loading ? (

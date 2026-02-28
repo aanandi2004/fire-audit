@@ -1,0 +1,55 @@
+<div class="page" style="width:210mm; min-height:297mm; margin:10mm auto; background:#fff; box-sizing:border-box; padding:12mm; box-shadow:0 2mm 6mm rgba(0,0,0,0.08); page-break-after:always;">
+  <div style="text-align:center; color:#6b7280; font-weight:700; letter-spacing:.5px; margin-bottom:8mm;">FINAL FIRE AUDIT REPORT</div>
+  <div style="font-size: 16px; font-weight: 700; margin-bottom: 6mm;">Section Comparison Charts</div>
+  <table style="width:100%; border-collapse: collapse;">
+    <thead>
+      <tr>
+        <th style="background:#f8fafc; color:#111827; font-weight:700; border-bottom:1px solid #e5e7eb; padding:2mm; text-align:left;">Section</th>
+        <th style="background:#f8fafc; color:#111827; font-weight:700; border-bottom:1px solid #e5e7eb; padding:2mm; text-align:left;">Org %</th>
+        <th style="background:#f8fafc; color:#111827; font-weight:700; border-bottom:1px solid #e5e7eb; padding:2mm; text-align:left;">Aud %</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in comparison_categories %}
+      {% set sname = c.name|lower %}
+      {% if sname not in ['building details', 'type of construction'] %}
+      <tr>
+        <td style="border-bottom:1px solid #e5e7eb; padding:2mm; font-size:12px;">{{ c.name }}</td>
+        <td style="border-bottom:1px solid #e5e7eb; padding:2mm;">
+          <div style="margin-bottom:2mm;">
+            <div style="font-size:11px; color:#64748b; margin-bottom:1mm;">Initial</div>
+            <div style="background:#e5e7eb; height:8px; position:relative;">
+              <div style="background:#0ea5e9; height:8px; width: {{ c.org_initial_percentage }}%;"></div>
+            </div>
+            <div style="font-size:11px; color:#111827;">{{ c.org_initial_percentage }}%</div>
+          </div>
+          <div>
+            <div style="font-size:11px; color:#64748b; margin-bottom:1mm;">Final</div>
+            <div style="background:#e5e7eb; height:8px; position:relative;">
+              <div style="background:#10b981; height:8px; width: {{ c.org_final_percentage }}%;"></div>
+            </div>
+            <div style="font-size:11px; color:#111827;">{{ c.org_final_percentage }}%</div>
+          </div>
+        </td>
+        <td style="border-bottom:1px solid #e5e7eb; padding:2mm;">
+          <div style="margin-bottom:2mm;">
+            <div style="font-size:11px; color:#64748b; margin-bottom:1mm;">Initial</div>
+            <div style="background:#e5e7eb; height:8px; position:relative;">
+              <div style="background:#1e3a8a; height:8px; width: {{ c.auditor_initial_percentage }}%;"></div>
+            </div>
+            <div style="font-size:11px; color:#111827;">{{ c.auditor_initial_percentage }}%</div>
+          </div>
+          <div>
+            <div style="font-size:11px; color:#64748b; margin-bottom:1mm;">Final</div>
+            <div style="background:#e5e7eb; height:8px; position:relative;">
+              <div style="background:#6366f1; height:8px; width: {{ c.auditor_final_percentage }}%;"></div>
+            </div>
+            <div style="font-size:11px; color:#111827;">{{ c.auditor_final_percentage }}%</div>
+          </div>
+        </td>
+      </tr>
+      {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
+</div>

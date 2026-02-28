@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Header
-from fastapi.responses import StreamingResponse, HTMLResponse
+from fastapi.responses import StreamingResponse, HTMLResponse, RedirectResponse
 from pydantic import BaseModel, Field
 from backend.reports.self_assessment.service import build_report, build_context_for_audit, compute_essay3_summary, build_context_for_summary, build_context_for_essay2
 from backend.reports.self_assessment.renderer import render_pdf, render_html, env
@@ -8,11 +8,13 @@ from backend.reports.final_report_builder import build_final_report
 from backend.storage.firebase_storage import upload_pdf_and_url
 import re
 from pathlib import Path
+import os
 
 router = APIRouter()
 
 class SelfAssessmentRequest(BaseModel):
     org_id: str = Field(min_length=1)
+    audit_id: str | None = None
 
 def verify_admin(id_token: str):
     if not id_token:
@@ -33,27 +35,52 @@ def _extract_token(authorization: str, id_token: str) -> str:
         return id_token
     raise HTTPException(status_code=401, detail="Missing Authorization or idToken")
 
+def _resolve_audit_id(org_id: str | None, audit_id: str | None) -> str:
+    aid = (audit_id or "").strip()
+    if aid:
+        return aid
+    db = firestore.client()
+    # Prefer active assignment doc id (assignment id equals audit_id)
+    if isinstance(org_id, str) and org_id.strip():
+        try:
+            q = db.collection("assignments").where("org_id", "==", org_id).where("is_active", "==", True)
+            items = list(q.stream())
+            if items:
+                return items[0].id
+        except Exception:
+            pass
+        try:
+            q2 = db.collection("audits").where("org_id", "==", org_id).order_by("started_at", direction=firestore.Query.DESCENDING).limit(1)
+            docs = list(q2.stream())
+            if docs:
+                return docs[0].id
+        except Exception:
+            pass
+    raise HTTPException(status_code=400, detail="Audit not found for organization")
+
 @router.post("/api/pdf/self-assessment")
 async def self_assessment(req: SelfAssessmentRequest, authorization: str = Header(default=None, alias="Authorization", description="Primary: Authorization: Bearer <ID_TOKEN>"), idToken: str = Header(default=None)):
     token = _extract_token(authorization, idToken)
     verify_admin(token)
     try:
-        report = build_report(req.org_id)
+        aid = _resolve_audit_id(req.org_id, req.audit_id)
+        report = build_context_for_audit(aid)
         pdf_bytes = render_pdf(report)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
-    return StreamingResponse(iter([pdf_bytes]), media_type="application/pdf")
+    import io
+    headers = {"Content-Disposition": f'attachment; filename=self_assessment_{aid}.pdf'}
+    return StreamingResponse(io.BytesIO(pdf_bytes), media_type="application/pdf", headers=headers)
 
-@router.post("/api/pdf/self-assessment/html")
-async def self_assessment_html(req: SelfAssessmentRequest, authorization: str = Header(default=None, alias="Authorization", description="Primary: Authorization: Bearer <ID_TOKEN>"), idToken: str = Header(default=None)):
+@router.get("/api/pdf/self-assessment/html/{audit_id}")
+async def self_assessment_html(audit_id: str, authorization: str = Header(default=None, alias="Authorization", description="Primary: Authorization: Bearer <ID_TOKEN>"), idToken: str = Header(default=None)):
     token = _extract_token(authorization, idToken)
     verify_admin(token)
     try:
-        report = build_report(req.org_id)
+        report = build_context_for_audit(audit_id)
         html = render_html(report)
         return HTMLResponse(content=html, media_type="text/html")
     except Exception as e:
-        # Fallback: return minimal HTML to avoid breaking the preview
         safe_msg = str(e)
         fallback = f"<!DOCTYPE html><html><head><meta charset='utf-8'><title>Self Assessment Preview</title></head><body><h2>Preview unavailable</h2><p>{safe_msg}</p></body></html>"
         return HTMLResponse(content=fallback, media_type="text/html", status_code=200)
@@ -64,6 +91,36 @@ async def preview_sa3(audit_id: str, authorization: str = Header(default=None, a
     verify_admin(token)
     ctx = build_context_for_summary(audit_id)
     html = env.get_template("essay3_summary.html").render(**ctx)
+    return HTMLResponse(content=html, media_type="text/html")
+
+@router.get("/reports/preview/sa3")
+async def preview_sa3_index(authorization: str = Header(default=None, alias="Authorization", description="Primary: Authorization: Bearer <ID_TOKEN>"), idToken: str = Header(default=None)):
+    token = _extract_token(authorization, idToken)
+    verify_admin(token)
+    db = firestore.client()
+    items = []
+    try:
+        q = db.collection("audits").order_by("started_at", direction=firestore.Query.DESCENDING).limit(10)
+        items = list(q.stream())
+    except Exception:
+        items = []
+    links = []
+    for doc in items:
+        aid = doc.id
+        data = doc.to_dict() or {}
+        org_name = str(data.get("org_name") or data.get("org_id") or "")
+        links.append(f"<li><a href=\"/reports/preview/sa3/{aid}\">{aid}</a> <span style=\"color:#64748b;\">{org_name}</span></li>")
+    html = (
+        "<!DOCTYPE html><html><head><meta charset='utf-8'><title>SA3 Preview Index</title>"
+        "<style>body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;padding:24px;color:#0f172a}"
+        "h1{font-size:20px;margin:0 0 12px}p{margin:0 0 16px;color:#334155}ul{padding-left:18px}li{margin:6px 0}</style>"
+        "</head><body>"
+        "<h1>Self Assessment SA3 Preview</h1>"
+        "<p>Provide an audit ID in the path: <code>/reports/preview/sa3/{audit_id}</code>.</p>"
+        "<p>Recent audits:</p>"
+        f"<ul>{''.join(links) or '<li>No audits found</li>'}</ul>"
+        "</body></html>"
+    )
     return HTMLResponse(content=html, media_type="text/html")
 
 @router.get("/reports/preview/sa2/{audit_id}")
@@ -180,3 +237,48 @@ async def generate_final_v1(audit_id: str, block_id: str, authorization: str = H
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+
+@router.get("/preview/self-assessment/{audit_id}")
+def self_assessment_preview_shell(audit_id: str):
+    return HTMLResponse(f"""
+    <html>
+    <head>
+      <meta charset="utf-8" />
+      <title>Self Assessment Preview</title>
+      <script>
+        function getParam(name) {{
+          const params = new URLSearchParams(window.location.search);
+          return params.get(name);
+        }}
+        async function loadPreview() {{
+          const token = getParam("idToken");
+          if (!token) {{
+            document.body.innerHTML = "<h2>Missing idToken</h2>";
+            return;
+          }}
+          try {{
+            const res = await fetch("/api/pdf/self-assessment/html/{audit_id}", {{
+              headers: {{ "Authorization": "Bearer " + token }}
+            }});
+            if (!res.ok) {{
+              document.body.innerHTML = "<h2>Failed to load preview</h2>";
+              return;
+            }}
+            const html = await res.text();
+            document.open();
+            document.write(html);
+            document.close();
+          }} catch (e) {{
+            document.body.innerHTML = "<h2>Network error</h2>";
+          }}
+        }}
+        window.onload = loadPreview;
+      </script>
+    </head>
+    <body>
+      <p>Loading preview...</p>
+    </body>
+    </html>
+    """)

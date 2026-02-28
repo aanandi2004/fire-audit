@@ -11,7 +11,27 @@ env = Environment(
 )
 
 def render_html(report: dict) -> str:
-    html = env.get_template("base.html").render(**report)
+    # derive missing fields expected by templates
+    derived = dict(report)
+    if "organization" not in derived or not isinstance(derived.get("organization"), dict):
+        derived["organization"] = {"name": ""}
+    try:
+        org_name = (report.get("organization") or {}).get("name") or ""
+    except Exception:
+        org_name = ""
+    if "block" not in derived:
+        derived["block"] = {"name": org_name or "Block"}
+    if "assessment_rows" not in derived:
+        rows = []
+        for s in report.get("sections", []):
+            name = s.get("name")
+            target = int(s.get("target") or 0)
+            earned = int(s.get("earned") or 0)
+            status = "In Place" if target and earned >= target else "Partially In Place" if earned > 0 else "Not In Place"
+            rows.append({"section": name, "target": target, "organization": earned, "status": status})
+        derived["assessment_rows"] = rows
+    # provide both nested and top-level variables to satisfy all templates
+    html = env.get_template("base.html").render(**derived, report=derived)
     charts_ctx = {
         "overall": {
             "percentage": report["charts_overall"]["percentage"],

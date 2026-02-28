@@ -360,7 +360,7 @@ async def save_org_building_details(body: OrgBuildingDetailsSaveBody, authorizat
     return {"status": "ok", "sections_saved": saved}
 
 @router.get("/org-responses/building-details/list")
-async def list_org_building_details(audit_id: str = Query(min_length=1), authorization: str = Header(default=None, alias="Authorization", description="Primary: Authorization: Bearer <ID_TOKEN>"), idToken: str = Header(default=None)):
+async def list_org_building_details(audit_id: str = Query(min_length=1), block_id: str | None = Query(default=None), authorization: str = Header(default=None, alias="Authorization", description="Primary: Authorization: Bearer <ID_TOKEN>"), idToken: str = Header(default=None)):
     token = _extract_token(authorization, idToken)
     user = verify_user(token)
     db = firestore.client()
@@ -383,4 +383,24 @@ async def list_org_building_details(audit_id: str = Query(min_length=1), authori
     except Exception:
         sections = []
         merged_fields = {}
+    # Fallback: use block profile from audit_responses if org_responses are empty
+    if (not sections or not merged_fields) and isinstance(block_id, str) and block_id.strip():
+        try:
+            bprof = db.collection("audit_responses").document(audit_id).collection("blocks").document(block_id).collection("building_details").document("profile").get()
+            if bprof.exists:
+                pdata = bprof.to_dict() or {}
+                pfields = pdata.get("fields") or {}
+                psecs = pdata.get("sections") or []
+                for k, v in (pfields or {}).items():
+                    merged_fields.setdefault(k, v)
+                for s in (psecs or []):
+                    sid = str(s.get("section_id") or s.get("id") or "")
+                    f = s.get("fields") or {}
+                    if sid:
+                        sections.append({"section_id": sid, "fields": f})
+                    for k, v in (f or {}).items():
+                        if k not in merged_fields:
+                            merged_fields[k] = v
+        except Exception:
+            pass
     return {"sections": sections, "fields": merged_fields}

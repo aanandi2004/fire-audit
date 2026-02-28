@@ -38,14 +38,16 @@
         </tr>
       </thead>
       <tbody>
+        {% for r in rows %}
         <tr style="border-bottom:1px solid #e5e7eb;">
           <td>{{ r.section }}</td>
           <td>{{ r.question }}</td>
-          <td>{{ r.target }} </td>
+          <td>{{ r.target }}</td>
           <td style="text-align:right;">{{ r.organization }}</td>
           <td style="text-align:right;">{{ r.auditor }}</td>
           <td>{{ r.auditor_observation }}</td>
         </tr>
+        {% endfor %}
       </tbody>
     </table>
   </div>

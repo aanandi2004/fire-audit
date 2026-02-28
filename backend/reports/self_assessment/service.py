@@ -49,6 +49,8 @@ def _normalize_status(entry: Dict[str, Any]) -> str:
     return "Not In Place"
 
 def _compute_context_from_responses(db, audit_id: str) -> Dict[str, Any]:
+    if not isinstance(audit_id, str) or not audit_id.strip():
+        raise ValueError("Invalid audit_id: cannot be empty")
     blocks = list(db.collection("audit_responses").document(audit_id).collection("blocks").stream())
     cat_counts: Dict[str, Dict[str, int]] = {}
     total_questions = 0
@@ -114,7 +116,9 @@ def build_report(org_id: str) -> Dict[str, Any]:
     aid = ""
     if items:
         aid = items[0].id
-    return _compute_context_from_responses(db, aid) if aid else _compute_context_from_responses(db, "")
+    if not aid:
+        raise ValueError("No audit found for organization")
+    return _compute_context_from_responses(db, aid)
 
 def build_context_for_audit(audit_id: str) -> Dict[str, Any]:
     db = firestore.client()

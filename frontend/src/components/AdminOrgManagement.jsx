@@ -280,16 +280,15 @@ function AdminOrgManagement({
   const previewSelfAssessment = React.useCallback((org) => {
     ;(async () => {
       try {
-        const idToken = await auth.currentUser.getIdToken()
         const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8011'
-        const res = await fetch(`${BASE_URL}/api/pdf/self-assessment/html`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', idToken },
-          body: JSON.stringify({ org_id: org.id })
-        })
-        if (!res.ok) return
-        const html = await res.text()
-        openHtmlInNewWindow(html)
+        const auditId = await api.getLatestAuditId(org.id)
+        if (!auditId) {
+          window.alert('Latest audit not found for organization')
+          return
+        }
+        const idToken = await auth.currentUser.getIdToken()
+        const url = `${BASE_URL}/preview/self-assessment/${encodeURIComponent(auditId)}?idToken=${encodeURIComponent(idToken)}`
+        window.open(url, '_blank')
       } catch { /* noop */ }
     })()
   }, [openHtmlInNewWindow])
@@ -297,24 +296,15 @@ function AdminOrgManagement({
   const previewInitialReport = React.useCallback((org) => {
     ;(async () => {
       try {
-        const idToken = await auth.currentUser.getIdToken()
         const auditId = await api.getLatestAuditId(org.id)
         if (!auditId) {
           window.alert('Latest audit not found for organization')
           return
         }
         const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8011'
-        const res = await fetch(`${BASE_URL}/reports/preview/initial/${auditId}`, {
-          method: 'GET',
-          headers: { idToken }
-        })
-        if (!res.ok) {
-          const data = await res.json().catch(() => ({}))
-          window.alert(data?.detail || 'Failed to render Initial Report preview')
-          return
-        }
-        const html = await res.text()
-        openHtmlInNewWindow(html)
+        const blockId = Array.isArray(org.blockNames) && org.blockNames.length ? org.blockNames[0] : `Block 1`
+        const url = `${BASE_URL}/reports/preview/initial/${encodeURIComponent(auditId)}/${encodeURIComponent(String(blockId))}`
+        window.open(url, '_blank')
       } catch {
         window.alert('Network error during Initial Report preview')
       }
@@ -324,24 +314,15 @@ function AdminOrgManagement({
   const previewFinalReport = React.useCallback((org) => {
     ;(async () => {
       try {
-        const idToken = await auth.currentUser.getIdToken()
         const auditId = await api.getLatestAuditId(org.id)
         if (!auditId) {
           window.alert('Latest audit not found for organization')
           return
         }
         const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8011'
-        const res = await fetch(`${BASE_URL}/reports/preview/final/${auditId}`, {
-          method: 'GET',
-          headers: { idToken }
-        })
-        if (!res.ok) {
-          const data = await res.json().catch(() => ({}))
-          window.alert(data?.detail || 'Failed to render Final Report preview')
-          return
-        }
-        const html = await res.text()
-        openHtmlInNewWindow(html)
+        const blockId = Array.isArray(org.blockNames) && org.blockNames.length ? org.blockNames[0] : `Block 1`
+        const url = `${BASE_URL}/reports/preview/final/${encodeURIComponent(auditId)}/${encodeURIComponent(String(blockId))}`
+        window.open(url, '_blank')
       } catch {
         window.alert('Network error during Final Report preview')
       }

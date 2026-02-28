@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException, Header, Query
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 from typing import Optional, List, Dict, Any
 from firebase_admin import auth, firestore
@@ -324,121 +325,75 @@ def _report_context(db, audit_id: str) -> Dict[str, Any]:
   }
 
 # --- Initial Report ---
-@router.post("/reports/initial/{audit_id}")
-async def generate_initial(audit_id: str, authorization: str = Header(default=None, alias="Authorization", description="Primary: Authorization: Bearer <ID_TOKEN>"), idToken: str = Header(default=None)):
+@router.post("/reports/initial/{audit_id}/{block_id}")
+async def generate_initial(audit_id: str, block_id: str, authorization: str = Header(default=None, alias="Authorization", description="Primary: Authorization: Bearer <ID_TOKEN>"), idToken: str = Header(default=None)):
   token = _extract_token(authorization, idToken)
-  admin_uid = verify_admin(token)
-  db = firestore.client()
-  ctx = _report_context(db, audit_id)
-  # Upload PDF to Firebase Storage (if available)
+  verify_admin(token)
   try:
+    from backend.reports.initial_report_builder import build_initial_report
     from weasyprint import HTML
     from jinja2 import Environment, FileSystemLoader, select_autoescape
     from pathlib import Path
+    result = build_initial_report(audit_id, block_id)
     tpl_dir = Path(__file__).resolve().parents[1] / "templates" / "initial_report"
     env = Environment(loader=FileSystemLoader(str(tpl_dir)), autoescape=select_autoescape(["html"]))
-    # Use existing report2.html if present
-    tpl = env.get_template("report2.html")
-    html_str = tpl.render(**ctx)
-    pdf_bytes = HTML(string=html_str, base_url=str(tpl_dir)).write_pdf()
-    # Storage upload
-    try:
-      from google.cloud import storage
-      client = storage.Client()
-      bucket_name = f"{firestore.client().project}.appspot.com"
-      bucket = client.bucket(bucket_name)
-      blob = bucket.blob(f"reports/{audit_id}/initial.pdf")
-      blob.upload_from_string(pdf_bytes, content_type="application/pdf")
-      url = f"https://storage.googleapis.com/{bucket_name}/reports/{audit_id}/initial.pdf"
-    except Exception as e:
-      raise HTTPException(status_code=500, detail=f"Storage upload failed: {str(e)}")
-    # Firestore metadata
-    db.collection("reports").document(f"{audit_id}_initial").set({
-      "audit_id": audit_id,
-      "type": "INITIAL",
-      "download_url": url,
-      "generated_by": admin_uid,
-      "created_at": firestore.SERVER_TIMESTAMP
-    }, merge=True)
-    return {"status": "generated", "url": url}
-  except HTTPException:
-    raise
+    tpl1 = env.get_template("report1.html")
+    page1 = tpl1.render(**result["report1"])
+    pages = [page1]
+    pages.extend(result["report2_pages"])
+    pages.extend(result["report3_pages"])
+    full_html = "".join(pages)
+    pdf_bytes = HTML(string=full_html, base_url=str(tpl_dir)).write_pdf()
+    headers = {"Content-Disposition": f'attachment; filename=initial_{audit_id}.pdf'}
+    return StreamingResponse(iter([pdf_bytes]), media_type="application/pdf", headers=headers)
   except Exception as e:
     raise HTTPException(status_code=500, detail=f"Initial report failed: {str(e)}")
 
-@router.get("/reports/preview/initial/{audit_id}")
-async def preview_initial(audit_id: str, authorization: str = Header(default=None, alias="Authorization", description="Primary: Authorization: Bearer <ID_TOKEN>"), idToken: str = Header(default=None)):
+@router.get("/reports/preview/initial/{audit_id}/{block_id}")
+async def preview_initial(audit_id: str, block_id: str, authorization: str = Header(default=None, alias="Authorization", description="Primary: Authorization: Bearer <ID_TOKEN>"), idToken: str = Header(default=None)):
   token = _extract_token(authorization, idToken)
   verify_admin(token)
-  db = firestore.client()
-  ctx = _report_context(db, audit_id)
   try:
+    from backend.reports.initial_report_builder import build_initial_report
     from jinja2 import Environment, FileSystemLoader, select_autoescape
     from pathlib import Path
+    result = build_initial_report(audit_id, block_id)
     tpl_dir = Path(__file__).resolve().parents[1] / "templates" / "initial_report"
     env = Environment(loader=FileSystemLoader(str(tpl_dir)), autoescape=select_autoescape(["html"]))
-    tpl = env.get_template("report2.html")
-    html_str = tpl.render(**ctx)
+    tpl1 = env.get_template("report1.html")
+    page1 = tpl1.render(**result["report1"])
+    pages = [page1]
+    pages.extend(result["report2_pages"])
+    pages.extend(result["report3_pages"])
     from fastapi.responses import HTMLResponse
-    return HTMLResponse(content=html_str, media_type="text/html")
+    return HTMLResponse(content="".join(pages), media_type="text/html")
   except Exception as e:
     raise HTTPException(status_code=500, detail=f"Preview failed: {str(e)}")
 
 # --- Final Report ---
-@router.post("/reports/final/{audit_id}")
-async def generate_final(audit_id: str, authorization: str = Header(default=None, alias="Authorization", description="Primary: Authorization: Bearer <ID_TOKEN>"), idToken: str = Header(default=None)):
+@router.post("/reports/final/{audit_id}/{block_id}")
+async def generate_final(audit_id: str, block_id: str, authorization: str = Header(default=None, alias="Authorization", description="Primary: Authorization: Bearer <ID_TOKEN>"), idToken: str = Header(default=None)):
   token = _extract_token(authorization, idToken)
-  admin_uid = verify_admin(token)
-  db = firestore.client()
-  ctx = _report_context(db, audit_id)
+  verify_admin(token)
   try:
+    from backend.reports.final_report_builder import build_final_report
     from weasyprint import HTML
-    from jinja2 import Environment, FileSystemLoader, select_autoescape
-    from pathlib import Path
-    tpl_dir = Path(__file__).resolve().parents[1] / "templates" / "self_assessment"
-    env = Environment(loader=FileSystemLoader(str(tpl_dir)), autoescape=select_autoescape(["html"]))
-    # Reuse essay3_summary + summary_charts combined base if available; fallback to essay3_summary
-    tpl = env.get_template("essay3_summary.html")
-    html_str = tpl.render(**ctx)
-    pdf_bytes = HTML(string=html_str, base_url=str(tpl_dir)).write_pdf()
-    # Storage upload
-    try:
-      from google.cloud import storage
-      client = storage.Client()
-      bucket_name = f"{firestore.client().project}.appspot.com"
-      bucket = client.bucket(bucket_name)
-      blob = bucket.blob(f"reports/{audit_id}/final.pdf")
-      blob.upload_from_string(pdf_bytes, content_type="application/pdf")
-      url = f"https://storage.googleapis.com/{bucket_name}/reports/{audit_id}/final.pdf"
-    except Exception as e:
-      raise HTTPException(status_code=500, detail=f"Storage upload failed: {str(e)}")
-    db.collection("reports").document(f"{audit_id}_final").set({
-      "audit_id": audit_id,
-      "type": "FINAL",
-      "download_url": url,
-      "generated_by": admin_uid,
-      "created_at": firestore.SERVER_TIMESTAMP
-    }, merge=True)
-    return {"status": "generated", "url": url}
-  except HTTPException:
-    raise
+    result = build_final_report(audit_id, block_id)
+    full_html = "".join(result["final_report_pages"])
+    pdf_bytes = HTML(string=full_html).write_pdf()
+    headers = {"Content-Disposition": f'attachment; filename=final_{audit_id}.pdf'}
+    return StreamingResponse(iter([pdf_bytes]), media_type="application/pdf", headers=headers)
   except Exception as e:
     raise HTTPException(status_code=500, detail=f"Final report failed: {str(e)}")
 
-@router.get("/reports/preview/final/{audit_id}")
-async def preview_final(audit_id: str, authorization: str = Header(default=None, alias="Authorization", description="Primary: Authorization: Bearer <ID_TOKEN>"), idToken: str = Header(default=None)):
+@router.get("/reports/preview/final/{audit_id}/{block_id}")
+async def preview_final(audit_id: str, block_id: str, authorization: str = Header(default=None, alias="Authorization", description="Primary: Authorization: Bearer <ID_TOKEN>"), idToken: str = Header(default=None)):
   token = _extract_token(authorization, idToken)
   verify_admin(token)
-  db = firestore.client()
-  ctx = _report_context(db, audit_id)
   try:
-    from jinja2 import Environment, FileSystemLoader, select_autoescape
-    from pathlib import Path
-    tpl_dir = Path(__file__).resolve().parents[1] / "templates" / "self_assessment"
-    env = Environment(loader=FileSystemLoader(str(tpl_dir)), autoescape=select_autoescape(["html"]))
-    tpl = env.get_template("essay3_summary.html")
-    html_str = tpl.render(**ctx)
+    from backend.reports.final_report_builder import build_final_report
+    result = build_final_report(audit_id, block_id)
     from fastapi.responses import HTMLResponse
-    return HTMLResponse(content=html_str, media_type="text/html")
+    return HTMLResponse(content="".join(result["final_report_pages"]), media_type="text/html")
   except Exception as e:
     raise HTTPException(status_code=500, detail=f"Preview failed: {str(e)}")

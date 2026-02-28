@@ -329,16 +329,9 @@ def build_initial_report(audit_id: str, block_id: str) -> dict:
     categories_payload = [{"name": name, "closed": cat_stats[name]["closed"], "gaps": cat_stats[name]["gaps"]} for name in cat_order]
     total_closed = sum(x["closed"] for x in categories_payload)
     total_gaps = sum(x["gaps"] for x in categories_payload)
-    tpl4 = env.get_template("report4.html")
-    report4_ctx = {
-        "summary": { "total_closed": int(total_closed), "total_gaps": int(total_gaps) },
-        "categories": categories_payload
-    }
-    report4_html = tpl4.render(**report4_ctx)
     flat = _build_report1_flat(org, block_name)
     return {
         "report1": flat,
         "report2_pages": pages,
-        "report3_pages": gap_pages,
-        "report4_page": report4_html
+        "report3_pages": gap_pages
     }
