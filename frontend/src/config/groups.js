@@ -92,4 +92,11 @@ export const RECORD_GROUPS = [
       { id: 'J-GEN', label: 'General – Group J' },
     ],
   },
+  {
+    id: 'ELEC',
+    label: 'Electrical Safety Audit',
+    subdivisions: [
+      { id: 'ELEC-GEN', label: 'General – Electrical' },
+    ],
+  },
 ]

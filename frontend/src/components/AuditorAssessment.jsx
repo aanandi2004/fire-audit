@@ -294,9 +294,13 @@ async function handleStatusChange(questionId, value) {
         const v = {}
         ;(Array.isArray(rows) ? rows : []).forEach(d => {
           const key = getKey(d.question_id)
-          const org = d.org || {}
-          s[key] = String(org.status || '').toLowerCase()
-          v[key] = org.value || ''
+          const topStatus = d.status
+          const topValue = d.value
+          const nested = d.org || {}
+          const status = (topStatus !== undefined && topStatus !== null) ? topStatus : nested.status
+          const value = (topValue !== undefined && topValue !== null) ? topValue : nested.value
+          s[key] = String(status || '').toLowerCase()
+          v[key] = value || ''
         })
         setOrgStatusMap(s)
         setOrgValueMap(v)
@@ -364,19 +368,18 @@ async function handleStatusChange(questionId, value) {
       const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8010'
       const params = new URLSearchParams({
         audit_id: String(auditId).trim(),
-        block_id: String(blockId).trim(),
-        section: String(selectedSection).trim()
+        block_id: String(blockId).trim()
       })
-      const resp = await fetch(`${BASE_URL}/audit/observations?${params.toString()}`, { headers: { idToken: token }, signal: controller.signal })
+      const resp = await fetch(`${BASE_URL}/audit/responses?${params.toString()}`, { headers: { idToken: token }, signal: controller.signal })
       if (!resp.ok) {
-        console.error('Observations fetch failed', resp.status)
+        console.error('Responses fetch failed', resp.status)
         return
       }
       const list = await resp.json()
       setObservations(Array.isArray(list) ? list : [])
     } catch (err) {
       if (!(err && err.name === 'AbortError')) {
-        console.error('Observations fetch failed', err)
+        console.error('Responses fetch failed', err)
       }
     } finally {
       fetchingRef.current = false

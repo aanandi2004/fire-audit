@@ -563,6 +563,20 @@ function OrganizationDetails({ data, onUpdate, jumpToSection, orgId, auditId, bl
   const partIIISections = partIIISectionIds.map(id => ORGANIZATION_SECTIONS.find(s => s.id === id)).filter(Boolean)
   const [activeSection, setActiveSection] = useState(() => partISectionIds[0] || 'general')
   const [localData, setLocalData] = useState(data)
+  const [dynamicSections, setDynamicSections] = useState([])
+  const SHOW_DYNAMIC_PREAUDIT = false
+  const sectionFieldMap = React.useMemo(() => {
+    if (Array.isArray(dynamicSections) && dynamicSections.length > 0) {
+      const m = {}
+      dynamicSections.forEach(sec => {
+        const sid = String(sec.section_id || '')
+        const keys = Object.keys(sec.fields || {})
+        if (sid && keys.length > 0) m[sid] = keys
+      })
+      return m
+    }
+    return SECTION_FIELDS
+  }, [dynamicSections])
   const [selectedBlockId, setSelectedBlockId] = useState(() => {
     const b0 = Array.isArray(blocks) && blocks.length > 0 ? (blocks[0]?.id || blocks[0]?.name) : ''
     return String(b0 || '')
@@ -595,7 +609,12 @@ function OrganizationDetails({ data, onUpdate, jumpToSection, orgId, auditId, bl
         if (res.ok) {
           const payload = await res.json()
           const merged = payload?.fields || {}
+          const secs = Array.isArray(payload?.sections) ? payload.sections : []
           setLocalData(merged || {})
+          setDynamicSections(secs || [])
+          if ((secs || []).length > 0) {
+            setActiveSection(String(secs[0]?.section_id || 'general'))
+          }
         }
       } catch { void 0 }
     })()
@@ -672,12 +691,20 @@ function OrganizationDetails({ data, onUpdate, jumpToSection, orgId, auditId, bl
       }
       const token = await auth.currentUser?.getIdToken?.()
       const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8010'
-      const sections = Object.keys(SECTION_FIELDS || {}).map(sectionId => {
-        const keys = SECTION_FIELDS[sectionId] || []
-        const fields = {}
-        keys.forEach(k => { fields[k] = (localData && localData[k] !== undefined && localData[k] !== null) ? localData[k] : '' })
-        return { section_id: sectionId, fields }
-      })
+      const sections = (Array.isArray(dynamicSections) && dynamicSections.length > 0)
+        ? (dynamicSections.map(s => {
+            const sectionId = String(s.section_id)
+            const keys = sectionFieldMap[sectionId] || []
+            const fields = {}
+            keys.forEach(k => { fields[k] = (localData && localData[k] !== undefined && localData[k] !== null) ? localData[k] : '' })
+            return { section_id: sectionId, section_label: s.section_label || sectionId, fields, field_labels: s.field_labels || {} }
+          }))
+        : (Object.keys(sectionFieldMap || {}).map(sectionId => {
+            const keys = sectionFieldMap[sectionId] || []
+            const fields = {}
+            keys.forEach(k => { fields[k] = (localData && localData[k] !== undefined && localData[k] !== null) ? localData[k] : '' })
+            return { section_id: sectionId, fields }
+          }))
       const resp = await fetch(`${BASE_URL}/org-responses/building-details/save`, {
         method: 'POST',
         headers: {
@@ -1815,7 +1842,32 @@ function OrganizationDetails({ data, onUpdate, jumpToSection, orgId, auditId, bl
   }, [])
 
   const renderContent = () => {
-    if (activeSection === 'general') {
+    if (SHOW_DYNAMIC_PREAUDIT && Array.isArray(dynamicSections) && dynamicSections.length > 0) {
+      const fields = sectionFieldMap[activeSection] || []
+      if (fields.length === 0) {
+        return <div style={{ padding: 20, color: '#64748b' }}>No fields configured for this section yet.</div>
+      }
+      return (
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+          {fields.map((fieldKey) => {
+            const activeMeta = (dynamicSections || []).find(s => String(s.section_id) === String(activeSection)) || {}
+            const label = (activeMeta.field_labels && activeMeta.field_labels[fieldKey]) || fieldKey
+            return (
+            <div key={fieldKey}>
+              <div style={{ fontSize: '12px', color: '#64748b', marginBottom: '4px' }}>{label}</div>
+              <input
+                type="text"
+                defaultValue={localData[fieldKey] || ''}
+                placeholder="NA"
+                onChange={e => setLocalData(prev => ({ ...(prev || {}), [fieldKey]: e.target.value }))}
+                onBlur={e => updateField(fieldKey, e.target.value)}
+                className="field-input"
+              />
+            </div>
+          )})}
+        </div>
+      )
+    } else if (activeSection === 'general') {
       return <BuildingInformationTable localData={localData} updateField={updateField} commitField={commitField} />
     } else if (activeSection === 'construction') {
       return (
@@ -2013,73 +2065,109 @@ function OrganizationDetails({ data, onUpdate, jumpToSection, orgId, auditId, bl
   return (
     <div style={{ display: 'flex', gap: '20px', minHeight: '400px' }}>
       <div style={{ width: '300px', borderRight: '1px solid #e2e8f0' }}>
-        <div style={{ padding: '12px 16px', fontWeight: 800, fontSize: '12px', color: '#1e3a8a', borderBottom: '1px solid #f1f5f9', textTransform: 'uppercase' }}>
-          {partI?.label}
-        </div>
-        {partISections.map(section => (
-          <div 
-            key={section.id}
-            onClick={() => setActiveSection(section.id)}
-            style={{ 
-              padding: '12px 16px', 
-              cursor: 'pointer',
-              backgroundColor: activeSection === section.id ? '#1e3a8a' : 'transparent',
-              color: activeSection === section.id ? 'white' : '#334155',
-              fontWeight: 500,
-              fontSize: '13px',
-              borderBottom: '1px solid #f1f5f9'
-            }}
-          >
-            {section.label}
-          </div>
-        ))}
-        <div style={{ padding: '12px 16px', fontWeight: 800, fontSize: '12px', color: '#1e3a8a', borderTop: '1px solid #f1f5f9', borderBottom: '1px solid #f1f5f9', textTransform: 'uppercase' }}>
-          {partII?.label}
-        </div>
-        {partIISections.map(section => (
-          <div 
-            key={section.id}
-            onClick={() => setActiveSection(section.id)}
-            style={{ 
-              padding: '12px 16px', 
-              cursor: 'pointer',
-              backgroundColor: activeSection === section.id ? '#1e3a8a' : 'transparent',
-              color: activeSection === section.id ? 'white' : '#334155',
-              fontWeight: 500,
-              fontSize: '13px',
-              borderBottom: '1px solid #f1f5f9'
-            }}
-          >
-            {section.label}
-          </div>
-        ))}
-        <div style={{ padding: '12px 16px', fontWeight: 800, fontSize: '12px', color: '#1e3a8a', borderTop: '1px solid #f1f5f9', textTransform: 'uppercase' }}>
-          {partIII?.label}
-        </div>
-        {partIIISections.map(section => (
-          <div 
-            key={section.id}
-            onClick={() => setActiveSection(section.id)}
-            style={{ 
-              padding: '12px 16px', 
-              cursor: 'pointer',
-              backgroundColor: activeSection === section.id ? '#1e3a8a' : 'transparent',
-              color: activeSection === section.id ? 'white' : '#334155',
-              fontWeight: 500,
-              fontSize: '13px',
-              borderBottom: '1px solid #f1f5f9'
-            }}
-          >
-            {section.label}
-          </div>
-        ))}
+        {SHOW_DYNAMIC_PREAUDIT && Array.isArray(dynamicSections) && dynamicSections.length > 0 ? (
+          <>
+            <div style={{ padding: '12px 16px', fontWeight: 800, fontSize: '12px', color: '#1e3a8a', borderBottom: '1px solid #f1f5f9', textTransform: 'uppercase' }}>
+              Pre-Audit Questionnaire
+            </div>
+            {dynamicSections.map(s => (
+              <div
+                key={String(s.section_id)}
+                onClick={() => setActiveSection(String(s.section_id))}
+                style={{
+                  padding: '12px 16px',
+                  cursor: 'pointer',
+                  backgroundColor: activeSection === String(s.section_id) ? '#1e3a8a' : 'transparent',
+                  color: activeSection === String(s.section_id) ? 'white' : '#334155',
+                  fontWeight: 500,
+                  fontSize: '13px',
+                  borderBottom: '1px solid #f1f5f9'
+                }}
+              >
+                {String(s.section_label || s.section_id)}
+              </div>
+            ))}
+          </>
+        ) : (
+          <>
+            <div style={{ padding: '12px 16px', fontWeight: 800, fontSize: '12px', color: '#1e3a8a', borderBottom: '1px solid #f1f5f9', textTransform: 'uppercase' }}>
+              {partI?.label}
+            </div>
+            {partISections.map(section => (
+              <div 
+                key={section.id}
+                onClick={() => setActiveSection(section.id)}
+                style={{ 
+                  padding: '12px 16px', 
+                  cursor: 'pointer',
+                  backgroundColor: activeSection === section.id ? '#1e3a8a' : 'transparent',
+                  color: activeSection === section.id ? 'white' : '#334155',
+                  fontWeight: 500,
+                  fontSize: '13px',
+                  borderBottom: '1px solid #f1f5f9'
+                }}
+              >
+                {section.label}
+              </div>
+            ))}
+            <div style={{ padding: '12px 16px', fontWeight: 800, fontSize: '12px', color: '#1e3a8a', borderTop: '1px solid #f1f5f9', borderBottom: '1px solid #f1f5f9', textTransform: 'uppercase' }}>
+              {partII?.label}
+            </div>
+            {partIISections.map(section => (
+              <div 
+                key={section.id}
+                onClick={() => setActiveSection(section.id)}
+                style={{ 
+                  padding: '12px 16px', 
+                  cursor: 'pointer',
+                  backgroundColor: activeSection === section.id ? '#1e3a8a' : 'transparent',
+                  color: activeSection === section.id ? 'white' : '#334155',
+                  fontWeight: 500,
+                  fontSize: '13px',
+                  borderBottom: '1px solid #f1f5f9'
+                }}
+              >
+                {section.label}
+              </div>
+            ))}
+            <div style={{ padding: '12px 16px', fontWeight: 800, fontSize: '12px', color: '#1e3a8a', borderTop: '1px solid #f1f5f9', textTransform: 'uppercase' }}>
+              {partIII?.label}
+            </div>
+            {partIIISections.map(section => (
+              <div 
+                key={section.id}
+                onClick={() => setActiveSection(section.id)}
+                style={{ 
+                  padding: '12px 16px', 
+                  cursor: 'pointer',
+                  backgroundColor: activeSection === section.id ? '#1e3a8a' : 'transparent',
+                  color: activeSection === section.id ? 'white' : '#334155',
+                  fontWeight: 500,
+                  fontSize: '13px',
+                  borderBottom: '1px solid #f1f5f9'
+                }}
+              >
+                {section.label}
+              </div>
+            ))}
+          </>
+        )}
       </div>
       <div key={String(selectedBlockId || '')} style={{ flex: 1, padding: '0 20px' }}>
         <div style={{ marginBottom: '10px', fontSize: '12px', fontWeight: 800, color: '#1e3a8a', textTransform: 'uppercase' }}>
-          {(partISectionIds.includes(activeSection) ? partI?.label : partIISectionIds.includes(activeSection) ? partII?.label : partIII?.label) || ''}
+          {SHOW_DYNAMIC_PREAUDIT && Array.isArray(dynamicSections) && dynamicSections.length > 0
+            ? 'Pre-Audit Questionnaire'
+            : ((partISectionIds.includes(activeSection) ? partI?.label : partIISectionIds.includes(activeSection) ? partII?.label : partIII?.label) || '')}
         </div>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
-          <div style={{ fontSize: '16px', fontWeight: 700, color: '#1e3a8a' }}>{ORGANIZATION_SECTIONS.find(s => s.id === activeSection)?.label}</div>
+          <div style={{ fontSize: '16px', fontWeight: 700, color: '#1e3a8a' }}>
+            {SHOW_DYNAMIC_PREAUDIT && Array.isArray(dynamicSections) && dynamicSections.length > 0
+              ? (() => {
+                  const m = (dynamicSections || []).find(s => String(s.section_id) === String(activeSection))
+                  return String((m && m.section_label) || activeSection)
+                })()
+              : (ORGANIZATION_SECTIONS.find(s => s.id === activeSection)?.label)}
+          </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <div style={{ display: 'flex', gap: 8, marginRight: 8 }}>
               {(Array.isArray(blocks) ? blocks : []).map(b => {

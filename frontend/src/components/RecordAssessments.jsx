@@ -46,7 +46,6 @@ function RecordAssessments({
   onChangeBlockId,
   onAuditContextChange,
 }) {
-  const [auditInfo, setAuditInfo] = React.useState({})
   const PAGE_LOCKED = false
   const effAllowedSubdivision = Array.isArray(allowedSubdivision) ? allowedSubdivision : []
   const [blocks, setBlocks] = React.useState(() => {
@@ -65,7 +64,7 @@ function RecordAssessments({
       return { id: canonical, name: display }
     })
     setBlocks(next)
-  }, [user, blocks.length, assignments])
+  }, [user, assignments])
   const [selectedBlockIdLocal, setSelectedBlockIdLocal] = React.useState(() => blocks[0]?.id || '')
   const selectedBlockId = controlledBlockId || selectedBlockIdLocal
   React.useEffect(() => {
@@ -131,41 +130,85 @@ function RecordAssessments({
   const allowedSubsByAssignment = subdivisions.filter(s => assignedSubIds.includes(s.id))
   const [selectedCategoryBlock, setSelectedCategoryBlock] = React.useState('')
   React.useEffect(() => { setSelectedCategoryBlock('') }, [subdivisionId, effectiveGroupId, selectedBlockId])
+  const lastAppliedGroupRef = React.useRef(null)
+  const lastAppliedSubRef = React.useRef(null)
   React.useEffect(() => {
     if (!effectiveGroupId) return
-    if (groupId !== effectiveGroupId) onChangeGroup(effectiveGroupId)
+    if (groupId !== effectiveGroupId && lastAppliedGroupRef.current !== effectiveGroupId) {
+      onChangeGroup(effectiveGroupId)
+      lastAppliedGroupRef.current = effectiveGroupId
+    }
     const allowedList = assignedSubIds
     if (allowedList.length > 0) {
       const isAllowed = allowedList.includes(subdivisionId)
-      if (!isAllowed) onChangeSubdivision(allowedList[0])
+      const target = allowedList[0]
+      if (!isAllowed && lastAppliedSubRef.current !== target) {
+        onChangeSubdivision(target)
+        lastAppliedSubRef.current = target
+      }
     } else {
-      onChangeSubdivision('')
+      if (subdivisionId !== '' && lastAppliedSubRef.current !== '') {
+        onChangeSubdivision('')
+        lastAppliedSubRef.current = ''
+      }
     }
   }, [assignedSubIds, effectiveGroupId, subdivisionId, onChangeGroup, onChangeSubdivision, groupId])
   const [questions, setQuestions] = React.useState([])
   React.useEffect(() => {
-    try {
-      const allowed = assignedSubIds
-      if (!effectiveGroupId || allowed.length === 0) {
-        console.error('[RecordAssessments] No allowed subdivisions or groupId')
+    ;(async () => {
+      try {
+        const allowed = assignedSubIds
+        if (!effectiveGroupId || allowed.length === 0) {
+          console.error('[RecordAssessments] No allowed subdivisions or groupId')
+          setQuestions([])
+          return
+        }
+        if (String(effectiveGroupId) === 'ELEC') {
+          const token = await auth.currentUser?.getIdToken?.()
+          const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8010'
+          const resp = await fetch(`${BASE_URL}/questions/self-assessment?category=${encodeURIComponent('Electrical Safety Audit')}`, {
+            method: 'GET',
+            headers: {
+              Authorization: token ? `Bearer ${token}` : undefined
+            }
+          })
+          if (!resp.ok) {
+            const txt = await resp.text().catch(() => '')
+            console.error('[RecordAssessments] Electrical questions fetch failed', txt)
+            setQuestions([])
+            return
+          }
+          const list = await resp.json().catch(() => [])
+          const merged = Array.isArray(list) ? list.map(d => ({
+            id: d.question_id || d.id,
+            block: d.section || 'General',
+            clause: '',
+            requirement: d.question_text || ''
+          })) : []
+          const filtered = merged.filter(q => {
+            if (!selectedCategoryBlock) return true
+            return (q.block || 'General') === selectedCategoryBlock
+          })
+          setQuestions(filtered)
+          try { console.log('[RecordAssessments] Electrical questions loaded', { count: filtered.length }) } catch { /* noop */ }
+          return
+        }
+        const merged = []
+        allowed.forEach(subId => {
+          const items = getQuestions(effectiveGroupId, subId)
+          merged.push(...items)
+        })
+        const filtered = merged.filter(q => {
+          if (!selectedCategoryBlock) return true
+          return (q.block || 'General') === selectedCategoryBlock
+        })
+        setQuestions(filtered)
+        try { console.log('[RecordAssessments] Questions loaded', { count: filtered.length, group: effectiveGroupId, subs: allowed }) } catch { void 0 }
+      } catch (e) {
+        console.error('[RecordAssessments] Failed to load questions', e)
         setQuestions([])
-        return
       }
-      const merged = []
-      allowed.forEach(subId => {
-        const items = getQuestions(effectiveGroupId, subId)
-        merged.push(...items)
-      })
-      const filtered = merged.filter(q => {
-        if (!selectedCategoryBlock) return true
-        return (q.block || 'General') === selectedCategoryBlock
-      })
-      setQuestions(filtered)
-      try { console.log('[RecordAssessments] Questions loaded', { count: filtered.length, group: effectiveGroupId, subs: allowed }) } catch { void 0 }
-    } catch (e) {
-      console.error('[RecordAssessments] Failed to load questions', e)
-      setQuestions([])
-    }
+    })()
   }, [effectiveGroupId, selectedCategoryBlock, assignedSubIds])
 
   const summary = questions.reduce(
@@ -214,7 +257,8 @@ function RecordAssessments({
   const canonicalBlockId = (() => {
     const bidRaw = selectedBlockId || ''
     const bid = String(bidRaw).trim()
-    if (/^block_\d+$/i.test(bid)) return bid.toLowerCase()
+    // Treat any "block_*" value as canonical, including "block_all"
+    if (/^block_.+/i.test(bid)) return bid.toLowerCase()
     const list = Array.isArray(assignments) ? assignments : []
     const match = list.find(a => {
       const sameOrg = (a.org_id === orgIdResolved || a.orgId === orgIdResolved)
@@ -231,14 +275,16 @@ function RecordAssessments({
     const list = Array.isArray(assignments) ? assignments : []
     const g = String(effectiveGroupId || groupId || '')
     const sid = String(subdivisionId || '')
-    if (!canonicalBlockId) return null
-    const exact = list.find(a =>
-      (a.org_id === orgIdResolved || a.orgId === orgIdResolved) &&
-      String(a.block_id) === String(canonicalBlockId) &&
-      String(a.group) === g &&
-      String(a.subdivision_id) === sid
-    )
-    if (exact) return exact
+    let exact = null
+    if (canonicalBlockId) {
+      exact = list.find(a =>
+        (a.org_id === orgIdResolved || a.orgId === orgIdResolved) &&
+        String(a.block_id) === String(canonicalBlockId) &&
+        String(a.group) === g &&
+        String(a.subdivision_id) === sid
+      )
+      if (exact) return exact
+    }
     const missingSub = list.find(a =>
       (a.org_id === orgIdResolved || a.orgId === orgIdResolved) &&
       String(a.block_id) === String(canonicalBlockId) &&
@@ -246,6 +292,19 @@ function RecordAssessments({
       !a.subdivision_id
     )
     if (missingSub) return { ...missingSub, subdivision_id: sid }
+    // Fallback: assignments scoped to all blocks
+    const allBlocks = list.find(a =>
+      (a.org_id === orgIdResolved || a.orgId === orgIdResolved) &&
+      String(a.group) === g &&
+      (String(a.block_id) === '__ALL__' || String(a.block_name) === '__ALL__')
+    )
+    if (allBlocks) {
+      return {
+        ...allBlocks,
+        // Persist under the selected block to keep block-scoped responses consistent
+        block_id: String(canonicalBlockId || selectedBlockId || 'block_all')
+      }
+    }
     const byBlock = list.find(a =>
       (a.org_id === orgIdResolved || a.orgId === orgIdResolved) &&
       (String(a.block_id) === String(canonicalBlockId) || String(a.block_name) === String(selectedBlockId))
@@ -256,13 +315,18 @@ function RecordAssessments({
   const blockIdForSelection = activeAssignment?.block_id || canonicalBlockId || selectedBlockId || ''
   const lastRehydrateKeyRef = React.useRef('')
   const lastBaselineKeyRef = React.useRef('')
+  const lastCtxKeyRef = React.useRef('')
   React.useEffect(() => {
     if (typeof onAuditContextChange === 'function') {
       const aid = assignmentIdForSelection || ''
       const bid = blockIdForSelection || ''
       const gid = effectiveGroupId || groupId || ''
       const sid = subdivisionId || ''
-      onAuditContextChange({ auditId: aid, blockId: bid, groupId: gid, subdivisionId: sid })
+      const k = [aid, bid, gid, sid].join('|')
+      if (lastCtxKeyRef.current !== k) {
+        lastCtxKeyRef.current = k
+        onAuditContextChange({ auditId: aid, blockId: bid, groupId: gid, subdivisionId: sid })
+      }
     }
   }, [assignmentIdForSelection, blockIdForSelection, effectiveGroupId, groupId, subdivisionId, onAuditContextChange])
   React.useEffect(() => {
@@ -288,7 +352,6 @@ function RecordAssessments({
         const auditId = activeAssignment?.audit_id || activeAssignment?.id
         if (!auditId) return
         const data = await getAudit(auditId)
-        setAuditInfo(data || {})
         const locked = String((data || {}).status || '').toUpperCase() === 'COMPLETED'
         if (locked) {
           try {
@@ -324,7 +387,7 @@ function RecordAssessments({
         })
       }
       const token = await auth.currentUser.getIdToken()
-      const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8011'
+      const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8010'
       // Persist ONLY via backend; org_responses is the single source of truth (v1)
       const resp = await fetch(`${BASE_URL}/org-responses/save`, {
         method: 'POST',
@@ -361,9 +424,9 @@ function RecordAssessments({
         if (lastRehydrateKeyRef.current === key) return
         lastRehydrateKeyRef.current = key
         const token = await auth.currentUser.getIdToken()
-        const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8011'
+        const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8010'
         const params = new URLSearchParams({ audit_id: String(auditId), block_id: String(blockId) })
-        const resp = await fetch(`${BASE_URL}/org-responses/list?${params.toString()}`, {
+        const resp = await fetch(`${BASE_URL}/audit/responses?${params.toString()}`, {
           method: 'GET',
           headers: { idToken: token }
         })
@@ -373,9 +436,13 @@ function RecordAssessments({
         const nextValue = {}
         ;(Array.isArray(list) ? list : []).forEach((d) => {
           const qid = d.question_id
-          const org = d.org || {}
-          nextStatus[getKey(qid)] = String(org.status || '').toLowerCase()
-          nextValue[getKey(qid)] = org.value || ''
+          const topStatus = d.status
+          const topValue = d.value
+          const nested = d.org || {}
+          const status = (topStatus !== undefined && topStatus !== null) ? topStatus : nested.status
+          const value = (topValue !== undefined && topValue !== null) ? topValue : nested.value
+          nextStatus[getKey(qid)] = String(status || '').toLowerCase()
+          nextValue[getKey(qid)] = value || ''
         })
         setStatusMap(nextStatus)
         setValueMap(nextValue)

@@ -16,8 +16,14 @@ function AdminAuditDetailView({ initialState, onBack }) {
   const [blockAuditMap, setBlockAuditMap] = React.useState({})
   const [blockMetaMap, setBlockMetaMap] = React.useState({})
   const [currentAuditId, setCurrentAuditId] = React.useState(null)
-  const [auditStatus, setAuditStatus] = React.useState('ACTIVE')
   const PRIMARY_ORDER = ['bldg_name', 'bldg_address', 'bldg_phone', 'bldg_email', 'bldg_website']
+  const canonicalizeBlockId = React.useCallback((bidRaw) => {
+    const s = String(bidRaw || '').trim()
+    if (/^block_.+/i.test(s)) return s.toLowerCase()
+    const m = /^Block\s*(\d+)/i.exec(s)
+    if (m) return `block_${parseInt(m[1], 10)}`
+    return s.toLowerCase()
+  }, [])
 
   React.useEffect(() => {
     const state = initialState || (window.history && window.history.state) || null
@@ -26,10 +32,10 @@ function AdminAuditDetailView({ initialState, onBack }) {
     const blocks = rawBlocks.map(b => (typeof b === 'string' ? { id: b, name: b, auditId } : { id: b?.id || b?.name, name: b?.name || b?.id, auditId: b?.auditId || auditId })).filter(b => b.id)
     const orgName = state?.orgName || ''
     const orgId = state?.orgId || null
-    try { console.log('[AdminAuditDetailView] state before fetch:', state) } catch { /* noop */ }
+    try { console.log('[AdminAuditDetailView] state before fetch:', state) } catch (e) { void e }
     if (!auditId) {
-      try { window.history.pushState({}, '', '/admin') } catch { /* noop */ }
-      try { onBack && onBack() } catch { /* noop */ }
+      try { window.history.pushState({}, '', '/admin') } catch (e) { void e }
+      try { onBack && onBack() } catch (e) { void e }
       return
     }
     setFullAuditData(prev => ({ ...prev, blocks, orgName, orgId, auditId }))
@@ -37,7 +43,7 @@ function AdminAuditDetailView({ initialState, onBack }) {
     ;(async () => {
       try {
         const idToken = await auth.currentUser.getIdToken()
-        const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || (typeof window !== 'undefined' ? window.__BACKEND_URL__ : undefined) || 'http://localhost:8011'
+        const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || (typeof window !== 'undefined' ? window.__BACKEND_URL__ : undefined) || 'http://localhost:8010'
         const asgRes = await fetch(`${BASE_URL}/assignments`, { headers: { idToken } })
         const asgList = await (asgRes.ok ? asgRes.json().catch(() => []) : Promise.resolve([]))
         const scoped = (Array.isArray(asgList) ? asgList : []).filter(a => String(a.org_id || a.orgId) === String(orgId))
@@ -67,7 +73,7 @@ function AdminAuditDetailView({ initialState, onBack }) {
         const _initialBlockId = blocks && blocks.length ? String(blocks[0].id || '') : ''
         const initialAudit = (_initialBlockId && map[_initialBlockId]) || (blocks[0]?.auditId) || auditId
         setCurrentAuditId(initialAudit || null)
-        try { console.log('[Switching Block] New Context:', { auditId: initialAudit || auditId, blockId: _initialBlockId }) } catch { /* noop */ }
+        try { console.log('[Switching Block] New Context:', { auditId: initialAudit || auditId, blockId: _initialBlockId }) } catch (e) { void e }
       } catch {
         const initialAudit = blocks[0]?.auditId || auditId
         setCurrentAuditId(initialAudit || null)
@@ -83,44 +89,40 @@ function AdminAuditDetailView({ initialState, onBack }) {
   }, [activeBlock, blockAuditMap])
 
   React.useEffect(() => {
-    const blockId = activeBlock
+    const blockId = canonicalizeBlockId(activeBlock)
     const auditId = currentAuditId
-    try { console.log('[AdminAuditDetailView] fetching for block:', blockId, 'auditId:', auditId) } catch { /* noop */ }
+    try { console.log('[AdminAuditDetailView] fetching for block:', blockId, 'auditId:', auditId) } catch (e) { void e }
     if (!blockId || !auditId) return
     let timeout = setTimeout(() => setLoading(true), 0)
     ;(async () => {
       try {
         const idToken = await auth.currentUser.getIdToken()
-        const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || (typeof window !== 'undefined' ? window.__BACKEND_URL__ : undefined) || 'http://localhost:8011'
+        const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || (typeof window !== 'undefined' ? window.__BACKEND_URL__ : undefined) || 'http://localhost:8010'
         const assessUrl = `${BASE_URL}/audit/responses?${new URLSearchParams({ audit_id: String(auditId), block_id: String(blockId) }).toString()}`
         const buildingUrl = `${BASE_URL}/org-responses/building-details/list?${new URLSearchParams({ audit_id: String(auditId), block_id: String(blockId) }).toString()}`
         const obsUrl = `${BASE_URL}/audit/observations?${new URLSearchParams({ audit_id: String(auditId), block_id: String(blockId) }).toString()}`
         const orgUrl = `${BASE_URL}/org-responses/list?${new URLSearchParams({ audit_id: String(auditId), block_id: String(blockId) }).toString()}`
-        const auditInfoUrl = `${BASE_URL}/audits/${encodeURIComponent(String(auditId || ''))}`
-        const [assessRes, buildingRes, obsRes, orgRes, auditInfoRes] = await Promise.all([
+        const [assessRes, buildingRes, obsRes, orgRes] = await Promise.all([
           fetch(assessUrl, { headers: { idToken } }),
           fetch(buildingUrl, { headers: { idToken } }),
           fetch(obsUrl, { headers: { idToken } }),
-          fetch(orgUrl, { headers: { idToken } }),
-          fetch(auditInfoUrl, { headers: { idToken } })
+          fetch(orgUrl, { headers: { idToken } })
         ])
         const assessments = await (assessRes.ok ? assessRes.json().catch(() => []) : Promise.resolve([]))
         const building = await (buildingRes.ok ? buildingRes.json().catch(() => ({ sections: [], fields: {} })) : Promise.resolve({ sections: [], fields: {} }))
         const observations = await (obsRes.ok ? obsRes.json().catch(() => []) : Promise.resolve([]))
         const orgRows = await (orgRes.ok ? orgRes.json().catch(() => []) : Promise.resolve([]))
-        const info = await (auditInfoRes.ok ? auditInfoRes.json().catch(() => ({})) : Promise.resolve({}))
         const meta = blockMetaMap[blockId] || {}
         setFullAuditData(prev => ({ ...prev, assessments, building, observations, orgRows, auditId, groupId: meta.group || prev.groupId, subdivisionId: meta.subdivision_id || prev.subdivisionId }))
-        setAuditStatus(String(info?.status || '').toUpperCase() || 'ACTIVE')
-        try { console.log('Hydrating Block:', { auditId, blockId, data: { assessments, building, observations, orgRows } }) } catch { /* noop */ }
+        try { console.log('Hydrating Block:', { auditId, blockId, data: { assessments, building, observations, orgRows } }) } catch (e) { void e }
       } catch {
         setFullAuditData(prev => ({ ...prev, assessments: [], building: { sections: [], fields: {} }, observations: [], orgRows: [] }))
       } finally {
-        try { clearTimeout(timeout) } catch { /* noop */ }
+        try { clearTimeout(timeout) } catch (e) { void e }
         setLoading(false)
       }
     })()
-    return () => { try { clearTimeout(timeout) } catch { /* noop */ } }
+    return () => { try { clearTimeout(timeout) } catch (e) { void e } }
   }, [activeBlock, currentAuditId, blockMetaMap])
 
   return (
@@ -137,32 +139,31 @@ function AdminAuditDetailView({ initialState, onBack }) {
           
           <button className="btn btn-outline" onClick={() => {
             ;(async () => {
-              const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || (typeof window !== 'undefined' ? window.__BACKEND_URL__ : undefined) || 'http://localhost:8011'
+              const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || (typeof window !== 'undefined' ? window.__BACKEND_URL__ : undefined) || 'http://localhost:8010'
               const currentAuditIdLocal = currentAuditId || blockAuditMap[activeBlock] || fullAuditData.auditId
-              const orgId = fullAuditData.orgId
               if (!isValidId(currentAuditIdLocal)) {
                 alert('Data not fully loaded')
                 return
               }
               const idToken = await auth.currentUser.getIdToken()
               const previewUrl = `${BASE_URL}/preview/self-assessment/${encodeURIComponent(currentAuditIdLocal)}?idToken=${encodeURIComponent(idToken)}`
-              try { window.open(previewUrl, '_blank') } catch { /* noop */ }
+              try { window.open(previewUrl, '_blank') } catch (e) { void e }
             })()
           }} style={{ background: '#dbeafe', borderColor: '#93c5fd' }}>Self Assessment</button>
           <button className="btn btn-outline" onClick={() => {
             ;(async () => {
               try {
-                const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || (typeof window !== 'undefined' ? window.__BACKEND_URL__ : undefined) || 'http://localhost:8011'
+                const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || (typeof window !== 'undefined' ? window.__BACKEND_URL__ : undefined) || 'http://localhost:8010'
                 const currentAuditIdLocal = currentAuditId || blockAuditMap[activeBlock] || fullAuditData.auditId
                 const blockId = String(activeBlock || '')
                 if (!isValidId(currentAuditIdLocal) || !isValidId(blockId)) {
                   alert('Data not fully loaded')
                   return
                 }
-                const previewUrl = `${BASE_URL}/reports/preview/initial/${encodeURIComponent(currentAuditIdLocal)}/${encodeURIComponent(blockId)}`
+                const idToken = await auth.currentUser.getIdToken()
+                const previewUrl = `${BASE_URL}/reports/preview/initial/${encodeURIComponent(currentAuditIdLocal)}/${encodeURIComponent(blockId)}?idToken=${encodeURIComponent(idToken)}`
                 window.open(previewUrl, '_blank')
-              } catch {
-              }
+              } catch (e) { void e }
             })()
           }} style={{ background: '#dcfce7', borderColor: '#86efac' }}>Initial Report</button>
           <button className="btn btn-outline" onClick={() => {
@@ -175,9 +176,10 @@ function AdminAuditDetailView({ initialState, onBack }) {
                   alert('Data not fully loaded')
                   return
                 }
-                const previewUrl = `${BASE_URL}/reports/preview/final/${encodeURIComponent(currentAuditIdLocal)}/${encodeURIComponent(blockId)}`
+                const idToken = await auth.currentUser.getIdToken()
+                const previewUrl = `${BASE_URL}/reports/preview/final/${encodeURIComponent(currentAuditIdLocal)}/${encodeURIComponent(blockId)}?idToken=${encodeURIComponent(idToken)}`
                 window.open(previewUrl, '_blank')
-              } catch { /* noop */ }
+              } catch (e) { void e }
             })()
           }} style={{ background: '#dbeafe', borderColor: '#93c5fd' }}>Final Report</button>
 
@@ -185,7 +187,7 @@ function AdminAuditDetailView({ initialState, onBack }) {
             ;(async () => {
               try {
                 const token = await auth.currentUser.getIdToken()
-                const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || (typeof window !== 'undefined' ? window.__BACKEND_URL__ : undefined) || 'http://localhost:8011'
+                const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || (typeof window !== 'undefined' ? window.__BACKEND_URL__ : undefined) || 'http://localhost:8010'
                 const currentAuditIdLocal = currentAuditId || blockAuditMap[activeBlock] || fullAuditData.auditId
                 const orgId = fullAuditData.orgId
                 if (!isValidId(currentAuditIdLocal)) {
@@ -211,8 +213,7 @@ function AdminAuditDetailView({ initialState, onBack }) {
                 a.click()
                 a.remove()
                 setTimeout(() => URL.revokeObjectURL(url), 2000)
-              } catch {
-              }
+              } catch (e) { void e }
             })()
           }} style={{ background: '#bfdbfe', borderColor: '#60a5fa', color: '#0c4a6e' }}>Download Self Assessment</button>
 
@@ -245,8 +246,7 @@ function AdminAuditDetailView({ initialState, onBack }) {
                 a.click()
                 a.remove()
                 setTimeout(() => URL.revokeObjectURL(url), 2000)
-              } catch {
-              }
+              } catch (e) { void e }
             })()
           }} style={{ background: '#bbf7d0', borderColor: '#4ade80', color: '#064e3b' }}>Download Initial</button>
 
@@ -279,8 +279,7 @@ function AdminAuditDetailView({ initialState, onBack }) {
                 a.click()
                 a.remove()
                 setTimeout(() => URL.revokeObjectURL(url), 2000)
-              } catch {
-              }
+              } catch (e) { void e }
             })()
           }} style={{ background: '#c7d2fe', borderColor: '#a78bfa', color: '#3730a3' }}>Download Final</button>
 

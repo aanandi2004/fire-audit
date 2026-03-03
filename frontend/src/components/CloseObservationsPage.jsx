@@ -64,6 +64,7 @@ function CloseObservationsPage({
   })()
   const [selectedSubdivisionId, setSelectedSubdivisionId] = useState(initialSubId)
   const [selectedCategory, setSelectedCategory] = useState('')
+  const [elecQuestions, setElecQuestions] = useState([])
 
   // Sync with parent groupId change
   useEffect(() => {
@@ -72,6 +73,7 @@ function CloseObservationsPage({
 
   const [observationMetaMap] = useState({})
   const [closureDetailsMap] = useState({})
+  const [rehydrateVersion, setRehydrateVersion] = useState(0)
   const [closedRows, setClosedRows] = useState([])
   const [gapRows, setGapRows] = useState([])
   const handleUpload = async (qid, file) => {
@@ -105,61 +107,89 @@ function CloseObservationsPage({
     } catch { /* noop */ }
   }
   useEffect(() => {
-    try {
-      const groupCanonical = selectedGroupId
-      const subId = selectedSubdivisionId
-      if (!groupCanonical || !subId) {
+    ;(async () => {
+      try {
+        const groupCanonical = selectedGroupId
+        const subId = selectedSubdivisionId
+        if (!groupCanonical || !subId) {
+          setClosedRows([])
+          setGapRows([])
+          return
+        }
+        let qs = []
+        if (String(groupCanonical) === 'ELEC') {
+          // Load Electrical question definitions from backend if needed
+          if (!Array.isArray(elecQuestions) || elecQuestions.length === 0) {
+            try {
+              const token = await auth.currentUser?.getIdToken?.()
+              const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8011'
+              const resp = await fetch(`${BASE_URL}/questions/self-assessment?category=${encodeURIComponent('Electrical Safety Audit')}`, {
+                headers: { Authorization: token ? `Bearer ${token}` : undefined }
+              })
+              const list = await resp.json().catch(() => [])
+              const defs = Array.isArray(list) ? list.map(d => ({
+                id: d.question_id || d.id,
+                block: d.section || 'General',
+                requirement: d.question_text || ''
+              })) : []
+              setElecQuestions(defs)
+              qs = defs
+            } catch {
+              qs = []
+            }
+          } else {
+            qs = elecQuestions
+          }
+        } else {
+          qs = getQuestions(groupCanonical, subId) || []
+        }
+        const closed = []
+        const gaps = []
+        for (const q of qs) {
+          const doc = (Array.isArray(unifiedDocs) ? unifiedDocs : []).find(d =>
+            String(d.question_id).trim().toUpperCase() === String(q.id).trim().toUpperCase()
+          )
+          const orgStRaw = (doc?.org?.status || doc?.customer_status || doc?.status || '')
+          const audStRaw = (doc?.auditor?.status || doc?.auditor_status || '')
+          const orgSt = String(orgStRaw || '').toUpperCase().trim()
+          const audSt = String(audStRaw || '').toUpperCase().trim()
+          const sec = q.block || 'General'
+          const row = {
+              id: String(q.id),
+              section: sec,
+              requirement: q.requirement || '',
+              org_status: (() => {
+                const isInputOnly = /^(building details|type of construction)$/i.test(String(sec || ''))
+                if (isInputOnly) {
+                  const v = doc?.org?.value ?? doc?.value ?? ''
+                  return String(v || '').trim() || '—'
+                }
+                return orgSt || '—'
+              })(),
+              auditor_status: audSt || '—',
+              auditor_observation: String(doc?.auditor?.observation || doc?.auditor_observation || doc?.observation || ''),
+              evidence_customer: (() => {
+                const e1 = Array.isArray(doc?.org?.uploads) ? doc.org.uploads : []
+                const e2 = Array.isArray(doc?.org?.evidence) ? doc.org.evidence : []
+                return [...e1, ...e2]
+              })(),
+              evidence_auditor: Array.isArray(doc?.auditor?.uploads) ? doc.auditor.uploads : []
+            }
+          const isClosed = (orgSt !== '' && audSt !== '' && orgSt === audSt)
+          if (isClosed) {
+            closed.push(row)
+          } else {
+            gaps.push(row)
+          }
+        }
+        setClosedRows(closed)
+        setGapRows(gaps)
+      } catch {
         setClosedRows([])
         setGapRows([])
-        return
       }
-      const qs = getQuestions(groupCanonical, subId) || []
-      const closed = []
-      const gaps = []
-      for (const q of qs) {
-        const doc = (Array.isArray(unifiedDocs) ? unifiedDocs : []).find(d =>
-          String(d.question_id).trim().toUpperCase() === String(q.id).trim().toUpperCase()
-        )
-        const orgStRaw = (doc?.org?.status || doc?.customer_status || doc?.status || '')
-        const audStRaw = (doc?.auditor?.status || doc?.auditor_status || '')
-        const orgSt = String(orgStRaw || '').toUpperCase().trim()
-        const audSt = String(audStRaw || '').toUpperCase().trim()
-        const sec = q.block || 'General'
-        const row = {
-            id: String(q.id),
-            section: sec,
-            requirement: q.requirement || '',
-            org_status: (() => {
-              const isInputOnly = /^(building details|type of construction)$/i.test(String(sec || ''))
-              if (isInputOnly) {
-                const v = doc?.org?.value ?? doc?.value ?? ''
-                return String(v || '').trim() || '—'
-              }
-              return orgSt || '—'
-            })(),
-            auditor_status: audSt || '—',
-            auditor_observation: String(doc?.auditor?.observation || doc?.auditor_observation || doc?.observation || ''),
-            evidence_customer: (() => {
-              const e1 = Array.isArray(doc?.org?.uploads) ? doc.org.uploads : []
-              const e2 = Array.isArray(doc?.org?.evidence) ? doc.org.evidence : []
-              return [...e1, ...e2]
-            })(),
-            evidence_auditor: Array.isArray(doc?.auditor?.uploads) ? doc.auditor.uploads : []
-          }
-        const isClosed = (orgSt !== '' && audSt !== '' && orgSt === audSt)
-        if (isClosed) {
-          closed.push(row)
-        } else {
-          gaps.push(row)
-        }
-      }
-      setClosedRows(closed)
-      setGapRows(gaps)
-    } catch {
-      setClosedRows([])
-      setGapRows([])
-    }
-  }, [selectedGroupId, selectedSubdivisionId, unifiedDocs, selectedBlockId])
+    })()
+  }, [selectedGroupId, selectedSubdivisionId, unifiedDocs, selectedBlockId, elecQuestions])
 
   useEffect(() => {
     try {
@@ -185,6 +215,22 @@ function CloseObservationsPage({
       })()
     } catch (err) { console.error("Unified Fetch Error:", err) }
   }, [assignments, user, selectedBlockId, selectedGroupId, selectedSubdivisionId, onAuditContextChange])
+
+  useEffect(() => {
+    try {
+      const docs = Array.isArray(unifiedDocs) ? unifiedDocs : []
+      let changed = false
+      docs.forEach(d => {
+        const qidKey = String(d.question_id || d.id).trim().toUpperCase()
+        const custClosure = typeof d.customer_closure === 'string' ? d.customer_closure : (d.org?.closure_details || '')
+        if (custClosure) {
+          closureDetailsMap[qidKey] = custClosure
+          changed = true
+        }
+      })
+      if (changed) setRehydrateVersion(v => v + 1)
+    } catch { /* noop */ }
+  }, [unifiedDocs])
 
   useEffect(() => {
     (async () => {
@@ -214,6 +260,7 @@ function CloseObservationsPage({
             closureDetailsMap[qid] = custClosure
           }
         })
+        setRehydrateVersion(v => v + 1)
       } catch { /* noop */ }
     })()
   }, [assignments, user, selectedBlockId, selectedGroupId, observationMetaMap])
@@ -377,7 +424,12 @@ function CloseObservationsPage({
                         const isAllowed = Array.isArray(allowedSubdivisionsFromAssignments) && allowedSubdivisionsFromAssignments.includes(sub.id)
                         const categorySummary = (() => {
                           try {
-                            const list = getQuestions(selectedGroupId, sub.id) || []
+                            let list = []
+                            if (String(selectedGroupId) === 'ELEC') {
+                              list = Array.isArray(elecQuestions) ? elecQuestions : []
+                            } else {
+                              list = getQuestions(selectedGroupId, sub.id) || []
+                            }
                             const map = {}
                             for (const q of list) {
                               const cat = q.block || 'General'
@@ -485,6 +537,7 @@ function CloseObservationsPage({
                               closureDetailsMap[qidKey] = custClosure
                             }
                           })
+                          setRehydrateVersion(v => v + 1)
                         }
                       } catch { /* noop */ }
                       alert('Changes saved and hydrated')
@@ -541,6 +594,7 @@ function CloseObservationsPage({
                     </td>
                     <td style={{ border: '1px solid #e2e8f0', padding: 12, verticalAlign: 'top', width: '30%', maxWidth: 0 }}>
                       <textarea
+                        key={`${qid}-${rehydrateVersion}`}
                         style={{ width: '100%', minWidth: '100%', minHeight: '100px', border: '1px solid #cbd5e1', borderRadius: 4, padding: 8, boxSizing: 'border-box', resize: 'vertical', display: 'block' }}
                         defaultValue={closureDetailsMap[String(qid).trim().toUpperCase()] || ''}
                         onChange={e => { closureDetailsMap[String(qid).trim().toUpperCase()] = e.target.value }}

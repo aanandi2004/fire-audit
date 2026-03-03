@@ -303,7 +303,8 @@ function AdminOrgManagement({
         }
         const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8011'
         const blockId = Array.isArray(org.blockNames) && org.blockNames.length ? org.blockNames[0] : `Block 1`
-        const url = `${BASE_URL}/reports/preview/initial/${encodeURIComponent(auditId)}/${encodeURIComponent(String(blockId))}`
+        const idToken = await auth.currentUser.getIdToken()
+        const url = `${BASE_URL}/reports/preview/initial/${encodeURIComponent(auditId)}/${encodeURIComponent(String(blockId))}?idToken=${encodeURIComponent(idToken)}`
         window.open(url, '_blank')
       } catch {
         window.alert('Network error during Initial Report preview')
@@ -321,7 +322,8 @@ function AdminOrgManagement({
         }
         const BASE_URL = (import.meta.env && import.meta.env.VITE_BACKEND_URL) || window.__BACKEND_URL__ || 'http://localhost:8011'
         const blockId = Array.isArray(org.blockNames) && org.blockNames.length ? org.blockNames[0] : `Block 1`
-        const url = `${BASE_URL}/reports/preview/final/${encodeURIComponent(auditId)}/${encodeURIComponent(String(blockId))}`
+        const idToken = await auth.currentUser.getIdToken()
+        const url = `${BASE_URL}/reports/preview/final/${encodeURIComponent(auditId)}/${encodeURIComponent(String(blockId))}?idToken=${encodeURIComponent(idToken)}`
         window.open(url, '_blank')
       } catch {
         window.alert('Network error during Final Report preview')
